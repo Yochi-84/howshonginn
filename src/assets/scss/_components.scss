@@ -1,0 +1,18 @@
+.container {
+  max-width: 540px;
+  margin: 0 auto;
+  padding-left: 12px;
+  padding-right: 12px;
+
+  @include md {
+    max-width: 720px;
+  }
+
+  @include lg {
+    max-width: 960px;
+  }
+
+  @include xl {
+    max-width: 1140px;
+  }
+}
