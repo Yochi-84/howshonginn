@@ -10,22 +10,22 @@
   }
 
   .mx-#{$level} {
-    margin-left : $level * $spacer;
     margin-right: $level * $spacer;
+    margin-left: $level * $spacer;
   }
 
   .my-#{$level} {
-    margin-top   : $level * $spacer;
+    margin-top: $level * $spacer;
     margin-bottom: $level * $spacer;
   }
 
   .px-#{$level} {
-    margin-left : $level * $spacer;
     margin-right: $level * $spacer;
+    margin-left: $level * $spacer;
   }
 
   .py-#{$level} {
-    padding-top   : $level * $spacer;
+    padding-top: $level * $spacer;
     padding-bottom: $level * $spacer;
   }
 }

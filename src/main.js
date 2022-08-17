@@ -8,10 +8,14 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 /* import specific icons */
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faSearch,
+  faLocationDot,
+} from "@fortawesome/free-solid-svg-icons";
 
 /* add icons to the library */
-library.add(faBars);
+library.add(faBars, faSearch, faLocationDot);
 
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)

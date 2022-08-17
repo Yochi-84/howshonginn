@@ -42,44 +42,47 @@ export default {
 .header {
   position: sticky;
   top: 0;
-  box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.3);
   z-index: 10;
+  background-color: $white;
+  box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.3);
+
+  @include md {
+    position: static;
+    box-shadow: none;
+  }
 }
 
 .nav {
   display: flex;
   align-items: flex-end;
-  background-color: $white;
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
 
   @include md {
     padding-top: 1rem;
     padding-bottom: 1rem;
-    position: static;
-    box-shadow: none;
   }
 
   .logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    overflow: hidden;
     width: 143.25px;
     height: 36px;
     text-indent: 101%;
-    overflow: hidden;
     white-space: nowrap;
-    background-image: url("../assets/image/logo.svg");
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
-    position: absolute;
-    left: 50%;
-    top: 50%;
+    background-image: url("../assets/image/logo.svg");
     transform: translate(-50%, -50%);
 
     @include md {
       position: static;
-      transform: none;
-      height: 48px;
       width: 191px;
+      height: 48px;
+      transform: none;
     }
 
     a {
@@ -92,16 +95,16 @@ export default {
     position: absolute;
     bottom: 0;
     left: 0;
-    transform: translateY(100%);
-    background-color: $white;
-    max-width: 0;
     overflow: hidden;
-    transition: max-width 0.3s;
+    max-width: 0;
+    background-color: $white;
+    transition: max-width 0.5s;
+    transform: translateY(100%);
 
     &.open {
       max-width: 100%;
-      box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.3);
       height: calc(100vh - 60px);
+      box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.3);
     }
 
     li {
@@ -121,9 +124,9 @@ export default {
 
     a {
       display: block;
-      color: $link;
-      font-size: 20px;
       padding: 1rem 5rem;
+      font-size: 20px;
+      color: $link;
 
       @include md {
         padding: 0;
@@ -133,10 +136,10 @@ export default {
 }
 
 .menu-controller {
-  color: $primary;
-  font-size: 32px;
-  line-height: 1;
   display: block;
+  font-size: 32px;
+  color: $primary;
+  line-height: 1;
 
   @include md {
     display: none;
