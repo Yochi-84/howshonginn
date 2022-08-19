@@ -1,24 +1,7 @@
 # How享營
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
+### 使用套件
+* [Vue3-carousel](https://ismail9k.github.io/vue3-carousel/)
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
