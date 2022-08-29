@@ -1,4 +1,12 @@
 @for $level from 0 through 16 {
+  .m-#{$level} {
+    margin: $level * $spacer;
+  }
+
+  .p-#{$level} {
+    padding: $level * $spacer;
+  }
+
   @each $dir,$dir-name in $direction {
     .m#{$dir}-#{$level} {
       margin-#{$dir-name}: $level * $spacer;
@@ -28,12 +36,4 @@
     padding-top: $level * $spacer;
     padding-bottom: $level * $spacer;
   }
-}
-
-.ml-auto {
-  margin-left: auto;
-}
-
-.mr-auto {
-  margin-right: auto;
 }

@@ -1,24 +1,92 @@
 <template>
-  <header class="header">
-    <nav class="nav container">
-      <span class="menu-controller" @click="navStatus = !navStatus"
+  <header
+    class="sticky top-0 z-10 bg-white shadow-[0_2px_5px_1px_rgba(0,0,0,0.3)] md:static md:shadow-none"
+  >
+    <nav class="container flex items-center py-3 md:py-4">
+      <span
+        class="block text-3xl leading-none text-primary md:hidden"
+        @click="navStatus = !navStatus"
         ><font-awesome-icon icon="fa-solid fa-bars"
       /></span>
-      <h1 class="logo">
-        <router-link to="/"> How享營 </router-link>
+      <ul
+        :class="[
+          'fixed top-14 bottom-0 left-0 z-10 flex max-w-0 flex-col items-center overflow-hidden bg-white duration-300 md:hidden',
+          {
+            'max-w-full shadow-[0_2px_5px_1px_rgba(0,0,0,0.3)_inset]':
+              navStatus,
+          },
+        ]"
+      >
+        <li class="w-full whitespace-nowrap py-4">
+          <SearchBox class="mx-auto w-[90%] border border-black" />
+        </li>
+        <li class="w-full whitespace-nowrap">
+          <router-link
+            to="/list"
+            class="block py-4 text-center text-xl text-primary"
+            >所有營地</router-link
+          >
+        </li>
+        <li class="w-full whitespace-nowrap">
+          <router-link
+            to="/share"
+            class="block py-4 text-center text-xl text-primary"
+            >分享營地</router-link
+          >
+        </li>
+        <li class="mb-auto w-full whitespace-nowrap">
+          <router-link
+            to="/contact"
+            class="block py-4 text-center text-xl text-primary"
+            >聯絡我們</router-link
+          >
+        </li>
+        <li class="w-full whitespace-nowrap">
+          <router-link
+            to="/login"
+            class="block py-4 text-center text-xl text-primary"
+            ><font-awesome-icon
+              icon="fa-solid fa-user-alt"
+              class="mr-2"
+            />登入</router-link
+          >
+        </li>
+      </ul>
+      <h1
+        class="absolute top-1/2 left-1/2 h-9 w-[143.25px] -translate-x-1/2 -translate-y-1/2 overflow-hidden whitespace-nowrap bg-[url('../image/logo.svg')] bg-cover bg-center bg-no-repeat indent-[101%] md:static md:h-12 md:w-[191px] md:translate-x-0 md:translate-y-0"
+      >
+        <router-link to="/" class="block h-full"> How享營 </router-link>
       </h1>
-      <ul :class="['nav-list', { open: navStatus }]">
+      <ul
+        class="hidden md:ml-12 md:flex md:flex-grow md:items-center md:gap-x-4 md:gap-y-8 md:bg-white"
+      >
         <li>
-          <router-link to="/list">所有營地</router-link>
+          <router-link
+            to="/list"
+            class="block py-4 px-20 text-xl text-link md:p-0"
+            >所有營地</router-link
+          >
         </li>
         <li>
-          <router-link to="/share">分享營地</router-link>
+          <router-link
+            to="/share"
+            class="block py-4 px-20 text-xl text-link md:p-0"
+            >分享營地</router-link
+          >
         </li>
         <li>
-          <router-link to="/contact">聯絡我們</router-link>
+          <router-link
+            to="/contact"
+            class="block py-4 px-20 text-xl text-link md:p-0"
+            >聯絡我們</router-link
+          >
         </li>
         <li class="ml-auto">
-          <router-link to="/contact">登入</router-link>
+          <router-link
+            to="/login"
+            class="block py-4 px-20 text-xl text-link md:p-0"
+            >登入</router-link
+          >
         </li>
       </ul>
     </nav>
@@ -26,8 +94,12 @@
 </template>
 
 <script>
+import SearchBox from "@/components/SearchBoxComponent";
 import { ref } from "vue";
 export default {
+  components: {
+    SearchBox,
+  },
   setup() {
     let navStatus = ref(false);
 
@@ -37,112 +109,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background-color: $white;
-  box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.3);
-
-  @include md {
-    position: static;
-    box-shadow: none;
-  }
-}
-
-.nav {
-  display: flex;
-  align-items: flex-end;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
-
-  @include md {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-  }
-
-  .logo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    overflow: hidden;
-    width: 143.25px;
-    height: 36px;
-    text-indent: 101%;
-    white-space: nowrap;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-image: url("../assets/image/logo.svg");
-    transform: translate(-50%, -50%);
-
-    @include md {
-      position: static;
-      width: 191px;
-      height: 48px;
-      transform: none;
-    }
-
-    a {
-      display: block;
-      height: 100%;
-    }
-  }
-
-  &-list {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    overflow: hidden;
-    max-width: 0;
-    background-color: $white;
-    transition: max-width 0.5s;
-    transform: translateY(100%);
-
-    &.open {
-      max-width: 100%;
-      height: calc(100vh - 60px);
-      box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.3);
-    }
-
-    li {
-      white-space: nowrap;
-    }
-
-    @include md {
-      position: static;
-      display: flex;
-      align-items: center;
-      flex-grow: 1;
-      gap: 1rem 2rem;
-      margin-left: 3rem;
-      max-width: 100%;
-      transform: none;
-    }
-
-    a {
-      display: block;
-      padding: 1rem 5rem;
-      font-size: 20px;
-      color: $link;
-
-      @include md {
-        padding: 0;
-      }
-    }
-  }
-}
-
-.menu-controller {
-  display: block;
-  font-size: 32px;
-  color: $primary;
-  line-height: 1;
-
-  @include md {
-    display: none;
-  }
-}
-</style>

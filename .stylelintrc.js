@@ -25,6 +25,7 @@ module.exports = {
     'selector-class-pattern': null,
     'function-parentheses-newline-inside': null,
     'at-rule-no-unknown': null,
+    "scss/at-rule-no-unknown": null,
     'color-function-notation': 'legacy',
     'alpha-value-notation': 'number',
     'scss/no-global-function-names': null,

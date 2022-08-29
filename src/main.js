@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
+import "./assets/css/all.css";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 
@@ -12,10 +13,12 @@ import {
   faBars,
   faSearch,
   faLocationDot,
+  faUserAlt,
+  faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 /* add icons to the library */
-library.add(faBars, faSearch, faLocationDot);
+library.add(faBars, faSearch, faLocationDot, faUserAlt, faUserPlus);
 
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)

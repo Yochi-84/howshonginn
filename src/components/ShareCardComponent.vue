@@ -1,20 +1,41 @@
 <template>
-  <Carousel :settings="settings" :breakpoints="breakpoints">
-    <Slide v-for="info of cardInfo" :key="info.name">
-      <div class="card carousel__item">
-        <div class="card-image">
-          <img :src="info.image" :alt="info.name" />
+  <Carousel
+    :settings="settings"
+    :breakpoints="breakpoints"
+    v-model="currentSlide"
+  >
+    <Slide v-for="(info, index) of cardInfo" :key="info.name">
+      <div class="carousel__item relative w-full overflow-hidden rounded">
+        <div
+          :class="[
+            'before:content-normal h-[350px] before:absolute before:inset-0 before:bg-gradient-to-b before:from-transparent before:via-[rgba(0,0,0,0.1)] before:to-[rgba(0,0,0,0.5)] before:opacity-0 before:duration-700',
+            { 'before:opacity-100': currentSlide === index },
+          ]"
+        >
+          <img
+            :src="info.image"
+            :alt="info.name"
+            class="h-full w-full object-cover object-bottom"
+          />
         </div>
-        <div class="card-content">
-          <h3 class="card-title">{{ info.name }}</h3>
-          <h4 class="card-subtitle">
+        <div
+          :class="[
+            'absolute right-0 bottom-6 left-0 text-center text-white opacity-0 duration-700',
+            { 'opacity-100': currentSlide === index },
+          ]"
+        >
+          <h3 class="lg:text-xl">{{ info.name }}</h3>
+          <h4 class="text-sm lg:text-base">
             <font-awesome-icon icon="fa-solid fa-location-dot" class="mr-2" />{{
               info.county
             }}
           </h4>
         </div>
         <!-- TODO: 連結 -->
-        <router-link to="/" class="card-link" />
+        <router-link
+          to="/"
+          class="after:content-normal after:absolute after:inset-0"
+        />
       </div>
     </Slide>
 
@@ -26,6 +47,7 @@
 <script>
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Navigation } from "vue3-carousel";
+import { ref } from "vue";
 export default {
   props: {
     cardInfo: {
@@ -53,78 +75,17 @@ export default {
       },
     };
 
+    const currentSlide = ref(0);
+
     return {
       settings,
       breakpoints,
+      currentSlide,
     };
   },
 };
 </script>
 <style lang="scss" scoped>
-.card {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  border-radius: 5px;
-
-  &-image {
-    height: 350px;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: bottom center;
-    }
-
-    &::before {
-      position: absolute;
-
-      // eslint-disable-next-line
-      background-image: linear-gradient(
-        transparent,
-        rgba(0, 0, 0, 0.1),
-        rgba(0, 0, 0, 0.5)
-      );
-      opacity: 0;
-      content: "";
-      inset: 0;
-      transition: 0.7s;
-    }
-  }
-
-  &-content {
-    position: absolute;
-    right: 0;
-    bottom: 1.5rem;
-    left: 0;
-    text-align: center;
-    color: $white;
-    opacity: 0;
-    transition: 0.7s;
-  }
-
-  &-title {
-    @include lg {
-      font-size: 20px;
-    }
-  }
-
-  &-subtitle {
-    font-size: 14px;
-
-    @include lg {
-      font-size: 16px;
-    }
-  }
-
-  &-link::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-  }
-}
-
 .carousel__slide {
   padding: 20px 0;
 }
@@ -132,14 +93,6 @@ export default {
 .carousel__slide--active {
   position: relative;
   z-index: 2;
-
-  .card-image::before {
-    opacity: 1;
-  }
-
-  .card-content {
-    opacity: 1;
-  }
 }
 
 .carousel__slide > .carousel__item {
@@ -149,7 +102,7 @@ export default {
   transform: scale(1);
 }
 
-:deep .carousel__prev {
+:deep(.carousel__prev) {
   width: auto;
   height: auto;
   background-color: transparent;
@@ -162,7 +115,7 @@ export default {
   }
 }
 
-:deep .carousel__next {
+:deep(.carousel__next) {
   width: auto;
   height: auto;
   background-color: transparent;

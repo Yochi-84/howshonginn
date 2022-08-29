@@ -1,0 +1,39 @@
+@import "https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap";
+@import "https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    line-height: 1.5;
+  }
+
+  a {
+    text-align: center;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-block py-2 px-6 leading-none font-bold text-white rounded duration-300 md:py-3 md:px-8 text-xl;
+  }
+
+  .btn-primary {
+    @apply bg-primary border-primary hover:bg-primary-dark hover:border-primary-dark;
+  }
+
+  .btn-danger {
+    @apply bg-danger border-danger hover:bg-danger-dark hover:border-danger-dark;
+  }
+
+  .btn-large {
+    @apply py-4 px-0 w-full text-center md:py-4 md:px-[6.5rem] md:w-auto;
+  }
+}
+
+@layer utilities {
+  .content-normal {
+    content: "";
+  }
+}

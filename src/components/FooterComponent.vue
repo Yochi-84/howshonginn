@@ -1,183 +1,79 @@
 <template>
-  <footer class="footer">
+  <footer class="bg-primary">
     <div class="container">
-      <div class="footer-main">
-        <div class="footer-logo">
+      <div
+        class="mx-auto flex w-5/6 flex-wrap-reverse items-center pt-8 pb-4 lg:flex-wrap lg:pt-16 lg:pb-8"
+      >
+        <div class="w-full p-8 lg:w-1/4 lg:pr-10">
           <img src="../assets/image/logo_white.svg" alt="How享營" />
         </div>
-        <div class="footer-link">
-          <div class="footer-link-block">
-            <h4>找地區</h4>
-            <ul>
-              <li><router-link to="/">北部</router-link></li>
-              <li><router-link to="/">中部</router-link></li>
-              <li><router-link to="/">南部</router-link></li>
-              <li><router-link to="/">東部</router-link></li>
-              <li><router-link to="/">離島</router-link></li>
+        <div class="lg:flex lg:flex-grow lg:justify-between">
+          <div class="mb-6 flex items-start lg:mb-0 lg:block">
+            <h4
+              class="mr-4 flex-shrink-0 text-2xl font-bold text-white lg:mr-0 lg:mb-4 lg:text-center"
+            >
+              找地區
+            </h4>
+            <ul
+              class="flex flex-wrap gap-x-6 gap-y-3 lg:block lg:space-y-6 lg:text-center"
+            >
+              <li><router-link to="/" class="link">北部</router-link></li>
+              <li><router-link to="/" class="link">中部</router-link></li>
+              <li><router-link to="/" class="link">南部</router-link></li>
+              <li><router-link to="/" class="link">東部</router-link></li>
+              <li><router-link to="/" class="link">離島</router-link></li>
             </ul>
           </div>
-          <div class="footer-link-block">
-            <h4>找特色</h4>
-            <ul>
-              <li><router-link to="/">有雨棚</router-link></li>
-              <li><router-link to="/">賞雲海</router-link></li>
-              <li><router-link to="/">賞櫻花</router-link></li>
-              <li><router-link to="/">近市區</router-link></li>
+          <div class="mb-6 flex items-start lg:mb-0 lg:block">
+            <h4
+              class="mr-4 flex-shrink-0 text-2xl font-bold text-white lg:mr-0 lg:mb-4 lg:text-center"
+            >
+              找特色
+            </h4>
+            <ul
+              class="flex flex-wrap gap-x-6 gap-y-3 lg:block lg:space-y-6 lg:text-center"
+            >
+              <li><router-link to="/" class="link">有雨棚</router-link></li>
+              <li><router-link to="/" class="link">賞雲海</router-link></li>
+              <li><router-link to="/" class="link">賞櫻花</router-link></li>
+              <li><router-link to="/" class="link">近市區</router-link></li>
             </ul>
           </div>
-          <div class="footer-link-block">
-            <h4>找朋友</h4>
-            <ul>
-              <li><router-link to="/">大草皮</router-link></li>
-              <li><router-link to="/">少帳包區</router-link></li>
-              <li><router-link to="/">親子</router-link></li>
-              <li><router-link to="/">寵物友善</router-link></li>
+          <div class="mb-6 flex items-start lg:mb-0 lg:block">
+            <h4
+              class="mr-4 flex-shrink-0 text-2xl font-bold text-white lg:mr-0 lg:mb-4 lg:text-center"
+            >
+              找朋友
+            </h4>
+            <ul
+              class="flex flex-wrap gap-x-6 gap-y-3 lg:block lg:space-y-6 lg:text-center"
+            >
+              <li><router-link to="/" class="link">大草皮</router-link></li>
+              <li><router-link to="/" class="link">少帳包區</router-link></li>
+              <li><router-link to="/" class="link">親子</router-link></li>
+              <li><router-link to="/" class="link">寵物友善</router-link></li>
             </ul>
           </div>
         </div>
       </div>
-      <div class="footer-copyright">
-        <p>Copyright© By Chi</p>
-        <p>此網頁為個人練習用作品</p>
+      <div
+        class="flex flex-wrap justify-center border-t border-t-white p-2 text-center lg:gap-x-8"
+      >
+        <p
+          class="after:content-normal relative w-full text-sm text-white after:absolute after:-right-4 after:h-full after:bg-white lg:w-auto lg:text-base"
+        >
+          Copyright© By Chi
+        </p>
+        <p class="relative w-full text-sm text-white lg:w-auto lg:text-base">
+          此網頁為個人練習用作品
+        </p>
       </div>
     </div>
   </footer>
 </template>
 
-<style lang="scss" scoped>
-.footer {
-  background-color: $primary;
-
-  &-main {
-    display: flex;
-    flex-wrap: wrap-reverse;
-    padding: 2rem 0 1rem;
-    margin: 0 auto;
-    width: 83.3333%;
-
-    @include lg {
-      flex-wrap: nowrap;
-      align-items: center;
-      padding: 4rem 0 2rem;
-    }
-  }
-
-  &-logo {
-    padding: 2rem;
-    width: 100%;
-
-    @include lg {
-      padding: 0 2.5rem 0 0;
-      width: 25%;
-    }
-  }
-
-  &-link {
-    @include lg {
-      display: flex;
-      flex-grow: 1;
-      justify-content: space-between;
-    }
-
-    &-block {
-      display: flex;
-      align-items: flex-start;
-      margin-bottom: 1.5rem;
-
-      @include lg {
-        display: block;
-        margin-bottom: 0;
-      }
-    }
-
-    h4 {
-      margin-right: 1rem;
-      font-size: 24px;
-      font-weight: 700;
-      color: $white;
-      flex-shrink: 0;
-
-      @include lg {
-        margin-right: 0;
-        margin-bottom: 1rem;
-        text-align: center;
-      }
-    }
-
-    ul {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem 1.5rem;
-
-      @include lg {
-        display: block;
-        text-align: center;
-
-        li + li {
-          margin-top: 1.5rem;
-        }
-      }
-    }
-
-    a {
-      color: $white;
-      font: 20px;
-
-      @include lg {
-        position: relative;
-        font-size: 24px;
-
-        &::after {
-          position: absolute;
-          bottom: -2px;
-          left: 50%;
-          width: 0;
-          height: 2px;
-          background-color: $white;
-          transition: 0.3s;
-          content: "";
-        }
-
-        &:hover::after {
-          left: 0;
-          width: 100%;
-        }
-      }
-    }
-  }
-
-  &-copyright {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 0.5rem;
-    border-top: 1px solid $white;
-    text-align: center;
-
-    @include lg {
-      column-gap: 2rem;
-    }
-
-    p {
-      position: relative;
-      width: 100%;
-      font-size: 14px;
-      color: $white;
-
-      @include lg {
-        width: auto;
-        font-size: 16px;
-
-        &:first-child::after {
-          position: absolute;
-          right: -1rem;
-          width: 1px;
-          height: 100%;
-          background-color: $white;
-          content: "";
-        }
-      }
-    }
-  }
+<style lang="postcss" scoped>
+.link {
+  @apply lg:after:content-normal text-xl text-white lg:relative lg:text-2xl lg:after:absolute lg:after:-bottom-0.5 lg:after:left-1/2 lg:after:h-0.5 lg:after:w-0 lg:after:bg-white lg:after:duration-300 lg:hover:after:left-0 lg:hover:after:w-full;
 }
 </style>

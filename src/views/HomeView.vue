@@ -1,46 +1,89 @@
 <template>
   <main>
-    <section class="banner">
-      <div class="banner-block">
-        <h2 class="banner-slogan">與你分享的快樂，勝過獨自擁有</h2>
-        <SearchBox></SearchBox>
+    <!-- Banner -->
+    <section
+      class="flex h-[200px] items-center justify-center bg-[url('https://images.unsplash.com/photo-1504632348771-974e356b80af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80')] bg-cover bg-bottom bg-no-repeat md:h-[calc((100vh-80px))]"
+    >
+      <div
+        class="w-[300px] md:flex md:w-[450px] md:flex-col md:items-center lg:w-[680px]"
+      >
+        <h2
+          class="hidden self-start md:mb-6 md:block md:w-[14em] md:animate-typing md:overflow-hidden md:whitespace-nowrap md:border-r-2 md:border-r-white md:text-3xl md:font-bold md:text-white lg:text-4xl"
+        >
+          與你分享的快樂，勝過獨自擁有
+        </h2>
+        <SearchBox class="md:w-4/5"></SearchBox>
       </div>
     </section>
-    <section class="famous block-py container">
-      <h2 class="subtitle">最近熱門</h2>
-      <ul class="famous-list">
-        <li v-for="info of famous" :key="info.name" class="famous-item">
+
+    <!-- Famous -->
+    <section class="container py-6 md:py-16">
+      <h2
+        class="before:content-normal after:content-normal mb-4 items-center text-center text-2xl font-bold text-primary before:mr-4 before:w-4 before:flex-grow before:border-t-8 before:border-double before:border-t-primary after:ml-4 after:w-4 after:flex-grow after:border-t-8 after:border-double after:border-t-primary md:mb-8 md:flex md:text-3xl"
+      >
+        最近熱門
+      </h2>
+      <ul class="flex flex-wrap gap-y-6 md:-mx-3">
+        <li
+          v-for="info of famous"
+          :key="info.name"
+          class="w-full px-3 md:w-1/2 lg:w-1/4"
+        >
           <FamousCard :cardInfo="info" />
         </li>
       </ul>
     </section>
-    <section class="feature">
-      <div class="feature-bg"></div>
-      <div class="container-lg">
-        <ul class="feature-block">
-          <li>
-            <div class="feature-image">
+
+    <!-- Feature -->
+    <section class="relative py-6 md:pt-[5.5rem] md:pb-16">
+      <div
+        class="hidden lg:absolute lg:inset-0 lg:-z-10 lg:block lg:bg-[url('https://images.unsplash.com/photo-1659427930751-590205446898?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1292&q=80')] lg:bg-cover lg:bg-fixed lg:bg-bottom lg:bg-no-repeat lg:opacity-70"
+      ></div>
+      <div class="lg:container">
+        <ul class="lg:mx-auto lg:w-5/6">
+          <li class="relative mb-6 flex items-center lg:mb-10">
+            <div
+              class="after:content-normal group relative h-[400px] w-full after:absolute after:inset-0 after:bg-black after:bg-opacity-40 lg:mr-6 lg:h-[300px] lg:w-1/2 lg:overflow-hidden lg:rounded lg:drop-shadow-[-1.5rem_-1.5rem_rgba(255,255,255,0.6)] lg:after:hidden"
+            >
               <img
                 src="https://images.unsplash.com/photo-1476041800959-2f6bb412c8ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-                alt=""
+                alt="住過露過，一定不能沒分享過"
+                class="h-full w-full rounded object-cover object-bottom duration-300 group-hover:scale-110"
               />
             </div>
-            <div class="feature-text">
-              <h3>住過露過，一定不能沒分享過</h3>
+            <div
+              class="absolute inset-0 flex flex-col items-center justify-center lg:static lg:block"
+            >
+              <h3
+                class="mb-3 text-2xl font-bold text-white md:text-3xl lg:mb-6 lg:text-[30px]"
+              >
+                住過露過，一定不能沒分享過
+              </h3>
               <router-link to="/share" class="btn btn-primary"
                 >馬上分享</router-link
               >
             </div>
           </li>
-          <li>
-            <div class="feature-image">
+          <li
+            class="relative flex items-center lg:flex-row-reverse lg:text-right"
+          >
+            <div
+              class="after:content-normal group relative h-[400px] w-full after:absolute after:inset-0 after:bg-black after:bg-opacity-40 lg:ml-6 lg:h-[300px] lg:w-1/2 lg:overflow-hidden lg:rounded lg:drop-shadow-[1.5rem_-1.5rem_rgba(255,255,255,0.6)] lg:after:hidden"
+            >
               <img
                 src="https://images.unsplash.com/photo-1524007769096-2dad448565c9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=684&q=80"
-                alt=""
+                alt="每天的驚喜從新的發現開始"
+                class="h-full w-full rounded object-cover object-bottom duration-300 group-hover:scale-110"
               />
             </div>
-            <div class="feature-text">
-              <h3>每天的驚喜從新的發現開始</h3>
+            <div
+              class="absolute inset-0 flex flex-col items-center justify-center lg:static lg:block"
+            >
+              <h3
+                class="mb-3 text-2xl font-bold text-white md:text-3xl lg:mb-6 lg:text-[30px]"
+              >
+                每天的驚喜從新的發現開始
+              </h3>
               <router-link to="/list" class="btn btn-primary"
                 >發現更多</router-link
               >
@@ -49,9 +92,15 @@
         </ul>
       </div>
     </section>
-    <section class="share block-py">
-      <div class="container-md">
-        <h2 class="subtitle">與你分享</h2>
+
+    <!-- Share -->
+    <section class="py-6 md:py-16">
+      <div class="md:container">
+        <h2
+          class="before:content-normal after:content-normal mb-4 items-center text-center text-2xl font-bold text-primary before:mr-4 before:w-4 before:flex-grow before:border-t-8 before:border-double before:border-t-primary after:ml-4 after:w-4 after:flex-grow after:border-t-8 after:border-double after:border-t-primary md:mb-8 md:flex md:text-3xl"
+        >
+          與你分享
+        </h2>
         <ShareCard :cardInfo="share" />
       </div>
     </section>
@@ -144,278 +193,3 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-.banner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 280px;
-  background-image: url("https://images.unsplash.com/photo-1504632348771-974e356b80af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80");
-  background-position: center bottom;
-  background-repeat: no-repeat;
-  background-size: cover;
-
-  @include md {
-    height: calc(100vh - 80px);
-  }
-
-  &-block {
-    width: 300px;
-
-    @include md {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 450px;
-    }
-
-    @include lg {
-      width: 680px;
-    }
-  }
-
-  &-slogan {
-    display: none;
-
-    @include md {
-      display: block;
-      overflow: hidden;
-      margin-bottom: 1.5rem;
-      width: 14em;
-      font-size: 32px;
-      font-weight: 700;
-      white-space: nowrap;
-      color: $white;
-      border-right: 2px solid $white;
-
-      /* prettier-ignore */
-      animation:
-        typing-effect 6s steps(14) infinite,
-        blink 0.5s step-end infinite alternate;
-      align-self: flex-start;
-    }
-
-    @include lg {
-      font-size: 48px;
-    }
-  }
-
-  .search-bar {
-    @include md {
-      width: 80%;
-    }
-  }
-}
-
-@keyframes typing-effect {
-  0% {
-    width: 0;
-  }
-
-  50% {
-    width: 14em;
-  }
-}
-
-@keyframes blink {
-  50% {
-    border-color: transparent;
-  }
-}
-
-.block-py {
-  padding: 1.5rem 0;
-
-  @include md {
-    padding: 4rem 0;
-  }
-}
-
-.subtitle {
-  margin-bottom: 1rem;
-  font-size: 24px;
-  font-weight: 700;
-  text-align: center;
-  color: $primary;
-
-  @include md {
-    display: flex;
-    align-items: center;
-    margin-bottom: 2rem;
-    font-size: 36px;
-
-    &::before,
-    &::after {
-      content: "";
-      border-top: 8px double $primary;
-      width: 1rem;
-      flex-grow: 1;
-    }
-
-    &::before {
-      margin-right: 1rem;
-    }
-
-    &::after {
-      margin-left: 1rem;
-    }
-  }
-}
-
-.famous {
-  &-list {
-    display: flex;
-    flex-wrap: wrap;
-    row-gap: 1.5rem;
-
-    @include md {
-      margin-right: -12px;
-      margin-left: -12px;
-    }
-  }
-
-  &-item {
-    padding-right: 12px;
-    padding-left: 12px;
-    width: 100%;
-
-    @include md {
-      width: 50%;
-    }
-
-    @include lg {
-      width: 25%;
-    }
-  }
-}
-
-.feature {
-  position: relative;
-  padding: 1.5rem 0;
-
-  @include md {
-    padding: 5.5rem 0 4rem;
-  }
-
-  &-bg {
-    display: none;
-
-    @include lg {
-      position: absolute;
-      z-index: -1;
-      display: block;
-      background: url("https://images.unsplash.com/photo-1659427930751-590205446898?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1292&q=80");
-      background-position: bottom center;
-      background-size: cover;
-      background-attachment: fixed;
-      filter: opacity(0.7);
-      inset: 0;
-    }
-  }
-
-  &-block {
-    @include lg {
-      margin: 0 auto;
-      width: 83.3333%;
-    }
-
-    li {
-      position: relative;
-      display: flex;
-      align-items: center;
-
-      &:first-child {
-        margin-bottom: 1.5rem;
-
-        @include lg {
-          margin-bottom: 2.5rem;
-
-          .feature-image {
-            margin-right: 1.5rem;
-            filter: drop-shadow(-1.5rem -1.5rem rgba(255, 255, 255, 0.6));
-          }
-        }
-      }
-
-      &:last-child {
-        @include lg {
-          flex-direction: row-reverse;
-          text-align: right;
-
-          .feature-image {
-            margin-left: 1.5rem;
-            filter: drop-shadow(1.5rem -1.5rem rgba(255, 255, 255, 0.6));
-          }
-        }
-      }
-    }
-  }
-
-  &-image {
-    position: relative;
-    width: 100%;
-    height: 400px;
-
-    &::after {
-      position: absolute;
-      background-color: rgba(0, 0, 0, 0.4);
-      content: "";
-      inset: 0;
-
-      @include lg {
-        display: none;
-      }
-    }
-
-    img {
-      width: 100%;
-      height: 100%;
-      border-radius: 4px;
-      object-fit: cover;
-      object-position: bottom center;
-      transition: 0.3s;
-    }
-
-    @include lg {
-      overflow: hidden;
-      width: 50%;
-      height: 300px;
-      border-radius: 4px;
-
-      &:hover img {
-        transform: scale(1.1);
-      }
-    }
-  }
-
-  &-text {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    @include lg {
-      position: static;
-      display: block;
-    }
-
-    h3 {
-      margin-bottom: 0.75rem;
-      font-size: 24px;
-      font-weight: 700;
-      color: $white;
-
-      @include md {
-        font-size: 30px;
-      }
-
-      @include lg {
-        margin-bottom: 1.5rem;
-        font-size: 28px;
-      }
-    }
-  }
-}
-</style>
