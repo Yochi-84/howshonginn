@@ -1,15 +1,11 @@
 <template>
-  <Carousel
-    :settings="settings"
-    :breakpoints="breakpoints"
-    v-model="currentSlide"
-  >
+  <Carousel :settings="settings" v-model="currentSlide">
     <Slide v-for="(info, index) of cardInfo" :key="info.name">
       <div class="carousel__item relative w-full overflow-hidden rounded">
         <div
           :class="[
-            'before:content-normal h-[350px] before:absolute before:inset-0 before:bg-gradient-to-b before:from-transparent before:via-[rgba(0,0,0,0.1)] before:to-[rgba(0,0,0,0.5)] before:opacity-0 before:duration-700',
-            { 'before:opacity-100': currentSlide === index },
+            'h-[350px] before:absolute before:inset-0 before:bg-gradient-to-b before:from-transparent before:via-[rgba(0,0,0,0.1)] before:to-[rgba(0,0,0,0.5)] before:duration-700',
+            currentSlide === index ? 'before:opacity-100' : 'before:opacity-0',
           ]"
         >
           <img
@@ -20,8 +16,8 @@
         </div>
         <div
           :class="[
-            'absolute right-0 bottom-6 left-0 text-center text-white opacity-0 duration-700',
-            { 'opacity-100': currentSlide === index },
+            'absolute right-0 bottom-6 left-0 text-center text-white duration-700',
+            currentSlide === index ? 'opacity-100' : 'opacity-0',
           ]"
         >
           <h3 class="lg:text-xl">{{ info.name }}</h3>
@@ -32,10 +28,7 @@
           </h4>
         </div>
         <!-- TODO: 連結 -->
-        <router-link
-          to="/"
-          class="after:content-normal after:absolute after:inset-0"
-        />
+        <router-link to="/" class="after:absolute after:inset-0" />
       </div>
     </Slide>
 
@@ -61,25 +54,27 @@ export default {
   },
   setup() {
     const settings = {
-      itemsToShow: 2.5,
+      itemsToShow: 1,
       snapAlign: "center",
       wrapAround: true,
       autoplay: 4000,
       pauseAutoplayOnHover: true,
+      mouseDrag: false,
       transition: 700,
-    };
-
-    const breakpoints = {
-      992: {
-        itemsToShow: 4,
+      breakpoints: {
+        576: {
+          itemsToShow: 2.5,
+        },
+        992: {
+          itemsToShow: 4,
+        },
       },
     };
 
-    const currentSlide = ref(0);
+    const currentSlide = ref(1);
 
     return {
       settings,
-      breakpoints,
       currentSlide,
     };
   },

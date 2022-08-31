@@ -2,13 +2,11 @@
   <main>
     <!-- Banner -->
     <section
-      class="flex h-[200px] items-center justify-center bg-[url('https://images.unsplash.com/photo-1504632348771-974e356b80af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80')] bg-cover bg-bottom bg-no-repeat md:h-[calc((100vh-80px))]"
+      class="clip-triangle flex h-[400px] items-center justify-center bg-[url('https://images.unsplash.com/photo-1504632348771-974e356b80af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80')] bg-cover bg-fixed bg-bottom bg-no-repeat md:h-screen"
     >
-      <div
-        class="w-[300px] md:flex md:w-[450px] md:flex-col md:items-center lg:w-[680px]"
-      >
+      <div class="md:flex md:w-4/5 md:flex-col md:items-center lg:w-1/2">
         <h2
-          class="hidden self-start md:mb-6 md:block md:w-[14em] md:animate-typing md:overflow-hidden md:whitespace-nowrap md:border-r-2 md:border-r-white md:text-3xl md:font-bold md:text-white lg:text-4xl"
+          class="md:text-shadow hidden md:mb-6 md:block md:w-[14em] md:animate-typing md:overflow-hidden md:whitespace-nowrap md:border-r-2 md:border-r-white md:text-3xl md:font-bold md:text-white lg:text-4xl"
         >
           與你分享的快樂，勝過獨自擁有
         </h2>
@@ -19,7 +17,7 @@
     <!-- Famous -->
     <section class="container py-6 md:py-16">
       <h2
-        class="before:content-normal after:content-normal mb-4 items-center text-center text-2xl font-bold text-primary before:mr-4 before:w-4 before:flex-grow before:border-t-8 before:border-double before:border-t-primary after:ml-4 after:w-4 after:flex-grow after:border-t-8 after:border-double after:border-t-primary md:mb-8 md:flex md:text-3xl"
+        class="mb-4 items-center text-center text-2xl font-bold text-primary before:mr-4 before:w-4 before:flex-grow before:border-t-8 before:border-double before:border-t-primary after:ml-4 after:w-4 after:flex-grow after:border-t-8 after:border-double after:border-t-primary md:mb-8 md:flex md:text-3xl"
       >
         最近熱門
       </h2>
@@ -37,13 +35,13 @@
     <!-- Feature -->
     <section class="relative py-6 md:pt-[5.5rem] md:pb-16">
       <div
-        class="hidden lg:absolute lg:inset-0 lg:-z-10 lg:block lg:bg-[url('https://images.unsplash.com/photo-1659427930751-590205446898?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1292&q=80')] lg:bg-cover lg:bg-fixed lg:bg-bottom lg:bg-no-repeat lg:opacity-70"
+        class="hidden lg:absolute lg:inset-0 lg:-z-10 lg:block lg:bg-[url('https://images.unsplash.com/photo-1470582891830-22e103e72deb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1246&q=80')] lg:bg-cover lg:bg-fixed lg:bg-bottom lg:bg-no-repeat lg:opacity-80"
       ></div>
       <div class="lg:container">
         <ul class="lg:mx-auto lg:w-5/6">
           <li class="relative mb-6 flex items-center lg:mb-10">
             <div
-              class="after:content-normal group relative h-[400px] w-full after:absolute after:inset-0 after:bg-black after:bg-opacity-40 lg:mr-6 lg:h-[300px] lg:w-1/2 lg:overflow-hidden lg:rounded lg:drop-shadow-[-1.5rem_-1.5rem_rgba(255,255,255,0.6)] lg:after:hidden"
+              class="group relative h-[400px] w-full after:absolute after:inset-0 after:bg-black after:bg-opacity-40 lg:mr-6 lg:h-[300px] lg:w-1/2 lg:overflow-hidden lg:rounded lg:drop-shadow-[-1.5rem_-1.5rem_rgba(255,255,255,0.6)] lg:after:hidden"
             >
               <img
                 src="https://images.unsplash.com/photo-1476041800959-2f6bb412c8ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
@@ -55,10 +53,13 @@
               class="absolute inset-0 flex flex-col items-center justify-center lg:static lg:block"
             >
               <h3
-                class="mb-3 text-2xl font-bold text-white md:text-3xl lg:mb-6 lg:text-[30px]"
+                class="mb-3 text-2xl font-bold text-white md:text-[30px] lg:mb-4"
               >
                 住過露過，一定不能沒分享過
               </h3>
+              <p class="mb-3 text-base text-white lg:mb-6 lg:text-lg">
+                挖到寶？<br />踩到雷？<br />快來和大家分享你的露營體驗吧！
+              </p>
               <router-link to="/share" class="btn btn-primary"
                 >馬上分享</router-link
               >
@@ -68,7 +69,7 @@
             class="relative flex items-center lg:flex-row-reverse lg:text-right"
           >
             <div
-              class="after:content-normal group relative h-[400px] w-full after:absolute after:inset-0 after:bg-black after:bg-opacity-40 lg:ml-6 lg:h-[300px] lg:w-1/2 lg:overflow-hidden lg:rounded lg:drop-shadow-[1.5rem_-1.5rem_rgba(255,255,255,0.6)] lg:after:hidden"
+              class="group relative h-[400px] w-full after:absolute after:inset-0 after:bg-black after:bg-opacity-40 lg:ml-6 lg:h-[300px] lg:w-1/2 lg:overflow-hidden lg:rounded lg:drop-shadow-[1.5rem_-1.5rem_rgba(255,255,255,0.6)] lg:after:hidden"
             >
               <img
                 src="https://images.unsplash.com/photo-1524007769096-2dad448565c9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=684&q=80"
@@ -80,10 +81,13 @@
               class="absolute inset-0 flex flex-col items-center justify-center lg:static lg:block"
             >
               <h3
-                class="mb-3 text-2xl font-bold text-white md:text-3xl lg:mb-6 lg:text-[30px]"
+                class="mb-3 text-2xl font-bold text-white md:text-[30px] lg:mb-4"
               >
                 每天的驚喜從新的發現開始
               </h3>
+              <p class="mb-3 text-base text-white lg:mb-6 lg:text-lg">
+                連假又快到了嗎？<br />還沒找到符合心意的營地嗎？<br />還有更多的寶藏營地等你來發現。
+              </p>
               <router-link to="/list" class="btn btn-primary"
                 >發現更多</router-link
               >
@@ -97,7 +101,7 @@
     <section class="py-6 md:py-16">
       <div class="md:container">
         <h2
-          class="before:content-normal after:content-normal mb-4 items-center text-center text-2xl font-bold text-primary before:mr-4 before:w-4 before:flex-grow before:border-t-8 before:border-double before:border-t-primary after:ml-4 after:w-4 after:flex-grow after:border-t-8 after:border-double after:border-t-primary md:mb-8 md:flex md:text-3xl"
+          class="mb-4 items-center text-center text-2xl font-bold text-primary before:mr-4 before:w-4 before:flex-grow before:border-t-8 before:border-double before:border-t-primary after:ml-4 after:w-4 after:flex-grow after:border-t-8 after:border-double after:border-t-primary md:mb-8 md:flex md:text-3xl"
         >
           與你分享
         </h2>

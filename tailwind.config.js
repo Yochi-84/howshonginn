@@ -7,6 +7,7 @@ module.exports = {
     screens: {
       sm: "576px",
       md: "768px",
+      lmd: "992px",
       lg: "1026px",
       xl: "1321px",
     },
@@ -34,8 +35,10 @@ module.exports = {
           DEFAULT: "#971d48",
           dark: "#6c1534",
         },
-        link: {
+        content: {
+          light: "#a0a0a0",
           DEFAULT: "#606060",
+          dark: "#202020",
         },
       },
       fontFamily: {
@@ -46,7 +49,8 @@ module.exports = {
         huge: "1.5rem",
       },
       boxShadow: {
-        around: "0 0 2px 2px #1D976C",
+        "around-primary": "0 0 2px 2px #1d976c",
+        "around-danger": "0 0 2px 2px #971d48",
       },
       keyframes: {
         blink: {

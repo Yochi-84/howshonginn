@@ -16,24 +16,32 @@
 
 @layer components {
   .btn {
-    @apply inline-block py-2 px-6 leading-none font-bold text-white rounded duration-300 md:py-3 md:px-8 text-xl;
+    @apply inline-block rounded py-2 px-6 font-bold leading-none text-white duration-300 md:py-3 md:px-8 md:text-lg;
   }
 
   .btn-primary {
-    @apply bg-primary border-primary hover:bg-primary-dark hover:border-primary-dark;
+    @apply border-primary bg-primary hover:border-primary-dark hover:bg-primary-dark;
   }
 
   .btn-danger {
-    @apply bg-danger border-danger hover:bg-danger-dark hover:border-danger-dark;
+    @apply border-danger bg-danger hover:border-danger-dark hover:bg-danger-dark;
   }
 
   .btn-large {
-    @apply py-4 px-0 w-full text-center md:py-4 md:px-[6.5rem] md:w-auto;
+    @apply w-full py-4 px-0 text-center md:w-auto md:py-4 md:px-[6.5rem];
+  }
+
+  .btn-fluid {
+    @apply rounded-none block border-0 py-4 text-center md:py-4;
   }
 }
 
 @layer utilities {
-  .content-normal {
-    content: "";
+  .clip-triangle {
+    clip-path: polygon(0% 0%, 0% 90%, 50% 100%, 100% 90%, 100% 0%);
+  }
+
+  .text-shadow {
+    text-shadow: 3px 3px 6px #333;
   }
 }

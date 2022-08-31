@@ -1,14 +1,14 @@
 <template>
-  <div class="flex items-center justify-center rounded bg-white pr-6 pl-4">
+  <div class="flex items-center justify-between rounded bg-white">
     <input
       type="text"
       placeholder="請輸入關鍵字搜尋"
-      class="flex-grow bg-transparent py-3 placeholder:text-link focus:outline-none md:text-xl"
+      class="flex-grow basis-3/4 bg-transparent py-3 pl-2 text-base placeholder:text-content-light focus:outline-none md:pl-4"
       @keydown.enter.exact="search"
     />
     <a
       href="#"
-      class="cursor-pointer text-link duration-300 hover:text-primary"
+      class="block h-full flex-shrink-0 cursor-pointer px-2 py-3 text-content-light duration-300 hover:text-primary md:px-4"
       @click.prevent="search"
       ><font-awesome-icon icon="fa-solid fa-search"
     /></a>

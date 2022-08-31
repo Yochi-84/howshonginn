@@ -1,8 +1,16 @@
 <template>
   <header
-    class="sticky top-0 z-10 bg-white shadow-[0_2px_5px_1px_rgba(0,0,0,0.3)] md:static md:shadow-none"
+    :class="[
+      'fixed top-0 z-50 w-full bg-white shadow-[0_2px_5px_1px_rgba(0,0,0,0.3)] duration-500 ',
+      {
+        'md:bg-transparent md:shadow-none': scrollStatus === 'top',
+        '-translate-y-full': scrollStatus === 'down',
+      },
+    ]"
   >
-    <nav class="container flex items-center py-3 md:py-4">
+    <nav
+      class="container flex flex-row-reverse items-center py-3 md:flex-row md:py-4"
+    >
       <span
         class="block text-3xl leading-none text-primary md:hidden"
         @click="navStatus = !navStatus"
@@ -10,41 +18,26 @@
       /></span>
       <ul
         :class="[
-          'fixed top-14 bottom-0 left-0 z-10 flex max-w-0 flex-col items-center overflow-hidden bg-white duration-300 md:hidden',
-          {
-            'max-w-full shadow-[0_2px_5px_1px_rgba(0,0,0,0.3)_inset]':
-              navStatus,
-          },
+          'absolute bottom-0 left-0 right-0 z-10 translate-y-full overflow-hidden whitespace-nowrap bg-white text-center text-primary duration-300 md:hidden',
+          navStatus
+            ? 'max-h-screen shadow-[0_2px_5px_1px_rgba(0,0,0,0.3)_inset]'
+            : 'max-h-0',
         ]"
       >
-        <li class="w-full whitespace-nowrap py-4">
-          <SearchBox class="mx-auto w-[90%] border border-black" />
+        <li class="whitespace-nowrap py-4">
+          <SearchBox class="mx-auto w-[90%] border border-black text-black" />
         </li>
-        <li class="w-full whitespace-nowrap">
-          <router-link
-            to="/list"
-            class="block py-4 text-center text-xl text-primary"
-            >所有營地</router-link
-          >
+        <li>
+          <router-link to="/list" class="block py-4">所有營地</router-link>
         </li>
-        <li class="w-full whitespace-nowrap">
-          <router-link
-            to="/share"
-            class="block py-4 text-center text-xl text-primary"
-            >分享營地</router-link
-          >
+        <li>
+          <router-link to="/share" class="block py-4">分享營地</router-link>
         </li>
-        <li class="mb-auto w-full whitespace-nowrap">
-          <router-link
-            to="/contact"
-            class="block py-4 text-center text-xl text-primary"
-            >聯絡我們</router-link
-          >
+        <li>
+          <router-link to="/contact" class="block py-4">聯絡我們</router-link>
         </li>
-        <li class="w-full whitespace-nowrap">
-          <router-link
-            to="/login"
-            class="block py-4 text-center text-xl text-primary"
+        <li>
+          <router-link to="/login" class="block py-4"
             ><font-awesome-icon
               icon="fa-solid fa-user-alt"
               class="mr-2"
@@ -53,38 +46,46 @@
         </li>
       </ul>
       <h1
-        class="absolute top-1/2 left-1/2 h-9 w-[143.25px] -translate-x-1/2 -translate-y-1/2 overflow-hidden whitespace-nowrap bg-[url('../image/logo.svg')] bg-cover bg-center bg-no-repeat indent-[101%] md:static md:h-12 md:w-[191px] md:translate-x-0 md:translate-y-0"
+        :class="[
+          'absolute top-1/2 left-1/2 h-9 w-[143px] -translate-x-1/2 -translate-y-1/2 overflow-hidden whitespace-nowrap bg-[url(../image/logo.svg)] bg-cover bg-center bg-no-repeat indent-[101%]  duration-300 md:static md:h-10 md:w-[159px] md:translate-x-0 md:translate-y-0',
+          {
+            'md:brightness-0 md:invert': scrollStatus === 'top',
+          },
+        ]"
       >
         <router-link to="/" class="block h-full"> How享營 </router-link>
       </h1>
       <ul
-        class="hidden md:ml-12 md:flex md:flex-grow md:items-center md:gap-x-4 md:gap-y-8 md:bg-white"
+        :class="[
+          'hidden md:ml-12 md:flex md:flex-grow md:items-center md:gap-x-8 md:gap-y-8',
+          scrollStatus !== 'top' ? 'text-content' : 'text-white',
+        ]"
       >
         <li>
           <router-link
             to="/list"
-            class="block py-4 px-20 text-xl text-link md:p-0"
+            class="bg-sl block py-4 px-20 duration-300 md:p-0 md:hover:-translate-y-1"
             >所有營地</router-link
           >
         </li>
         <li>
           <router-link
             to="/share"
-            class="block py-4 px-20 text-xl text-link md:p-0"
+            class="block py-4 px-20 duration-300 md:p-0 md:hover:-translate-y-1"
             >分享營地</router-link
           >
         </li>
         <li>
           <router-link
             to="/contact"
-            class="block py-4 px-20 text-xl text-link md:p-0"
+            class="'block py-4 px-20 duration-300 md:p-0 md:hover:-translate-y-1"
             >聯絡我們</router-link
           >
         </li>
         <li class="ml-auto">
           <router-link
             to="/login"
-            class="block py-4 px-20 text-xl text-link md:p-0"
+            class="block py-4 px-20 duration-300 md:p-0 md:hover:-translate-y-1"
             >登入</router-link
           >
         </li>
@@ -95,16 +96,42 @@
 
 <script>
 import SearchBox from "@/components/SearchBoxComponent";
-import { ref } from "vue";
+import { ref, onMounted, watch } from "vue";
 export default {
   components: {
     SearchBox,
   },
-  setup() {
+  emits: ["scrollStatus", "showMask"],
+  setup(props, { emit }) {
     let navStatus = ref(false);
+    let top = 0;
+    let scrollStatus = ref("top");
+
+    onMounted(() => {
+      window.addEventListener("scroll", () => {
+        let topDistance = document.documentElement.scrollTop;
+        if (topDistance <= 0) {
+          scrollStatus.value = "top";
+          emit("scrollStatus", "top");
+        } else if (topDistance >= top) {
+          top = topDistance;
+          scrollStatus.value = "down";
+          emit("scrollStatus", "down");
+        } else {
+          top = topDistance;
+          scrollStatus.value = "up";
+          emit("scrollStatus", "up");
+        }
+      });
+    });
+
+    watch(navStatus, (newV) => {
+      emit("showMask", newV);
+    });
 
     return {
       navStatus,
+      scrollStatus,
     };
   },
 };
