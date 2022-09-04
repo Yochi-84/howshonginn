@@ -111,89 +111,74 @@
   </main>
 </template>
 
-<script>
+<script setup>
 import SearchBox from "@/components/SearchBoxComponent";
 import FamousCard from "@/components/FamousCardComponent";
 import ShareCard from "@/components/ShareCardComponent";
 
-export default {
-  name: "HomeView",
-  components: {
-    SearchBox,
-    FamousCard,
-    ShareCard,
+const famous = [
+  {
+    name: "懶懶露休閒露營區",
+    county: "南投縣埔里鎮",
+    image:
+      "https://images.unsplash.com/photo-1580842693665-cdae6f59814f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80",
   },
-  setup() {
-    const famous = [
-      {
-        name: "懶懶露休閒露營區",
-        county: "南投縣埔里鎮",
-        image:
-          "https://images.unsplash.com/photo-1580842693665-cdae6f59814f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80",
-      },
-      {
-        name: "海天一色露營區",
-        county: "花蓮縣秀林鄉",
-        image:
-          "https://images.unsplash.com/photo-1517824806704-9040b037703b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-      },
-      {
-        name: "熊與龜露營區",
-        county: "高雄市六龜區",
-        image:
-          "https://images.unsplash.com/photo-1497900304864-273dfb3aae33?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1215&q=80",
-      },
-      {
-        name: "微笑草景觀露營區",
-        county: "桃園市復興區",
-        image:
-          "https://images.unsplash.com/photo-1571687949921-1306bfb24b72?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-      },
-    ];
-
-    const share = [
-      {
-        name: "三岔口露營區",
-        county: "新竹縣尖石鄉",
-        image:
-          "https://images.unsplash.com/photo-1595923112485-5e7c738fa67b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=374&q=80",
-      },
-      {
-        name: "憂鬱森林露營區",
-        county: "南投縣仁愛鄉",
-        image:
-          "https://images.unsplash.com/photo-1542332213-1d277bf3d6c6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-      },
-      {
-        name: "天湖漫遊露營區",
-        county: "新竹縣五峰鄉",
-        image:
-          "https://images.unsplash.com/photo-1580842693665-cdae6f59814f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80 ",
-      },
-      {
-        name: "晴天娃娃露營區",
-        county: "苗栗縣泰安鄉",
-        image:
-          "https://images.unsplash.com/photo-1599758376048-8c340c1489cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
-      },
-      {
-        name: "地平線景觀休閒露營區",
-        county: "宜蘭縣大同鄉",
-        image:
-          "https://images.unsplash.com/photo-1506404214625-2c59d5e6e912?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-      },
-      {
-        name: "山林忘歸露營區",
-        county: "台中市和平區",
-        image:
-          "https://images.unsplash.com/photo-1513104399965-f5160d963d39?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
-      },
-    ];
-
-    return {
-      famous,
-      share,
-    };
+  {
+    name: "海天一色露營區",
+    county: "花蓮縣秀林鄉",
+    image:
+      "https://images.unsplash.com/photo-1517824806704-9040b037703b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
   },
-};
+  {
+    name: "熊與龜露營區",
+    county: "高雄市六龜區",
+    image:
+      "https://images.unsplash.com/photo-1497900304864-273dfb3aae33?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1215&q=80",
+  },
+  {
+    name: "微笑草景觀露營區",
+    county: "桃園市復興區",
+    image:
+      "https://images.unsplash.com/photo-1571687949921-1306bfb24b72?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+  },
+];
+
+const share = [
+  {
+    name: "三岔口露營區",
+    county: "新竹縣尖石鄉",
+    image:
+      "https://images.unsplash.com/photo-1595923112485-5e7c738fa67b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=374&q=80",
+  },
+  {
+    name: "憂鬱森林露營區",
+    county: "南投縣仁愛鄉",
+    image:
+      "https://images.unsplash.com/photo-1542332213-1d277bf3d6c6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+  },
+  {
+    name: "天湖漫遊露營區",
+    county: "新竹縣五峰鄉",
+    image:
+      "https://images.unsplash.com/photo-1628087235616-4e146afcd061?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=388&q=80",
+  },
+  {
+    name: "晴天娃娃露營區",
+    county: "苗栗縣泰安鄉",
+    image:
+      "https://images.unsplash.com/photo-1599758376048-8c340c1489cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
+  },
+  {
+    name: "地平線景觀休閒露營區",
+    county: "宜蘭縣大同鄉",
+    image:
+      "https://images.unsplash.com/photo-1506404214625-2c59d5e6e912?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+  },
+  {
+    name: "山林忘歸露營區",
+    county: "台中市和平區",
+    image:
+      "https://images.unsplash.com/photo-1513104399965-f5160d963d39?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+  },
+];
 </script>

@@ -12,6 +12,25 @@
   a {
     text-align: center;
   }
+
+  ::-webkit-scrollbar {
+    @apply w-1.5;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-300;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    @apply bg-green-800 rounded;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary;
+  }
 }
 
 @layer components {
@@ -32,7 +51,7 @@
   }
 
   .btn-fluid {
-    @apply rounded-none block border-0 py-4 text-center md:py-4;
+    @apply block rounded-none border-0 py-4 text-center md:py-4;
   }
 }
 

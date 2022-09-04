@@ -8,29 +8,29 @@
       <div
         :class="[
           'form-block mx-auto w-5/6 duration-300 md:rounded-xl md:border-[5px] md:border-primary md:bg-white md:bg-opacity-60 md:py-6 md:px-8 md:backdrop-blur-sm lg:w-2/3 lg:py-6 lg:px-32',
-          { 'md:border-danger': currentTab === 'register' },
+          { 'md:border-danger': currentTab === 'Register' },
         ]"
       >
         <ul class="flex items-center">
           <li
             :class="[
               'w-1/2 cursor-pointer border-b-2 pb-3 text-center text-lg duration-500',
-              currentTab === 'login'
+              currentTab === 'Login'
                 ? 'border-b-current font-bold text-primary'
                 : 'border-b-transparent text-content',
             ]"
-            @click="currentTab = 'login'"
+            @click="currentTab = 'Login'"
           >
             <font-awesome-icon icon="fa-solid fa-user-alt" class="mr-2" />登入
           </li>
           <li
             :class="[
               'w-1/2 cursor-pointer border-b-2 pb-3 text-center text-lg duration-500',
-              currentTab === 'register'
+              currentTab === 'Register'
                 ? 'border-b-current font-bold text-danger'
                 : 'border-b-transparent text-content',
             ]"
-            @click="currentTab = 'register'"
+            @click="currentTab = 'Register'"
           >
             <font-awesome-icon icon="fa-solid fa-user-plus" class="mr-2" />註冊
           </li>
@@ -38,31 +38,25 @@
 
         <transition mode="out-in" :duration="300">
           <keep-alive>
-            <component :is="currentTab"></component>
+            <component :is="tab[currentTab]"></component>
           </keep-alive>
         </transition>
       </div>
     </div>
   </main>
 </template>
-<script>
+<script setup>
 import Login from "@/components/LoginComponent";
 import Register from "@/components/RegisterComponent";
 import { ref } from "vue";
-export default {
-  components: {
-    Login,
-    Register,
-  },
-  setup() {
-    const currentTab = ref("login");
-    return {
-      currentTab,
-    };
-  },
+
+const currentTab = ref("Login");
+const tab = {
+  Login,
+  Register,
 };
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .v-enter-active,
 .v-leave-active {
   transition: opacity 0.5s ease;

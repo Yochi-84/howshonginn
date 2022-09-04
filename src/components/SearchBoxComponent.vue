@@ -4,6 +4,7 @@
       type="text"
       placeholder="請輸入關鍵字搜尋"
       class="flex-grow basis-3/4 bg-transparent py-3 pl-2 text-base placeholder:text-content-light focus:outline-none md:pl-4"
+      v-model="keyword"
       @keydown.enter.exact="search"
     />
     <a
@@ -14,6 +15,11 @@
     /></a>
   </div>
 </template>
-<script>
-export default {};
+<script setup>
+import { ref } from "vue";
+const keyword = ref("");
+
+function search() {
+  console.log(123);
+}
 </script>

@@ -3,6 +3,7 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
+  safelist: ["bg-danger", "bg-orange-600"],
   theme: {
     screens: {
       sm: "576px",

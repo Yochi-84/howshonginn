@@ -6,7 +6,7 @@
       <div
         class="mx-auto flex w-5/6 flex-wrap items-start justify-start pb-4 md:flex-wrap md:justify-around md:pb-8"
       >
-        <div class="mb-6 flex items-start md:mb-0 md:block">
+        <div class="mb-6 flex items-center md:mb-0 md:block md:items-start">
           <h4
             class="mr-4 flex-shrink-0 text-xl font-bold tracking-widest text-white md:mr-0 md:mb-4 md:text-center"
           >
@@ -22,7 +22,7 @@
             <li><router-link to="/" class="link">離島</router-link></li>
           </ul>
         </div>
-        <div class="mb-6 flex items-start md:mb-0 md:block">
+        <div class="mb-6 flex items-center md:mb-0 md:block md:items-start">
           <h4
             class="mr-4 flex-shrink-0 text-xl font-bold tracking-widest text-white md:mr-0 md:mb-4 md:text-center"
           >
@@ -37,7 +37,7 @@
             <li><router-link to="/" class="link">近市區</router-link></li>
           </ul>
         </div>
-        <div class="mb-6 flex items-start md:mb-0 md:block">
+        <div class="mb-6 flex items-center md:mb-0 md:block md:items-start">
           <h4
             class="mr-4 flex-shrink-0 text-xl font-bold tracking-widest text-white md:mr-0 md:mb-4 md:text-center"
           >

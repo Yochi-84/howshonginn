@@ -7,38 +7,31 @@
     id="mask"
   ></div>
 </template>
-<script>
+<script setup>
 import { onMounted } from "vue";
-export default {
-  props: {
-    show: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  setup(props) {
-    onMounted(() => {
-      const observer = new IntersectionObserver((entries) => {
-        console.log(entries);
-        if (entries.some((item) => item.isIntersecting)) {
-          document
-            .querySelector("body")
-            .classList.add("overflow-y-hidden", "max-h-screen");
-        } else {
-          document.querySelector("#mask").classList.remove("block");
-          document.querySelector("#mask").classList.add("hidden");
-          document
-            .querySelector("body")
-            .classList.remove("overflow-y-hidden", "max-h-screen");
-        }
-      });
 
-      observer.observe(document.querySelector("#mask"));
-    });
-
-    return {
-      props,
-    };
+const props = defineProps({
+  show: {
+    type: Boolean,
+    default: false,
   },
-};
+});
+
+onMounted(() => {
+  const observer = new IntersectionObserver((entries) => {
+    if (entries.some((item) => item.isIntersecting)) {
+      document
+        .querySelector("body")
+        .classList.add("overflow-y-hidden", "max-h-screen");
+    } else {
+      document.querySelector("#mask").classList.remove("block");
+      document.querySelector("#mask").classList.add("hidden");
+      document
+        .querySelector("body")
+        .classList.remove("overflow-y-hidden", "max-h-screen");
+    }
+  });
+
+  observer.observe(document.querySelector("#mask"));
+});
 </script>

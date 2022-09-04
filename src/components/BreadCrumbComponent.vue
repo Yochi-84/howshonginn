@@ -6,6 +6,4 @@
     <li class="">所有營地</li>
   </ul>
 </template>
-<script>
-export default {};
-</script>
+<script setup></script>

@@ -57,35 +57,35 @@
       </h1>
       <ul
         :class="[
-          'hidden md:ml-12 md:flex md:flex-grow md:items-center md:gap-x-8 md:gap-y-8',
+          'hidden md:ml-12 md:flex md:flex-grow md:items-center md:gap-x-8',
           scrollStatus !== 'top' ? 'text-content' : 'text-white',
         ]"
       >
         <li>
           <router-link
             to="/list"
-            class="bg-sl block py-4 px-20 duration-300 md:p-0 md:hover:-translate-y-1"
+            class="block p-0 duration-300 md:hover:-translate-y-1"
             >所有營地</router-link
           >
         </li>
         <li>
           <router-link
             to="/share"
-            class="block py-4 px-20 duration-300 md:p-0 md:hover:-translate-y-1"
+            class="block duration-300 md:hover:-translate-y-1"
             >分享營地</router-link
           >
         </li>
         <li>
           <router-link
             to="/contact"
-            class="'block py-4 px-20 duration-300 md:p-0 md:hover:-translate-y-1"
+            class="block duration-300 md:hover:-translate-y-1"
             >聯絡我們</router-link
           >
         </li>
         <li class="ml-auto">
           <router-link
             to="/login"
-            class="block py-4 px-20 duration-300 md:p-0 md:hover:-translate-y-1"
+            class="block duration-300 md:hover:-translate-y-1"
             >登入</router-link
           >
         </li>
@@ -94,45 +94,32 @@
   </header>
 </template>
 
-<script>
+<script setup>
 import SearchBox from "@/components/SearchBoxComponent";
 import { ref, onMounted, watch } from "vue";
-export default {
-  components: {
-    SearchBox,
-  },
-  emits: ["scrollStatus", "showMask"],
-  setup(props, { emit }) {
-    let navStatus = ref(false);
-    let top = 0;
-    let scrollStatus = ref("top");
 
-    onMounted(() => {
-      window.addEventListener("scroll", () => {
-        let topDistance = document.documentElement.scrollTop;
-        if (topDistance <= 0) {
-          scrollStatus.value = "top";
-          emit("scrollStatus", "top");
-        } else if (topDistance >= top) {
-          top = topDistance;
-          scrollStatus.value = "down";
-          emit("scrollStatus", "down");
-        } else {
-          top = topDistance;
-          scrollStatus.value = "up";
-          emit("scrollStatus", "up");
-        }
-      });
-    });
+const emits = defineEmits(["scrollStatus", "showMask"]);
+let navStatus = ref(false);
+let top = 0;
+let scrollStatus = ref("top");
 
-    watch(navStatus, (newV) => {
-      emit("showMask", newV);
-    });
+onMounted(() => {
+  window.addEventListener("scroll", () => {
+    let topDistance = document.documentElement.scrollTop;
+    if (topDistance <= 0) {
+      scrollStatus.value = "top";
+    } else if (topDistance >= top) {
+      top = topDistance;
+      scrollStatus.value = "down";
+    } else {
+      top = topDistance;
+      scrollStatus.value = "up";
+    }
+    emits("scrollStatus", scrollStatus.value);
+  });
+});
 
-    return {
-      navStatus,
-      scrollStatus,
-    };
-  },
-};
+watch(navStatus, (newV) => {
+  emits("showMask", newV);
+});
 </script>

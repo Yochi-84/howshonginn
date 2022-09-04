@@ -1,6 +1,6 @@
 <template>
   <Carousel :settings="settings" v-model="currentSlide">
-    <Slide v-for="(info, index) of cardInfo" :key="info.name">
+    <Slide v-for="(info, index) of props.cardInfo" :key="info.name">
       <div class="carousel__item relative w-full overflow-hidden rounded">
         <div
           :class="[
@@ -33,50 +33,34 @@
     </Slide>
 
     <template #addons>
-      <navigation />
+      <Navigation />
     </template>
   </Carousel>
 </template>
-<script>
+<script setup>
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Navigation } from "vue3-carousel";
 import { ref } from "vue";
-export default {
-  props: {
-    cardInfo: {
-      type: Object,
+
+const props = defineProps({
+  cardInfo: Object,
+});
+const currentSlide = ref(1);
+const settings = {
+  itemsToShow: 1,
+  snapAlign: "center",
+  wrapAround: true,
+  autoplay: 4000,
+  pauseAutoplayOnHover: true,
+  mouseDrag: false,
+  transition: 700,
+  breakpoints: {
+    576: {
+      itemsToShow: 2.5,
     },
-  },
-  components: {
-    Carousel,
-    Slide,
-    Navigation,
-  },
-  setup() {
-    const settings = {
-      itemsToShow: 1,
-      snapAlign: "center",
-      wrapAround: true,
-      autoplay: 4000,
-      pauseAutoplayOnHover: true,
-      mouseDrag: false,
-      transition: 700,
-      breakpoints: {
-        576: {
-          itemsToShow: 2.5,
-        },
-        992: {
-          itemsToShow: 4,
-        },
-      },
-    };
-
-    const currentSlide = ref(1);
-
-    return {
-      settings,
-      currentSlide,
-    };
+    992: {
+      itemsToShow: 4,
+    },
   },
 };
 </script>
@@ -106,7 +90,7 @@ export default {
   .carousel__icon {
     width: 48px;
     height: 48px;
-    fill: $primary;
+    fill: #1d976c;
   }
 }
 
@@ -119,7 +103,7 @@ export default {
   .carousel__icon {
     width: 48px;
     height: 48px;
-    fill: $primary;
+    fill: #1d976c;
   }
 }
 
