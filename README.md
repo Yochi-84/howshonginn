@@ -4,6 +4,7 @@
 ### 使用技術
 * vue-cli
 * tailwind
+* JSON Server
 * puppeteer(資料收集)
 
 ### 使用套件
@@ -12,8 +13,12 @@
 
 ### 資料來源
 * [露營樂](https://www.easycamp.com.tw/)
+
 ### 圖片來源
-* [Unspalsh](https://unsplash.com/)
+* [Unsplash](https://unsplash.com/)
+
+### 已知問題
+1. list 頁面卡片的 transition 在資料內容變動後如果依舊存在時不會觸發
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

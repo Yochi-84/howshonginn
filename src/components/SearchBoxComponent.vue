@@ -3,7 +3,9 @@
     <input
       type="text"
       placeholder="請輸入關鍵字搜尋"
-      class="flex-grow basis-3/4 bg-transparent py-3 pl-2 text-base placeholder:text-content-light focus:outline-none md:pl-4"
+      :class="[
+        'flex-grow basis-3/4 bg-transparent py-3 pl-2 text-base  focus:outline-none md:pl-4 lg:placeholder:text-content-light',
+      ]"
       v-model="keyword"
       @keydown.enter.exact="search"
     />
@@ -17,9 +19,15 @@
 </template>
 <script setup>
 import { ref } from "vue";
+import router from "@/router";
 const keyword = ref("");
 
 function search() {
-  console.log(123);
+  router.push({
+    name: "list",
+    query: {
+      q: keyword.value,
+    },
+  });
 }
 </script>

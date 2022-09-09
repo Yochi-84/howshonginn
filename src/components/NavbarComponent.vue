@@ -1,7 +1,7 @@
 <template>
   <header
     :class="[
-      'fixed top-0 z-50 w-full bg-white shadow-[0_2px_5px_1px_rgba(0,0,0,0.3)] duration-500 ',
+      'fixed top-0 z-30 w-full bg-white shadow-[0_2px_5px_1px_rgba(0,0,0,0.3)] duration-500 ',
       {
         'md:bg-transparent md:shadow-none': scrollStatus === 'top',
         '-translate-y-full': scrollStatus === 'down',
@@ -18,7 +18,7 @@
       /></span>
       <ul
         :class="[
-          'absolute bottom-0 left-0 right-0 z-10 translate-y-full overflow-hidden whitespace-nowrap bg-white text-center text-primary duration-300 md:hidden',
+          'absolute bottom-0 left-0 right-0 z-5 translate-y-full overflow-hidden whitespace-nowrap bg-white text-center text-primary duration-300 md:hidden',
           navStatus
             ? 'max-h-screen shadow-[0_2px_5px_1px_rgba(0,0,0,0.3)_inset]'
             : 'max-h-0',
@@ -28,20 +28,20 @@
           <SearchBox class="mx-auto w-[90%] border border-black text-black" />
         </li>
         <li>
-          <router-link to="/list" class="block py-4">所有營地</router-link>
+          <a href="#" @click.prevent="routeTo('list')" class="block py-4">所有營地</a>
         </li>
         <li>
-          <router-link to="/share" class="block py-4">分享營地</router-link>
+          <a href="#" @click.prevent="routeTo('share')" class="block py-4">分享營地</a>
         </li>
         <li>
-          <router-link to="/contact" class="block py-4">聯絡我們</router-link>
+          <a href="#" @click.prevent="routeTo('contact')" class="block py-4">聯絡我們</a>
         </li>
         <li>
-          <router-link to="/login" class="block py-4"
+          <a href="#" class="block py-4" @click.prevent="showLoginModal"
             ><font-awesome-icon
               icon="fa-solid fa-user-alt"
               class="mr-2"
-            />登入</router-link
+            />登入</a
           >
         </li>
       </ul>
@@ -83,10 +83,12 @@
           >
         </li>
         <li class="ml-auto">
-          <router-link
-            to="/login"
+          <a
+            href="#"
             class="block duration-300 md:hover:-translate-y-1"
-            >登入</router-link
+            v-if="!store.userInfo.status"
+            @click.prevent="showLoginModal"
+            >登入</a
           >
         </li>
       </ul>
@@ -96,9 +98,12 @@
 
 <script setup>
 import SearchBox from "@/components/SearchBoxComponent";
+import { useStore } from '@/stores/index';
 import { ref, onMounted, watch } from "vue";
+import router from "@/router";
 
-const emits = defineEmits(["scrollStatus", "showMask"]);
+const store = useStore();
+const emits = defineEmits(["scrollStatus", "showMask", "LoginModal"]);
 let navStatus = ref(false);
 let top = 0;
 let scrollStatus = ref("top");
@@ -106,7 +111,7 @@ let scrollStatus = ref("top");
 onMounted(() => {
   window.addEventListener("scroll", () => {
     let topDistance = document.documentElement.scrollTop;
-    if (topDistance <= 0) {
+    if (topDistance <= 50) {
       scrollStatus.value = "top";
     } else if (topDistance >= top) {
       top = topDistance;
@@ -119,7 +124,15 @@ onMounted(() => {
   });
 });
 
-watch(navStatus, (newV) => {
-  emits("showMask", newV);
-});
+function showLoginModal() {
+  navStatus.value = false;
+  emits("loginModal", true);
+}
+
+function routeTo(url) {
+  navStatus.value = false;
+  router.push({path: `/${url}`});
+}
+
+watch(navStatus, (newV) => emits("showMask", newV));
 </script>

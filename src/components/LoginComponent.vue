@@ -1,25 +1,29 @@
 <template>
-  <div class="flex flex-col py-6 md:py-8">
+  <div class="flex flex-col py-6 md:py-4">
+    <p class="bg-danger py-1 text-sm md:text-base text-danger-dark text-center mb-2" v-show="errorStatus === 'errorInfo'"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" class="mr-1"/>登入資料有誤，請確認您輸入的資料是否正確</p>
     <label for="email" class="mb-2 text-sm md:mb-3 md:text-base">信箱</label>
     <input
       type="email"
       id="email"
       placeholder="請輸入電子信箱"
-      class="mb-6 rounded-sm border border-black bg-white py-2 px-4 placeholder:text-content-light focus:border-primary focus:shadow-around-primary focus:outline-none lg:py-3 lg:px-4 lg:text-xl"
+      :class="['mb-6 rounded-sm border border-black bg-white py-2 px-4 placeholder:text-content-light focus:border-primary-dark focus:shadow-around-primary focus:outline-none lg:py-2 lg:px-3',{'bg-danger outline outline-danger-dark': errorStatus === 'emptyEmail' && !loginData.email }]"
+      v-model.trim="loginData.email"
     />
     <label for="password" class="mb-2 text-sm md:mb-3 md:text-base">密碼</label>
     <input
       type="password"
       id="password"
       placeholder="請輸入密碼"
-      class="mb-6 rounded-sm border border-black bg-white py-2 px-4 placeholder:text-content-light focus:border-primary focus:shadow-around-primary focus:outline-none lg:py-3 lg:px-4 lg:text-xl"
+      :class="['mb-6 rounded-sm border border-black bg-white py-2 px-4 placeholder:text-content-light focus:border-primary-dark focus:shadow-around-primary focus:outline-none lg:py-2 lg:px-3',{'bg-danger outline outline-danger-dark': errorStatus === 'emptyPassword' && !loginData.password }]"
+      v-model.trim="loginData.password"
     />
     <div class="mb-6 flex items-center justify-between">
       <div class="flex items-center">
         <input
           type="checkbox"
           id="keepLogin"
-          class="mr-2 rounded-sm border border-black bg-white py-2 px-4 accent-primary focus:border-primary focus:outline-none"
+          class="mr-2 rounded-sm border border-black bg-white py-2 px-4 accent-primary-dark focus:border-primary-dark focus:outline-none"
+          v-model="loginData.keepLogin"
         />
         <label for="keepLogin" class="text-sm lg:text-base">保持登入</label>
       </div>
@@ -27,7 +31,10 @@
         >忘記密碼?</a
       >
     </div>
-    <a href="#" class="btn btn-primary btn-large mb-8 self-center md:mb-10"
+    <a
+      href="#"
+      class="btn btn-primary btn-large mb-8 self-center md:mb-10"
+      @click.prevent="submit"
       >登入</a
     >
 
@@ -37,7 +44,7 @@
     >
     <a
       href="#"
-      class="btn btn-large flex items-center justify-center self-center border border-black bg-white font-normal text-black shadow-sm duration-300 hover:bg-gray-300"
+      class="btn btn-large flex items-center justify-center self-center border border-black bg-white font-normal text-black shadow-sm duration-300 hover:bg-gray-200"
       ><img
         src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png"
         alt="Google Icon"
@@ -46,4 +53,47 @@
     >
   </div>
 </template>
-<script setup></script>
+<script setup>
+// import { mapState } from 'pinia';
+import { useStore } from '@/stores/index';
+import axios from 'axios';
+import { ref } from 'vue';
+
+const store = useStore();
+const emits = defineEmits(['login']);
+const loginData = ref({
+  email: '',
+  password: '',
+  keepLogin: '',
+});
+const errorStatus = ref('');
+
+function submit() {
+  if (!loginData.value.email) {
+    errorStatus.value = 'emptyEmail';
+  } else if(!loginData.value.password) {
+    errorStatus.value = 'emptyPassword';
+  } else {
+    axios
+      .get(
+        `http://localhost:3000/user?email=${loginData.value.email}&password=${loginData.value.password}`
+      )
+      .then((res) => {
+        if (res.data.length > 0) {
+          store.userInfo = {
+            status:true,
+            ...res.data[0]
+          };
+          emits('login', true);
+          if(loginData.value.keepLogin) {
+            // 保持登入 localStorage ， false SessionStorage(?)
+            console.log("keepLogin");
+          }
+        } else {
+          errorStatus.value = 'errorInfo';
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+}
+</script>

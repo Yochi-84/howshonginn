@@ -8,7 +8,7 @@
       />
     </div>
     <div class="p-4 text-center md:px-6 md:text-left">
-      <h4 class="mb-2 text-primary md:mb-3 md:text-lg">
+      <h4 class="mb-2 text-primary-dark md:mb-3 md:text-lg">
         <font-awesome-icon icon="fa-solid fa-location-dot" class="mr-2" />{{
           props.cardInfo.county
         }}

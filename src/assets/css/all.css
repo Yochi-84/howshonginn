@@ -6,6 +6,8 @@
 
 @layer base {
   body {
+    @apply text-gray-700;
+
     line-height: 1.5;
   }
 
@@ -35,15 +37,23 @@
 
 @layer components {
   .btn {
-    @apply inline-block rounded py-2 px-6 font-bold leading-none text-white duration-300 md:py-3 md:px-8 md:text-lg;
+    @apply inline-block rounded py-3 px-6 leading-none text-black duration-300 md:py-3 md:px-8 tracking-wider;
   }
 
   .btn-primary {
-    @apply border-primary bg-primary hover:border-primary-dark hover:bg-primary-dark;
+    @apply border-primary bg-primary hover:border-primary-dark hover:bg-primary-dark hover:text-white;
+  }
+
+  .btn-secondary {
+    @apply border-secondary bg-secondary hover:border-secondary-dark hover:bg-secondary-dark hover:text-white;
   }
 
   .btn-danger {
-    @apply border-danger bg-danger hover:border-danger-dark hover:bg-danger-dark;
+    @apply border-danger bg-danger hover:border-danger-dark hover:bg-danger-dark hover:text-white;
+  }
+
+  .btn-small {
+    @apply py-1.5 px-2 text-base;
   }
 
   .btn-large {
@@ -62,5 +72,13 @@
 
   .text-shadow {
     text-shadow: 3px 3px 6px #333;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  .content-\[\>\] {
+    content: ">";
   }
 }

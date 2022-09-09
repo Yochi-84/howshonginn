@@ -4,7 +4,7 @@
       <div class="carousel__item relative w-full overflow-hidden rounded">
         <div
           :class="[
-            'h-[350px] before:absolute before:inset-0 before:bg-gradient-to-b before:from-transparent before:via-[rgba(0,0,0,0.1)] before:to-[rgba(0,0,0,0.5)] before:duration-700',
+            'h-[400px] before:absolute before:inset-0 before:bg-gradient-to-b before:from-transparent before:via-[rgba(0,0,0,0.1)] before:to-[rgba(0,0,0,0.5)] before:duration-700',
             currentSlide === index ? 'before:opacity-100' : 'before:opacity-0',
           ]"
         >

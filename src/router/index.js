@@ -15,26 +15,69 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/ListView.vue"),
+    meta: {
+      breadcrumb: [
+        {
+          name: "首頁",
+          link: "/",
+        },
+        {
+          name: "所有營地",
+        },
+      ],
+    },
   },
   {
     path: "/share",
     name: "share",
     component: () => import("../views/ShareView.vue"),
+    meta: {
+      breadcrumb: [
+        {
+          name: "首頁",
+          link: "/",
+        },
+        {
+          name: "分享營地",
+        },
+      ],
+    },
   },
   {
     path: "/contact",
     name: "contact",
     component: () => import("../views/ContactView.vue"),
-  },
-  {
-    path: "/login",
-    name: "login",
-    component: () => import("../views/LoginView.vue"),
+    meta: {
+      breadcrumb: [
+        {
+          name: "首頁",
+          link: "/",
+        },
+        {
+          name: "聯絡我們",
+        },
+      ],
+    },
   },
   {
     path: "/info",
     name: "info",
     component: () => import("../views/InfoView.vue"),
+    meta: {
+      breadcrumb: [
+        {
+          name: "首頁",
+          link: "/",
+        },
+        {
+          name: "所有營地",
+          link: "/list",
+        },
+        {
+          name: "營地資訊",
+        },
+      ],
+    },
   },
 ];
 

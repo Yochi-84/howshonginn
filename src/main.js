@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
+import { createPinia } from 'pinia'
 import router from "./router";
 import axios from "axios";
 import VueAxios from "vue-axios";
@@ -19,7 +20,24 @@ import {
   faUserPlus,
   faFilter,
   faXmark,
+  faMap,
+  faPhone,
+  faPhoneVolume,
+  faGlobe,
+  faMountainSun,
+  faHeart as faHeartFilled,
+  faTags,
+  faCaretUp,
+  faCaretDown,
+  faTriangleExclamation
 } from "@fortawesome/free-solid-svg-icons";
+
+import {
+  faHeart,
+  faThumbsUp,
+  faThumbsDown,
+  faCommentDots,
+} from "@fortawesome/free-regular-svg-icons";
 
 /* add icons to the library */
 library.add(
@@ -29,11 +47,31 @@ library.add(
   faUserAlt,
   faUserPlus,
   faFilter,
-  faXmark
+  faXmark,
+  faMap,
+  faPhone,
+  faPhoneVolume,
+  faGlobe,
+  faMountainSun,
+  faHeart,
+  faHeartFilled,
+  faTags,
+  faThumbsUp,
+  faThumbsDown,
+  faCommentDots,
+  faCaretUp,
+  faCaretDown,
+  faTriangleExclamation
 );
 
+const pinia = createPinia();
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)
+  .use(pinia)
   .use(VueAxios, axios)
   .use(router)
   .mount("#app");
+
+router.afterEach(() => {
+  window.scrollTo(0, 0);
+});

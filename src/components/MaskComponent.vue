@@ -1,8 +1,10 @@
 <template>
   <div
     :class="[
-      'fixed inset-0 z-40  bg-black bg-opacity-60 lg:hidden',
-      props.show ? 'block' : 'hidden',
+      'fixed inset-0 bg-black bg-opacity-60',
+      props.show.status ? 'block' : 'hidden',
+      props.show['z-index'] === 40 ? 'z-40' : 'z-20',
+      { 'lg:hidden': props.show['lg-hidden'] },
     ]"
     id="mask"
   ></div>
@@ -12,8 +14,14 @@ import { onMounted } from "vue";
 
 const props = defineProps({
   show: {
-    type: Boolean,
-    default: false,
+    type: Object,
+    default: () => {
+      return {
+        status: false,
+        "z-index": 20,
+        "lg-hidden": false,
+      };
+    },
   },
 });
 

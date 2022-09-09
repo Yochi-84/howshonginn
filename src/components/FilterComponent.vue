@@ -2,8 +2,11 @@
   <!-- 手機版篩選鈕 -->
   <label
     for="filterController"
-    class="fixed bottom-[4.5rem] right-4 z-40 flex h-12 w-12 cursor-pointer select-none items-center justify-center rounded-full border border-primary bg-gray-300 lg:hidden"
-    ><font-awesome-icon icon="fa-solid fa-filter" class="text-primary"
+    :class="[
+      'fixed right-4 z-10 flex h-12 w-12 cursor-pointer select-none items-center justify-center rounded-full border border-primary-dark bg-gray-300 duration-500 lg:hidden',
+      scrollStatus === 'top' ? 'bottom-4' : 'bottom-[4.5rem]',
+    ]"
+    ><font-awesome-icon icon="fa-solid fa-filter" class="text-primary-dark"
   /></label>
   <input
     type="checkbox"
@@ -13,10 +16,10 @@
   />
   <!-- Filter Bar -->
   <div
-    class="fixed top-1/2 left-1/2 z-50 hidden max-h-[95vh] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-lg border border-primary bg-white peer-checked:block lg:static lg:z-0 lg:block lg:max-h-max lg:translate-x-0 lg:translate-y-0"
+    class="fixed top-1/2 left-1/2 z-50 hidden max-h-[95vh] min-w-[80%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-lg border border-primary-dark bg-white peer-checked:block lg:static lg:z-0 lg:block lg:max-h-max lg:translate-x-0 lg:translate-y-0"
   >
     <h2
-      class="border-b border-b-primary py-2 pb-2 text-center text-xl font-bold text-primary"
+      class="border-b border-b-primary-dark py-2 pb-2 text-center text-xl font-bold text-primary-dark"
     >
       <font-awesome-icon icon="fa-solid fa-filter" class="mr-2" />條件篩選
     </h2>
@@ -28,17 +31,13 @@
     <div
       class="max-h-[calc(95vh-111px)] overflow-y-auto overflow-x-hidden px-4 py-6 lg:max-h-max"
     >
-      <div class="mb-4 border-b border-b-primary pb-4">
-        <h3 class="mb-4 border-l-4 border-l-primary pl-2 text-lg">搜尋</h3>
-        <SearchBox class="border border-black"></SearchBox>
-      </div>
-      <div class="mb-4 border-b border-b-primary pb-4">
-        <h3 class="mb-4 border-l-4 border-l-primary pl-2 text-lg">縣市</h3>
+      <div class="mb-4 border-b border-b-primary-dark pb-4">
+        <h3 class="mb-4 border-l-4 border-l-primary-dark pl-2 text-lg">縣市</h3>
         <div class="mb-3 flex gap-x-2">
           <select
             name="county"
             id="county"
-            class="flex-grow rounded border border-black bg-white py-1 text-center focus:outline-primary"
+            class="flex-grow rounded border border-black bg-white py-1 text-center focus:outline-primary-dark"
             v-model="countySelect"
           >
             <option value="" selected disabled>--- 縣市 ---</option>
@@ -53,11 +52,11 @@
           <select
             name="town"
             id="town"
-            class="flex-grow rounded border border-black bg-white py-1 text-center focus:outline-primary"
+            class="flex-grow rounded border border-black bg-white py-1 text-center focus:outline-primary-dark"
             ref="town"
             disabled
           >
-            <option value="" selected disabled>--- 鄉鎮 ---</option>
+            <option value="" selected disabled>--- 鄉鎮區 ---</option>
             <option
               :value="town.AreaEngName"
               v-for="town of townList"
@@ -67,16 +66,16 @@
             </option>
           </select>
         </div>
-        <span class="mb-3 block text-center text-primary">或者</span>
-        <h3 class="mb-4 border-l-4 border-l-primary pl-2 text-lg">地區</h3>
+        <span class="mb-3 block text-center text-primary-dark">或者</span>
+        <h3 class="mb-4 border-l-4 border-l-primary-dark pl-2 text-lg">地區</h3>
         <ul class="-mx-1 flex flex-wrap gap-y-2">
           <li class="w-1/2 px-1" v-for="area of areaList" :key="area.area">
             <a
               href="#"
               :class="[
-                'block rounded-lg border py-1 text-center duration-300 hover:border-black hover:bg-black hover:text-white ',
+                'block rounded-lg border py-1 text-center duration-300 hover:border-primary hover:bg-primary hover:text-white',
                 area.selected
-                  ? 'border-primary bg-primary text-white'
+                  ? 'border-primary-dark bg-primary-dark text-white'
                   : 'border-black',
               ]"
               @click.prevent="areaSelect(area)"
@@ -86,15 +85,15 @@
         </ul>
       </div>
       <div>
-        <h3 class="mb-4 border-l-4 border-l-primary pl-2 text-lg">標籤</h3>
+        <h3 class="mb-4 border-l-4 border-l-primary-dark pl-2 text-lg">標籤</h3>
         <ul class="flex flex-wrap gap-x-2 gap-y-2">
           <li v-for="tags of tagList" :key="tags.tag">
             <a
               href="#"
               :class="[
-                'block rounded-xl border py-px px-2  hover:border-black hover:bg-black hover:text-white',
+                'block rounded-xl border py-px px-2  hover:border-primary hover:bg-primary hover:text-white',
                 tags.selected
-                  ? 'border-primary bg-primary text-white'
+                  ? 'border-primary-dark bg-primary-dark text-white'
                   : 'border-content text-content',
               ]"
               @click.prevent="tags.selected = !tags.selected"
@@ -104,7 +103,7 @@
         </ul>
       </div>
     </div>
-    <div class="-mx-1d flex justify-between border-t border-t-primary p-4">
+    <div class="-mx-1d flex justify-between border-t border-t-primary-dark p-4">
       <div class="w-1/2 px-1">
         <a
           href="#"
@@ -125,8 +124,7 @@
   </div>
 </template>
 <script setup>
-import SearchBox from "@/components/SearchBoxComponent";
-import { onMounted, ref, watch, computed } from "vue";
+import { onMounted, ref, watch, computed, inject } from "vue";
 import axios from "axios";
 
 const emits = defineEmits(["showMask"]);
@@ -134,6 +132,7 @@ const countyCity = ref({});
 const countySelect = ref("");
 const town = ref(null);
 const filterStatus = ref(false);
+const scrollStatus = inject("scrollStatus");
 // const area = {
 //   北部: [],
 // };
@@ -245,7 +244,7 @@ const townList = computed(
 );
 
 watch(countySelect, (newV) => {
-  if (newV) {
+  if (newV > -1) {
     for (let item of areaList.value) {
       item.selected = false;
     }
@@ -255,6 +254,6 @@ watch(countySelect, (newV) => {
 });
 
 watch(filterStatus, (newV) => {
-  emits("showMask", newV);
+  emits("showHigherMask", newV);
 });
 </script>

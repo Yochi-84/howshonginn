@@ -3,7 +3,7 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
-  safelist: ["bg-danger", "bg-orange-600"],
+  safelist: ["bg-danger-dark", "bg-sky-600", "text-white", "bg-secondary-dark"],
   theme: {
     screens: {
       sm: "576px",
@@ -29,12 +29,18 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#1d976c",
-          dark: "#156c4d",
+          light: "#E9F4EE",
+          DEFAULT: "#88C6A5",
+          dark: "#408560",
+        },
+        secondary: {
+          light: "#F4EEE9",
+          DEFAULT: "#E3A864",
+          dark: "#D28226",
         },
         danger: {
-          DEFAULT: "#971d48",
-          dark: "#6c1534",
+          DEFAULT: "#F7D2DB",
+          dark: "#A31C3D",
         },
         content: {
           light: "#a0a0a0",
@@ -50,8 +56,9 @@ module.exports = {
         huge: "1.5rem",
       },
       boxShadow: {
-        "around-primary": "0 0 2px 2px #1d976c",
-        "around-danger": "0 0 2px 2px #971d48",
+        "around-primary": "0 0 2px 2px #88C6A5",
+        "around-secondary": "0 0 2px 2px #E3A864",
+        "around-danger": "0 0 2px 2px #F7D2DB",
       },
       keyframes: {
         blink: {
@@ -61,11 +68,23 @@ module.exports = {
           "0%": { width: "0" },
           "50%": { width: "14em" },
         },
+        "twinkle-effect": {
+          "0%,40%": { right: "-100%" },
+          "65%,100%": { right: "150%" },
+        },
       },
       animation: {
         typing:
           "typing-effect 6s steps(14) infinite,blink 0.5s step-end infinite alternate",
+        twinkle: "twinkle-effect 3s ease-out infinite",
       },
+      zIndex: {
+        1: "1",
+        5: "5",
+      },
+      flexBasis: {
+        "1/8": "12.5%"
+      }
     },
   },
   plugins: [],

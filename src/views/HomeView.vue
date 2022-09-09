@@ -2,7 +2,7 @@
   <main>
     <!-- Banner -->
     <section
-      class="clip-triangle flex h-[400px] items-center justify-center bg-[url('https://images.unsplash.com/photo-1504632348771-974e356b80af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80')] bg-cover bg-fixed bg-bottom bg-no-repeat md:h-screen"
+      class="clip-triangle flex h-[500px] items-center justify-center bg-[url('https://images.unsplash.com/photo-1504632348771-974e356b80af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80')] bg-cover lg:bg-fixed bg-bottom bg-no-repeat md:h-screen"
     >
       <div class="md:flex md:w-4/5 md:flex-col md:items-center lg:w-1/2">
         <h2
@@ -17,7 +17,7 @@
     <!-- Famous -->
     <section class="container py-6 md:py-16">
       <h2
-        class="mb-4 items-center text-center text-2xl font-bold text-primary before:mr-4 before:w-4 before:flex-grow before:border-t-8 before:border-double before:border-t-primary after:ml-4 after:w-4 after:flex-grow after:border-t-8 after:border-double after:border-t-primary md:mb-8 md:flex md:text-3xl"
+        class="mb-4 items-center text-center text-2xl font-bold text-primary-dark before:mr-4 before:w-4 before:flex-grow before:border-t-8 before:border-double before:border-t-primary-dark after:ml-4 after:w-4 after:flex-grow after:border-t-8 after:border-double after:border-t-primary-dark md:mb-8 md:flex md:text-3xl"
       >
         最近熱門
       </h2>
@@ -60,7 +60,7 @@
               <p class="mb-3 text-base text-white lg:mb-6 lg:text-lg">
                 挖到寶？<br />踩到雷？<br />快來和大家分享你的露營體驗吧！
               </p>
-              <router-link to="/share" class="btn btn-primary"
+              <router-link to="/share" class="btn btn-secondary"
                 >馬上分享</router-link
               >
             </div>
@@ -98,10 +98,10 @@
     </section>
 
     <!-- Share -->
-    <section class="py-6 md:py-16">
+    <section class="py-6 mb-10 md:py-16 md:mb-6">
       <div class="md:container">
         <h2
-          class="mb-4 items-center text-center text-2xl font-bold text-primary before:mr-4 before:w-4 before:flex-grow before:border-t-8 before:border-double before:border-t-primary after:ml-4 after:w-4 after:flex-grow after:border-t-8 after:border-double after:border-t-primary md:mb-8 md:flex md:text-3xl"
+          class="mb-4 items-center text-center text-2xl font-bold text-primary-dark before:mr-4 before:w-4 before:flex-grow before:border-t-8 before:border-double before:border-t-primary-dark after:ml-4 after:w-4 after:flex-grow after:border-t-8 after:border-double after:border-t-primary-dark md:mb-8 md:flex md:text-3xl"
         >
           與你分享
         </h2>
