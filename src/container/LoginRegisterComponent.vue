@@ -4,7 +4,7 @@
       'fixed top-1/2 left-1/2 z-50 w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-xl border-[5px]   bg-white py-6 duration-300 md:w-[460px] lg:w-[550px] lg:py-6',
       currentTab === 'Login' ? 'border-primary' : 'border-secondary',
     ]"
-    v-show="props.showModal"
+    v-show="store.loginModal"
   >
     <a
       href="#"
@@ -18,7 +18,7 @@
         />
       </span>
     </a>
-    <ul class="items-center flex px-3 md:px-6">
+    <ul class="flex items-center px-3 md:px-6">
       <li
         :class="[
           'w-1/2 cursor-pointer border-b-2 pb-3 text-center duration-300 md:text-lg',
@@ -45,35 +45,30 @@
 
     <transition mode="out-in" :duration="300">
       <keep-alive>
-        <component :is="tab[currentTab]" class="px-3 md:px-6" @login="closeModal"></component>
+        <component
+          :is="tab[currentTab]"
+          class="px-3 md:px-6"
+          @success="closeModal"
+        ></component>
       </keep-alive>
     </transition>
   </div>
 </template>
 <script setup>
-import Login from "@/components/LoginComponent";
-import Register from "@/components/RegisterComponent";
-import { ref, computed, watch } from "vue";
+import Login from '@/components/LoginComponent';
+import Register from '@/components/RegisterComponent';
+import { ref } from 'vue';
+import { useStore } from '@/stores/index';
 
-const emits = defineEmits(["closeModal", "showHigherNoHiddenMask"]);
-const props = defineProps({
-  showModal: {
-    type: Boolean,
-    default: false,
-  },
-});
-
-const propsValue = computed(() => props.showModal);
+const store = useStore();
 
 function closeModal() {
-  emits("closeModal", false);
+  store.loginModal = false;
+  store.toggleMask(false);
+  currentTab.value = 'Login';
 }
 
-watch(propsValue, (newV) => {
-  emits("showHigherNoHiddenMask", newV);
-});
-
-const currentTab = ref("Login");
+const currentTab = ref('Login');
 const tab = {
   Login,
   Register,

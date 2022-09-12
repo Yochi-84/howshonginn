@@ -53,7 +53,7 @@ module.exports = {
         mono: ["Roboto Mono", ...defaultTheme.fontFamily.sans],
       },
       borderRadius: {
-        huge: "1.5rem",
+        huge: "2rem",
       },
       boxShadow: {
         "around-primary": "0 0 2px 2px #88C6A5",

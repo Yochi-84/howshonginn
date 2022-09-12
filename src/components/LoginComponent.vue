@@ -1,20 +1,20 @@
 <template>
   <div class="flex flex-col py-6 md:py-4">
-    <p class="bg-danger py-1 text-sm md:text-base text-danger-dark text-center mb-2" v-show="errorStatus === 'errorInfo'"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" class="mr-1"/>登入資料有誤，請確認您輸入的資料是否正確</p>
-    <label for="email" class="mb-2 text-sm md:mb-3 md:text-base">信箱</label>
+    <p class="bg-danger py-1 text-sm md:text-base text-danger-dark text-center mb-2" v-show="errorMsg === 'errorInfo'"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" class="mr-1"/>登入資料有誤，請確認您輸入的資料是否正確</p>
+    <label for="email" class="mb-2 text-sm md:text-base">信箱</label>
     <input
       type="email"
       id="email"
       placeholder="請輸入電子信箱"
-      :class="['mb-6 rounded-sm border border-black bg-white py-2 px-4 placeholder:text-content-light focus:border-primary-dark focus:shadow-around-primary focus:outline-none lg:py-2 lg:px-3',{'bg-danger outline outline-danger-dark': errorStatus === 'emptyEmail' && !loginData.email }]"
+      :class="['mb-6 rounded-sm border border-black bg-white py-2 px-4 placeholder:text-content-light focus:border-primary-dark focus:shadow-around-primary focus:outline-none lg:py-2 lg:px-3',{'bg-danger outline outline-danger-dark': errorMsg === 'emptyEmail' && !loginData.email }]"
       v-model.trim="loginData.email"
     />
-    <label for="password" class="mb-2 text-sm md:mb-3 md:text-base">密碼</label>
+    <label for="password" class="mb-2 text-sm md:text-base">密碼</label>
     <input
       type="password"
       id="password"
       placeholder="請輸入密碼"
-      :class="['mb-6 rounded-sm border border-black bg-white py-2 px-4 placeholder:text-content-light focus:border-primary-dark focus:shadow-around-primary focus:outline-none lg:py-2 lg:px-3',{'bg-danger outline outline-danger-dark': errorStatus === 'emptyPassword' && !loginData.password }]"
+      :class="['mb-6 rounded-sm border border-black bg-white py-2 px-4 placeholder:text-content-light focus:border-primary-dark focus:shadow-around-primary focus:outline-none lg:py-2 lg:px-3',{'bg-danger outline outline-danger-dark': errorMsg === 'emptyPassword' && !loginData.password }]"
       v-model.trim="loginData.password"
     />
     <div class="mb-6 flex items-center justify-between">
@@ -44,7 +44,7 @@
     >
     <a
       href="#"
-      class="btn btn-large flex items-center justify-center self-center border border-black bg-white font-normal text-black shadow-sm duration-300 hover:bg-gray-200"
+      class="btn flex items-center justify-center self-center border border-black bg-white font-normal text-black shadow-sm duration-300 hover:bg-gray-200"
       ><img
         src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png"
         alt="Google Icon"
@@ -60,19 +60,18 @@ import axios from 'axios';
 import { ref } from 'vue';
 
 const store = useStore();
-const emits = defineEmits(['login']);
 const loginData = ref({
   email: '',
   password: '',
   keepLogin: '',
 });
-const errorStatus = ref('');
+const errorMsg = ref('');
 
 function submit() {
   if (!loginData.value.email) {
-    errorStatus.value = 'emptyEmail';
+    errorMsg.value = 'emptyEmail';
   } else if(!loginData.value.password) {
-    errorStatus.value = 'emptyPassword';
+    errorMsg.value = 'emptyPassword';
   } else {
     axios
       .get(
@@ -84,13 +83,25 @@ function submit() {
             status:true,
             ...res.data[0]
           };
-          emits('login', true);
+
+          delete store.userInfo.password;
+          delete store.userInfo.permission;
+
+          store.loginModal = false;
+          store.toggleMask(false);
+          loginData.value.email = "";
+          loginData.value.password = "";
+
+          // 是否保持登入
           if(loginData.value.keepLogin) {
-            // 保持登入 localStorage ， false SessionStorage(?)
-            console.log("keepLogin");
+            store.userInfo.mode = "local";
+            store.userInfoToLocalStorage();
+          } else {
+            store.userInfo.mode = "session";
+            store.userInfoToSessionStorage();
           }
         } else {
-          errorStatus.value = 'errorInfo';
+          errorMsg.value = 'errorInfo';
         }
       })
       .catch((err) => console.log(err));

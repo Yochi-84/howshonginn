@@ -29,7 +29,13 @@ import {
   faTags,
   faCaretUp,
   faCaretDown,
-  faTriangleExclamation
+  faTriangleExclamation,
+  faBullhorn,
+  faRightFromBracket,
+  faCircleCheck,
+  faCircleXmark,
+  faGear,
+  faQuestion,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -61,7 +67,13 @@ library.add(
   faCommentDots,
   faCaretUp,
   faCaretDown,
-  faTriangleExclamation
+  faTriangleExclamation,
+  faBullhorn,
+  faRightFromBracket,
+  faCircleCheck,
+  faCircleXmark,
+  faGear,
+  faQuestion,
 );
 
 const pinia = createPinia();

@@ -38,7 +38,7 @@
             name="county"
             id="county"
             class="flex-grow rounded border border-black bg-white py-1 text-center focus:outline-primary-dark"
-            v-model="countySelect"
+            v-model="filterItem.countySelect"
           >
             <option value="" selected disabled>--- 縣市 ---</option>
             <option
@@ -54,11 +54,12 @@
             id="town"
             class="flex-grow rounded border border-black bg-white py-1 text-center focus:outline-primary-dark"
             ref="town"
-            disabled
+            v-model="filterItem.townSelect"
+            :disabled="filterItem.countySelect === ''"
           >
             <option value="" selected disabled>--- 鄉鎮區 ---</option>
             <option
-              :value="town.AreaEngName"
+              :value="town.AreaName"
               v-for="town of townList"
               :key="town.AreaName"
             >
@@ -69,7 +70,11 @@
         <span class="mb-3 block text-center text-primary-dark">或者</span>
         <h3 class="mb-4 border-l-4 border-l-primary-dark pl-2 text-lg">地區</h3>
         <ul class="-mx-1 flex flex-wrap gap-y-2">
-          <li class="w-1/2 px-1" v-for="area of areaList" :key="area.area">
+          <li
+            class="w-1/2 px-1"
+            v-for="area of filterItem.areaList"
+            :key="area.area"
+          >
             <a
               href="#"
               :class="[
@@ -85,9 +90,54 @@
         </ul>
       </div>
       <div>
-        <h3 class="mb-4 border-l-4 border-l-primary-dark pl-2 text-lg">標籤</h3>
+        <div class="mb-4 flex items-center justify-between">
+          <h3 class="border-l-4 border-l-primary-dark pl-2 text-lg">標籤</h3>
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              class="peer hidden"
+              id="modeSwitcher"
+              v-model="filterItem.tagFilterMode"
+            />
+            <label
+              for="modeSwitcher"
+              class="mr-2 inline-block h-5 w-10 cursor-pointer rounded-huge bg-primary-light ring-1 ring-primary duration-300 peer-checked:bg-secondary-light peer-checked:ring-secondary shadow-inner shadow-primary-dark peer-checked:shadow-secondary-dark"
+            >
+              <span
+                :class="[
+                  'inline-block h-5 w-5 rounded-full duration-300',
+                  filterItem.tagFilterMode ? 'ml-5 bg-secondary-dark' : 'bg-primary-dark',
+                ]"
+              ></span>
+            </label>
+            <!-- 點擊不做動作，只是要 stopPropagation 而已 -->
+            <label
+              class="relative flex h-4 w-4 cursor-pointer select-none items-center justify-center rounded-full bg-gray-200 text-sm text-gray-600 ring-1 ring-black"
+              for="filterModeDirection"
+              @click.stop=""
+            >
+              <font-awesome-icon icon="fa-solid fa-question" />
+              <input
+                type="checkbox"
+                id="filterModeDirection"
+                class="peer hidden"
+                v-model="filterModeDirection"
+              />
+              <div
+                class="invisible absolute right-0 -bottom-2 z-1 w-[220px] translate-y-full rounded-lg border border-primary-dark bg-primary-light p-2 text-base opacity-0 shadow duration-300 peer-checked:visible peer-checked:opacity-100 md:p-4"
+              >
+                <p class="mb-4 text-primary-dark">
+                  一般模式：只需符合任意一個選擇標籤。
+                </p>
+                <p class="text-secondary-dark">
+                  嚴格模式：須符合所有選擇標籤。
+                </p>
+              </div>
+            </label>
+          </div>
+        </div>
         <ul class="flex flex-wrap gap-x-2 gap-y-2">
-          <li v-for="tags of tagList" :key="tags.tag">
+          <li v-for="tags of filterItem.tagList" :key="tags.tag">
             <a
               href="#"
               :class="[
@@ -124,136 +174,163 @@
   </div>
 </template>
 <script setup>
-import { onMounted, ref, watch, computed, inject } from "vue";
-import axios from "axios";
+import { onMounted, ref, watch, computed, inject } from 'vue';
+import { useStore } from '@/stores/index';
+import axios from 'axios';
 
-const emits = defineEmits(["showMask"]);
-const countyCity = ref({});
-const countySelect = ref("");
-const town = ref(null);
-const filterStatus = ref(false);
-const scrollStatus = inject("scrollStatus");
-// const area = {
-//   北部: [],
-// };
-const areaList = ref([
-  {
-    area: "北部",
-    selected: false,
-  },
-  {
-    area: "中部",
-    selected: false,
-  },
-  {
-    area: "南部",
-    selected: false,
-  },
-  {
-    area: "東部",
-    selected: false,
-  },
-  {
-    area: "離島",
-    selected: false,
-  },
-]);
-const tagList = ref([
-  {
-    tag: "賞花",
-    selected: false,
-  },
-  {
-    tag: "寵物友善",
-    selected: false,
-  },
-  {
-    tag: "有雨棚",
-    selected: false,
-  },
-  {
-    tag: "少帳包區",
-    selected: false,
-  },
-  {
-    tag: "近市區",
-    selected: false,
-  },
-  {
-    tag: "五星級衛浴",
-    selected: false,
-  },
-  {
-    tag: "網路暢通",
-    selected: false,
-  },
-  {
-    tag: "大草皮",
-    selected: false,
-  },
-  {
-    tag: "高海拔",
-    selected: false,
-  },
-  {
-    tag: "百萬夜景",
-    selected: false,
-  },
-  {
-    tag: "狩獵帳",
-    selected: false,
-  },
-  {
-    tag: "免裝備",
-    selected: false,
-  },
-]);
+const store = useStore();
+const countyCity = ref({}); //全台區域資料
+const filterStatus = ref(false); //filter 是否顯示
+const filterModeDirection = ref(false); // 標籤篩選模式說明是否顯示
+const scrollStatus = inject('scrollStatus');
+const filterItem = ref({
+  countySelect: '', //縣市選擇項目
+  townSelect: '', //鄉鎮選擇項目
+  areaList: [
+    {
+      area: '北部',
+      selected: false,
+    },
+    {
+      area: '中部',
+      selected: false,
+    },
+    {
+      area: '南部',
+      selected: false,
+    },
+    {
+      area: '東部',
+      selected: false,
+    },
+    {
+      area: '離島',
+      selected: false,
+    },
+  ],
+  tagList: [
+    {
+      tag: '有夜景',
+      selected: false,
+    },
+    {
+      tag: '裝備出租',
+      selected: false,
+    },
+    {
+      tag: '有雨棚',
+      selected: false,
+    },
+    {
+      tag: '小包區',
+      selected: false,
+    },
+    {
+      tag: '近市區',
+      selected: false,
+    },
+    {
+      tag: '近溪流',
+      selected: false,
+    },
+    {
+      tag: '有雲海',
+      selected: false,
+    },
+    {
+      tag: '免裝備露營',
+      selected: false,
+    },
+    {
+      tag: '有遊戲設施',
+      selected: false,
+    },
+    {
+      tag: '螢火蟲季',
+      selected: false,
+    },
+    {
+      tag: '團露大草皮',
+      selected: false,
+    },
+    {
+      tag: '免裝備露營',
+      selected: false,
+    },
+  ],
+  tagFilterMode: false //標籤篩選模式，false 為一般模式
+});
 
 function filterSubmit() {
+  if(filterItem.value.countySelect !== "") {
+    console.log("縣市篩選")
+  } else {
+    console.log("縣市篩選2")
+  }
   filterStatus.value = false;
 }
 
+// FIXME:按第一下沒反應
 function areaSelect(area) {
-  if (countySelect.value) countySelect.value = "";
+  if (filterItem.value.countySelect) filterItem.value.countySelect = '';
   area.selected = !area.selected;
 }
 
 function clearFilter() {
-  countySelect.value = "";
-  for (let item of areaList.value) {
+  filterItem.value.countySelect = '';
+  for (let item of filterItem.value.areaList) {
     item.selected = false;
   }
-  for (let item of tagList.value) {
+  for (let item of filterItem.value.tagList) {
     item.selected = false;
   }
+}
+
+// 縣市下拉選單
+const townList = computed(
+  () => Array.from(countyCity.value)[filterItem.value.countySelect]?.AreaList
+);
+
+// 監聽全部用 deep，只監聽其中一樣先 computed
+const countySelect = computed(() => filterItem.value.countySelect)
+watch(
+  countySelect,
+  (newV) => {
+    if (newV > -1) {
+      for (let item of filterItem.value.areaList) {
+        item.selected = false;
+      }
+      filterItem.value.townSelect = '';
+    }
+  }
+);
+
+// 點擊區域外關閉
+watch(filterModeDirection, (newV) => {
+  if (newV) {
+    document.body.addEventListener('click', closeDirection);
+  } else {
+    document.body.removeEventListener('click', closeDirection);
+  }
+});
+
+// 遮罩
+watch(filterStatus, (newV) => {
+  store.toggleMask(newV, true, true);
+});
+
+// 不能寫在 watch 裡面，每次 watch 執行會重新宣告一次 function，會被判定跟上次執行是不同函式，removeEventListener 會失敗
+function closeDirection() {
+  filterModeDirection.value = false;
 }
 
 // 抓取鄉鎮資料
 onMounted(() => {
   axios
     .get(
-      "https://raw.githubusercontent.com/donma/TaiwanAddressCityAreaRoadChineseEnglishJSON/master/CityCountyData.json"
+      'https://raw.githubusercontent.com/donma/TaiwanAddressCityAreaRoadChineseEnglishJSON/master/CityCountyData.json'
     )
     .then((res) => (countyCity.value = res.data))
     .catch((err) => console.log(err));
-});
-
-// 縣市下拉選單
-const townList = computed(
-  () => Array.from(countyCity.value)[countySelect.value]?.AreaList
-);
-
-watch(countySelect, (newV) => {
-  if (newV > -1) {
-    for (let item of areaList.value) {
-      item.selected = false;
-    }
-    town.value.disabled = false;
-    town.value.value = "";
-  }
-});
-
-watch(filterStatus, (newV) => {
-  emits("showHigherMask", newV);
 });
 </script>

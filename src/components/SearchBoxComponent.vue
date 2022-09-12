@@ -11,7 +11,7 @@
     />
     <a
       href="#"
-      class="block h-full flex-shrink-0 cursor-pointer px-2 py-3 text-content-light duration-300 hover:text-primary md:px-4"
+      class="block h-full flex-shrink-0 cursor-pointer px-2 py-3 text-content-light duration-300 hover:text-primary-dark md:px-4"
       @click.prevent="search"
       ><font-awesome-icon icon="fa-solid fa-search"
     /></a>

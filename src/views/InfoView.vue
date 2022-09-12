@@ -29,18 +29,11 @@
                   class="mr-2"
                 />{{ info.county }}
               </h3>
-              <a href="#">
+              <a href="#" @click.prevent="store.toggleFavorite(info.id)">
                 <font-awesome-icon
-                  icon="fa-regular fa-heart"
-                  class="text-2xl text-danger-dark"
-                  v-show="1 > 0"
-                  title="加入收藏"
-                />
-                <font-awesome-icon
-                  icon="fa-solid fa-heart"
-                  class="text-2xl text-danger-dark"
-                  v-show="!1 > 0"
-                  title="移除收藏"
+                  :icon="[store.userInfo.status && store.userInfo.favorite.indexOf(info.id) > -1 ? 'fa-solid' : 'fa-regular','fa-heart']"
+                  class="text-2xl text-danger-dark duration-300 hover:scale-125"
+                  :title="(store.userInfo.status && store.userInfo.favorite.indexOf(info.id) > -1 ? '移除' : '加入') + '收藏'"
                 />
               </a>
             </div>
@@ -264,7 +257,9 @@ import { VueperSlides, VueperSlide } from 'vueperslides';
 import 'vueperslides/dist/vueperslides.css';
 import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { useStore } from '@/stores/index';
 
+const store = useStore();
 const route = useRoute();
 const info = ref({});
 const routeChange = ref(false);

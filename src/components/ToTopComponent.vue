@@ -14,8 +14,8 @@ import { inject } from "vue";
 const scrollStatus = inject("scrollStatus");
 function toTop() {
   let speed =
-    document.documentElement.scrollTop / 80 > 50
-      ? document.documentElement.scrollTop / 80
+    document.documentElement.scrollTop / 60 > 50
+      ? document.documentElement.scrollTop / 60
       : 50;
   const checkPosition = setInterval(() => {
     if (document.documentElement.scrollTop > 0) {

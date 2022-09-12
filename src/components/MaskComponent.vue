@@ -1,5 +1,5 @@
 <template>
-  <div
+  <!-- <div
     :class="[
       'fixed inset-0 bg-black bg-opacity-60',
       props.show.status ? 'block' : 'hidden',
@@ -7,23 +7,22 @@
       { 'lg:hidden': props.show['lg-hidden'] },
     ]"
     id="mask"
+  ></div> -->
+  <div
+    :class="[
+      'fixed inset-0 bg-black bg-opacity-60',
+      store.mask.status ? 'block' : 'hidden',
+      store.mask['z-index'] === 40 ? 'z-40' : 'z-20',
+      { 'lg:hidden': store.mask['lg-hidden'] },
+    ]"
+    id="mask"
   ></div>
 </template>
 <script setup>
 import { onMounted } from "vue";
+import { useStore } from "@/stores/index";
 
-const props = defineProps({
-  show: {
-    type: Object,
-    default: () => {
-      return {
-        status: false,
-        "z-index": 20,
-        "lg-hidden": false,
-      };
-    },
-  },
-});
+const store = useStore();
 
 onMounted(() => {
   const observer = new IntersectionObserver((entries) => {

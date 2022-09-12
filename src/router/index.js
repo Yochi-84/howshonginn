@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import { useStore } from "@/stores/index";
 
 const routes = [
   {
@@ -31,6 +32,13 @@ const routes = [
     path: "/share",
     name: "share",
     component: () => import("../views/ShareView.vue"),
+    beforeEnter() {
+      if (!useStore().userInfo.status) {
+        useStore().loginModal = true;
+        useStore().toggleMask(true, true, false);
+        return {};
+      }
+    },
     meta: {
       breadcrumb: [
         {
@@ -79,6 +87,45 @@ const routes = [
       ],
     },
   },
+  {
+    path: "/news",
+    name: "news",
+    component: () => import("../views/NewsView.vue"),
+    beforeEnter() {
+      if (!useStore().userInfo.status) {
+        useStore().loginModal = true;
+        useStore().toggleMask(true, true, false);
+        return {};
+      }
+    },
+    meta: {
+      breadcrumb: [
+        {
+          name: "首頁",
+          link: "/",
+        },
+        {
+          name: "系統消息"
+        }
+      ],
+    },
+  },
+  {
+    path: "/favorite",
+    name: "favorite",
+    component: () => import("../views/FavoriteView.vue"),
+    meta: {
+      breadcrumb: [
+        {
+          name: "首頁",
+          link: "/",
+        },
+        {
+          name: "我的收藏"
+        }
+      ],
+    },
+  }
 ];
 
 const router = createRouter({

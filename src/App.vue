@@ -1,18 +1,11 @@
 <template>
-  <Navbar
-    @scrollStatus="getScrollStatus"
-    @showMask="showMask"
-    @loginModal="loginModal"
-  ></Navbar>
-  <router-view @showMask="showMask" @showHigherMask="showHigherMask" />
+  <Navbar @scrollStatus="getScrollStatus"></Navbar>
+  <router-view/>
+
   <Footer></Footer>
 
-  <LoginRegister
-    :showModal="loginModalStatus"
-    @showHigherNoHiddenMask="showHigherNoHiddenMask"
-    @closeModal="closeLoginModal"
-  ></LoginRegister>
-  <Mask :show="maskStatus"></Mask>
+  <LoginRegister></LoginRegister>
+  <Mask></Mask>
   <ToTop></ToTop>
 </template>
 <script setup>
@@ -21,50 +14,31 @@ import Footer from '@/components/FooterComponent';
 import LoginRegister from '@/container/LoginRegisterComponent';
 import Mask from '@/components/MaskComponent';
 import ToTop from '@/components/ToTopComponent';
-import { ref, provide } from 'vue';
+import { ref, provide, onMounted } from 'vue';
+import { useStore } from '@/stores/index';
 
+const store = useStore();
 const scrollStatus = ref('top');
-const loginModalStatus = ref(false);
-const maskStatus = ref({
-  status: false,
-  'z-index': 20,
-});
 
 function getScrollStatus(status) {
   scrollStatus.value = status;
 }
 
-function loginModal(status) {
-  loginModalStatus.value = status;
-}
-
-function closeLoginModal(status) {
-  loginModalStatus.value = status;
-}
-
-function showMask(status) {
-  maskStatus.value = {
-    status: status,
-    'z-index': 20,
-    'lg-hidden': true,
-  };
-}
-
-function showHigherMask(status) {
-  maskStatus.value = {
-    status: status,
-    'z-index': 40,
-    'lg-hidden': true,
-  };
-}
-
-function showHigherNoHiddenMask(status) {
-  maskStatus.value = {
-    status: status,
-    'z-index': 40,
-    'lg-hidden': false,
-  };
-}
-
 provide('scrollStatus', scrollStatus);
+
+// 確認是否存在使用者登入資訊
+onMounted(() => {
+  if (!store.userInfo.status) store.getUserInfo();
+});
 </script>
+<style scoped>
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s;
+  }
+
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+</style>

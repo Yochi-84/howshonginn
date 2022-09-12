@@ -1,9 +1,23 @@
 <template>
   <Transition appear>
     <div
-      class="backface-hidden relative h-full cursor-pointer overflow-hidden rounded shadow-[1px_1px_0_2px_#333] ring-1 ring-content-light duration-300 after:absolute after:bottom-0 after:z-1 after:h-full after:w-1/4 after:skew-x-[35deg] after:bg-gradient-to-l after:from-white/[0.1] after:via-white/[0.4] after:to-white/[0.1] after:opacity-0 hover:after:animate-twinkle hover:after:opacity-40"
+      class="backface-hidden relative h-full cursor-pointer overflow-hidden rounded shadow-[1px_1px_0_1px_#777] ring-1 ring-content-light duration-300 after:absolute after:bottom-0 after:z-1 after:h-full after:w-1/4 after:skew-x-[35deg] after:bg-gradient-to-l after:from-white/[0.1] after:via-white/[0.4] after:to-white/[0.1] after:opacity-0 hover:after:animate-twinkle hover:after:opacity-40"
       @click="router.push({ path: '/info', query: { id: cardInfo.id } })"
     >
+      <a
+        href="#"
+        @click.prevent.stop="store.toggleFavorite(cardInfo.id)"
+        class="absolute left-4 top-4 text-xl text-danger-dark"
+      >
+        <font-awesome-icon
+          :icon="[
+            store.userInfo.status && store.userInfo.favorite.indexOf(cardInfo.id) > -1
+              ? 'fa-solid'
+              : 'fa-regular',
+            'fa-heart',
+          ]"
+          class="duration-300 hover:scale-125"
+      /></a>
       <div class="h-[280px] overflow-hidden">
         <img
           :src="require('../assets/image/' + props.cardInfo.image[0])"
@@ -37,8 +51,11 @@
   </Transition>
 </template>
 <script setup>
-import { computed } from "vue";
-import router from "@/router";
+import { computed } from 'vue';
+import router from '@/router';
+import { useStore } from '@/stores/index';
+
+const store = useStore();
 const props = defineProps({
   cardInfo: Object,
   delay: {
@@ -48,25 +65,25 @@ const props = defineProps({
 });
 
 const name = computed(() =>
-  props.cardInfo.name.slice(props.cardInfo.name.indexOf(" ") + 1)
+  props.cardInfo.name.slice(props.cardInfo.name.indexOf(' ') + 1)
 );
 
 const mark = computed(() => {
   if (props.cardInfo.want > 500) {
-    return { color: "danger-dark", title: "熱門" };
+    return { color: 'danger-dark', title: '熱門' };
   } else if (props.cardInfo.tags.length > 6) {
-    return { color: "sky-600", title: "超多特色" };
+    return { color: 'sky-600', title: '超多特色' };
   } else {
-    return { color: "secondary-dark", title: "最近新增" };
+    return { color: 'secondary-dark', title: '最近新增' };
   }
 });
 
-const transitionDelay = computed(() => props.delay + "s");
+const transitionDelay = computed(() => props.delay + 's');
 </script>
 <style>
 .v-enter-active,
 .v-leave-active {
-  transition: transform 0.5s v-bind("transitionDelay") ease;
+  transition: transform 0.5s v-bind('transitionDelay') ease;
 }
 
 .v-enter-from,

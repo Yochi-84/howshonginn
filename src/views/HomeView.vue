@@ -88,7 +88,7 @@
               <p class="mb-3 text-base text-white lg:mb-6 lg:text-lg">
                 連假又快到了嗎？<br />還沒找到符合心意的營地嗎？<br />還有更多的寶藏營地等你來發現。
               </p>
-              <router-link to="/list" class="btn btn-primary"
+              <router-link to="/list" class="btn btn-secondary"
                 >發現更多</router-link
               >
             </div>
