@@ -1,12 +1,11 @@
 <template>
-  <div class="hidden h-[4.5rem] bg-primary-dark md:block"></div>
-  <main class="py-20 md:py-16">
+  <main class="py-20 md:py-34">
     <div class="container">
       <BreadCrumb class="mb-6"></BreadCrumb>
-      <div class="items-center -mx-3 mb-4 flex gap-y-4">
+      <div class="-mx-3 mb-4 flex items-center flex-col md:flex-row gap-y-4">
         <div
           :class="[
-            'px-3 transition-[top] duration-500 flex-grow lg:static lg:w-1/3 lg:translate-x-0 xl:w-1/4',
+            'flex-grow px-3 transition-[top] duration-500 lg:static lg:w-1/3 lg:translate-x-0 xl:w-1/4',
             { 'fixed left-1/2 z-20 -translate-x-1/2': scrollStatus !== 'top' },
             { 'top-[72px]': scrollStatus === 'up' },
             { 'top-8': scrollStatus === 'down' },
@@ -16,16 +15,16 @@
             :class="[
               'border lg:border-black',
               scrollStatus !== 'top'
-                ? 'border-primary bg-transparent text-primary duration-300 focus-within:bg-white focus-within:text-black focus-within:drop-shadow-[0_0_10px_#b3c648] lg:focus-within:drop-shadow-none'
+                ? 'border-primary bg-transparent text-primary duration-300 focus-within:bg-white focus-within:text-black focus-within:drop-shadow-[0_0_8px_#408560] lg:focus-within:drop-shadow-none'
                 : 'border-black',
             ]"
           ></SearchBox>
         </div>
-        <div class="px-3 text-right lg:w-2/3 xl:w-3/4">
+        <div class="px-3 text-right lg:w-2/3 xl:w-3/4 self-end">
           <select
             name="sort"
             id="sort"
-            class="rounded border border-black py-2.5 px-4 focus:outline-none cursor-pointer"
+            class="cursor-pointer rounded border border-black py-2.5 px-4 focus:outline-none"
             v-model="sortMethod"
           >
             <option value="id">預設排序</option>
@@ -36,9 +35,13 @@
       </div>
       <div class="-mx-3 flex flex-wrap justify-center">
         <aside class="w-full px-3 lg:w-1/3 xl:w-1/4">
-          <Filter @showHigherMask="showHigherMask"></Filter>
+          <Filter></Filter>
         </aside>
-        <section class="px-3 lg:w-2/3 xl:w-3/4">
+        <Loading class="px-3 lg:w-2/3 xl:w-3/4" v-if="loadingShow"></Loading>
+        <section
+          class="px-3 lg:w-2/3 xl:w-3/4"
+          v-else-if="!loadingShow && hasResult"
+        >
           <ul class="-mx-2 mb-8 flex flex-wrap gap-y-4">
             <li
               class="w-full px-2 md:w-1/2 xl:w-1/3"
@@ -60,29 +63,39 @@
             >
           </div>
         </section>
+        <div class="px-3 text-center lg:w-2/3 xl:w-3/4" v-else>
+          <font-awesome-icon
+            icon="fa-regular fa-face-sad-cry"
+            class="my-4 text-4xl text-primary-dark md:text-[80px]"
+          />
+          <h3 class="text-xl font-bold text-primary-dark md:text-3xl">
+            沒有符合的搜尋結果，請重新搜尋
+          </h3>
+        </div>
       </div>
     </div>
   </main>
 </template>
 <script setup>
-import BreadCrumb from "@/components/BreadCrumbComponent";
-import SearchBox from "@/components/SearchBoxComponent";
-import Filter from "@/components/FilterComponent";
-import CampingCard from "@/components/CampingCardComponent";
-import { ref, onMounted, watch, computed, inject } from "vue";
-import { useRoute } from "vue-router";
-import axios from "axios";
+import BreadCrumb from '@/components/BreadCrumbComponent';
+import SearchBox from '@/components/SearchBoxComponent';
+import Filter from '@/components/FilterComponent';
+import CampingCard from '@/components/CampingCardComponent';
+import Loading from '@/components/LoadingComponent';
+import { ref, onMounted, watch, computed, inject } from 'vue';
+import { useRoute } from 'vue-router';
+import axios from 'axios';
 
-const emits = defineEmits(["showHigherMask"]);
+const loadingShow = ref(true);
 const place = ref([]);
 const currentPage = ref(1);
-const sortMethod = ref("id");
-const scrollStatus = inject("scrollStatus");
+const sortMethod = ref('id');
+const scrollStatus = inject('scrollStatus');
 const route = useRoute();
 let routeQuery = computed(() => route.query);
 
 const showList = computed(() => {
-  let list = []
+  let list = [];
   if (route.query.q) {
     list = place.value.filter((item) =>
       item.name.toLowerCase().includes(route.query.q.toLowerCase())
@@ -92,31 +105,29 @@ const showList = computed(() => {
   }
 
   switch (sortMethod.value) {
-    case "favorite":
-      return list.sort((prev,next) => next.want - prev.want);
-    case "random":
+    case 'favorite':
+      return list.sort((prev, next) => next.want - prev.want);
+    case 'random':
       return list.sort(() => 0.5 - Math.random());
     default:
-    return list;
+      return list;
   }
 });
 
+const hasResult = computed(() => showList.value.length > 0);
 const totalPage = computed(() => Math.ceil(showList.value.length / 12));
 
 onMounted(() => {
   axios
     .get(`https://howshonginn-api.herokuapp.com/camp`)
-    .then((res) => (place.value = res.data))
+    .then((res) => {
+      place.value = res.data;
+      loadingShow.value = false;
+    })
     .catch((err) => console.log(err));
 });
 
 watch(routeQuery, () => {
-  // document.documentElement.scrollTop = 0;
   currentPage.value = 1;
 });
-
-
-function showHigherMask(status) {
-  emits("showHigherMask", status);
-}
 </script>

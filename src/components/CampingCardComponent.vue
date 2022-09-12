@@ -1,17 +1,18 @@
 <template>
   <Transition appear>
     <div
-      class="backface-hidden relative h-full cursor-pointer overflow-hidden rounded shadow-[1px_1px_0_1px_#777] ring-1 ring-content-light duration-300 after:absolute after:bottom-0 after:z-1 after:h-full after:w-1/4 after:skew-x-[35deg] after:bg-gradient-to-l after:from-white/[0.1] after:via-white/[0.4] after:to-white/[0.1] after:opacity-0 hover:after:animate-twinkle hover:after:opacity-40"
+      class="backface-hidden group relative h-full cursor-pointer overflow-hidden rounded shadow-[1px_1px_0_1px_#777] ring-1 ring-content-light duration-300 after:absolute after:bottom-0 after:z-1 after:h-full after:w-1/4 after:skew-x-[35deg] after:bg-gradient-to-l after:from-white/[0.1] after:via-white/[0.4] after:to-white/[0.1] after:opacity-0 hover:after:animate-twinkle hover:after:opacity-40"
       @click="router.push({ path: '/info', query: { id: cardInfo.id } })"
     >
       <a
         href="#"
         @click.prevent.stop="store.toggleFavorite(cardInfo.id)"
-        class="absolute left-4 top-4 text-xl text-danger-dark"
+        class="absolute left-4 top-4 text-2xl md:text-xl text-danger-dark"
       >
         <font-awesome-icon
           :icon="[
-            store.userInfo.status && store.userInfo.favorite.indexOf(cardInfo.id) > -1
+            store.userInfo.status &&
+            store.userInfo.favorite.indexOf(cardInfo.id) > -1
               ? 'fa-solid'
               : 'fa-regular',
             'fa-heart',
@@ -27,7 +28,7 @@
         />
         <div
           :class="[
-            'text-0 absolute right-9 top-6 z-5 flex h-8 w-[160px] origin-center translate-x-1/2 rotate-45 select-none items-center justify-center border-t border-b border-double border-white text-sm tracking-[8px] text-white',
+            'absolute right-9 top-6 z-5 flex h-8 w-[160px] origin-center translate-x-1/2 rotate-45 select-none items-center justify-center border-t-2 border-b-2 border-white text-sm tracking-[8px] text-white',
             'bg-' + mark.color,
           ]"
         >

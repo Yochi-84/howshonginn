@@ -3,7 +3,9 @@
     :class="[
       'fixed top-0 z-30 w-full bg-white shadow-[0_2px_5px_1px_rgba(0,0,0,0.3)] duration-500 ',
       {
-        'md:bg-transparent md:shadow-none': scrollStatus === 'top',
+        'md:bg-primary-dark': scrollStatus === 'top' && route.name !== 'home',
+        'md:bg-transparent ': scrollStatus === 'top' && route.name === 'home',
+        'md:shadow-none': scrollStatus === 'top',
         '-translate-y-full': scrollStatus === 'down',
       },
     ]"
@@ -24,32 +26,81 @@
             : 'max-h-0',
         ]"
       >
-        <li class="whitespace-nowrap py-4">
+        <li class="whitespace-nowrap py-3">
           <SearchBox class="mx-auto w-[90%] border border-black text-black" />
         </li>
         <li>
-          <a href="#" @click.prevent="routeTo('list')" class="block py-4"
+          <a href="#" @click.prevent="routeTo('list')" class="block py-3"
             >所有營地</a
           >
         </li>
         <li>
-          <a href="#" @click.prevent="routeTo('share')" class="block py-4"
+          <a href="#" @click.prevent="routeTo('share')" class="block py-3"
             >分享營地</a
           >
         </li>
         <li>
-          <a href="#" @click.prevent="routeTo('contact')" class="block py-4"
+          <a href="#" @click.prevent="routeTo('contact')" class="block py-3"
             >聯絡我們</a
           >
         </li>
         <li v-if="!store.userInfo.status">
-          <a href="#" class="block py-4" @click.prevent="showLoginModal"
+          <a href="#" class="block py-3" @click.prevent="showLoginModal"
             ><font-awesome-icon
               icon="fa-solid fa-user-alt"
               class="mr-2"
             />登入</a
           >
         </li>
+        <ul class="border-t border-t-secondary-dark text-secondary bg-secondary-light" v-else>
+          <li>
+            <div
+              class="flex cursor-pointer select-none items-center justify-center py-3"
+              @click.stop="userMenuStatus = !userMenuStatus"
+            >
+              <span class="mr-2 font-bold text-lg">{{ store.userInfo.nickname }}</span>
+              <img
+                :src="
+                  store.userInfo.pic !== ''
+                    ? store.userInfo.pic
+                    : require('@/assets/image/user_init.jpg')
+                "
+                :alt="store.userInfo.nickname"
+                class="h-8 ring-2 ring-secondary-dark w-8 rounded-full"
+              />
+            </div>
+          </li>
+          <li v-show="store.userInfo.status">
+            <a href="#" class="block py-3" @click.prevent="routeTo('favorite')">
+              <font-awesome-icon icon="fa-solid fa-heart" class="mr-2" />
+              我的收藏
+            </a>
+          </li>
+          <li v-show="store.userInfo.status">
+            <a href="#" @click.prevent="routeTo('news')" class="block py-3"
+              ><font-awesome-icon
+                icon="fa-solid fa-bullhorn"
+                class="mr-2"
+              />系統消息</a
+            >
+          </li>
+          <li v-show="store.userInfo.status">
+            <a href="#" @click.prevent="routeTo('/')" class="block py-3"
+              ><font-awesome-icon
+                icon="fa-solid fa-gear"
+                class="mr-2"
+              />會員設定</a
+            >
+          </li>
+          <li v-show="store.userInfo.status">
+            <a href="#" class="block py-3" @click.prevent="logout"
+              ><font-awesome-icon
+                icon="fa-solid fa-right-from-bracket"
+                class="mr-2"
+              />登出</a
+            >
+          </li>
+        </ul>
       </ul>
       <h1
         :class="[
@@ -104,7 +155,10 @@
             v-else
           >
             <li>
-              <div class="cursor-pointer duration-300 md:hover:-translate-y-1">
+              <div
+                class="cursor-pointer duration-300 md:hover:-translate-y-1"
+                @click="router.push({ path: 'favorite' })"
+              >
                 <font-awesome-icon icon="fa-solid fa-heart" class="mr-2" />
                 <span class="hidden lmd:inline">我的收藏</span>
               </div>
@@ -138,7 +192,7 @@
                   <li
                     class="whitespace-nowrap text-white duration-300 hover:text-secondary"
                   >
-                    <router-link to="/favorite" class="block py-2 px-4"
+                    <router-link to="/news" class="block py-2 px-4"
                       ><font-awesome-icon
                         icon="fa-solid fa-bullhorn"
                         class="mr-2"
@@ -148,7 +202,7 @@
                   <li
                     class="whitespace-nowrap text-white duration-300 hover:text-secondary"
                   >
-                    <router-link to="/favorite" class="block py-2 px-4"
+                    <router-link to="/" class="block py-2 px-4"
                       ><font-awesome-icon
                         icon="fa-solid fa-gear"
                         class="mr-2"
@@ -179,8 +233,10 @@
 import SearchBox from '@/components/SearchBoxComponent';
 import { useStore } from '@/stores/index';
 import { ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import router from '@/router';
 
+const route = useRoute();
 const store = useStore();
 const emits = defineEmits(['scrollStatus']);
 let navStatus = ref(false);

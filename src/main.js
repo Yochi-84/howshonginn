@@ -43,6 +43,7 @@ import {
   faThumbsUp,
   faThumbsDown,
   faCommentDots,
+  faFaceSadCry
 } from "@fortawesome/free-regular-svg-icons";
 
 /* add icons to the library */
@@ -74,6 +75,7 @@ library.add(
   faCircleXmark,
   faGear,
   faQuestion,
+  faFaceSadCry
 );
 
 const pinia = createPinia();

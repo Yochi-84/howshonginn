@@ -1,6 +1,5 @@
 <template>
-  <div class="hidden h-[4.5rem] bg-primary-dark md:block"></div>
-  <main class="py-20 md:py-16" v-if="infoExist">
+  <main class="py-20 md:py-34" v-if="infoExist">
     <!-- 輪播 & 基本資訊 -->
     <section class="mb-[120px]">
       <div class="container">
@@ -248,14 +247,16 @@
       <Comment :id="route.query.id"></Comment>
     </section>
   </main>
+  <Loading v-else></Loading>
 </template>
 <script setup>
 import axios from 'axios';
 import BreadCrumb from '@/components/BreadCrumbComponent';
 import Comment from '@/components/CommentComponent';
+import Loading from '@/components/LoadingComponent';
 import { VueperSlides, VueperSlide } from 'vueperslides';
 import 'vueperslides/dist/vueperslides.css';
-import { ref, computed, onMounted } from 'vue';
+import { ref,computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from '@/stores/index';
 
