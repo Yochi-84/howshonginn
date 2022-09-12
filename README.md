@@ -2,11 +2,12 @@
 ![](https://i.imgur.com/R0nwMxJ.png)
 
 ### Demo
-[https://yochi-84.github.io/howshonginn/](https://yochi-84.github.io/howshonginn/)
-體驗帳號: root@example.com
-密碼: 12345678
-or
-自己申請
+[https://yochi-84.github.io/howshonginn/](https://yochi-84.github.io/howshonginn/)      
+
+體驗帳號: root@example.com    
+密碼: 12345678    
+or   
+註冊帳號
 ### 使用技術
 * vue-cli
 * tailwind
