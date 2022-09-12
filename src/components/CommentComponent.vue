@@ -132,8 +132,8 @@ const props = defineProps({
 });
 
 const getComment = () =>
-  axios.get(`http://localhost:3000/comment/?campID=${props.id}`);
-const getUser = () => axios.get(`http://localhost:3000/user`);
+  axios.get(`https://howshonginn-api.herokuapp.com/comment/?campID=${props.id}`);
+const getUser = () => axios.get(`https://howshonginn-api.herokuapp.com/user`);
 
 onMounted(() => {
   axios

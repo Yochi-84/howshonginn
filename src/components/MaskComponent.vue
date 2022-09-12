@@ -1,13 +1,4 @@
 <template>
-  <!-- <div
-    :class="[
-      'fixed inset-0 bg-black bg-opacity-60',
-      props.show.status ? 'block' : 'hidden',
-      props.show['z-index'] === 40 ? 'z-40' : 'z-20',
-      { 'lg:hidden': props.show['lg-hidden'] },
-    ]"
-    id="mask"
-  ></div> -->
   <div
     :class="[
       'fixed inset-0 bg-black bg-opacity-60',

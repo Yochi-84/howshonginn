@@ -102,7 +102,7 @@ const nicknameStatus = ref('false');
 const errorMsg = ref('');
 
 const api = axios.create({
-  baseURL: `http://localhost:3000/`,
+  baseURL: `https://howshonginn-api.herokuapp.com/`,
 });
 function register() {
   if (registerData.value.email === '') {

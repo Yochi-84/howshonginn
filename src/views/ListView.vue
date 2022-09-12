@@ -105,7 +105,7 @@ const totalPage = computed(() => Math.ceil(showList.value.length / 12));
 
 onMounted(() => {
   axios
-    .get(`http://localhost:3000/camp`)
+    .get(`https://howshonginn-api.herokuapp.com/camp`)
     .then((res) => (place.value = res.data))
     .catch((err) => console.log(err));
 });

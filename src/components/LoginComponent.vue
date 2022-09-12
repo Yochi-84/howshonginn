@@ -75,7 +75,7 @@ function submit() {
   } else {
     axios
       .get(
-        `http://localhost:3000/user?email=${loginData.value.email}&password=${loginData.value.password}`
+        `https://howshonginn-api.herokuapp.com/user?email=${loginData.value.email}&password=${loginData.value.password}`
       )
       .then((res) => {
         if (res.data.length > 0) {
