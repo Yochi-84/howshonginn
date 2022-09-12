@@ -9,7 +9,7 @@
           ]"
         >
           <img
-            :src="info.image"
+            :src="require('../assets/image/' + info.image[0])"
             :alt="info.name"
             class="h-full w-full object-cover object-bottom"
           />
@@ -20,7 +20,7 @@
             currentSlide === index ? 'opacity-100' : 'opacity-0',
           ]"
         >
-          <h3 class="lg:text-xl">{{ info.name }}</h3>
+          <h3 class="lg:text-lg">{{ info.name }}</h3>
           <h4 class="text-sm lg:text-base">
             <font-awesome-icon icon="fa-solid fa-location-dot" class="mr-2" />{{
               info.county
@@ -38,9 +38,9 @@
   </Carousel>
 </template>
 <script setup>
-import "vue3-carousel/dist/carousel.css";
-import { Carousel, Slide, Navigation } from "vue3-carousel";
-import { ref } from "vue";
+import 'vue3-carousel/dist/carousel.css';
+import { Carousel, Slide, Navigation } from 'vue3-carousel';
+import { ref } from 'vue';
 
 const props = defineProps({
   cardInfo: Object,
@@ -48,7 +48,7 @@ const props = defineProps({
 const currentSlide = ref(1);
 const settings = {
   itemsToShow: 1,
-  snapAlign: "center",
+  snapAlign: 'center',
   wrapAround: true,
   autoplay: 4000,
   pauseAutoplayOnHover: true,
