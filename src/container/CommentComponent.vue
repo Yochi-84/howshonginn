@@ -153,8 +153,9 @@ const props = defineProps({
   },
 });
 const store = useStore();
-const commentList = ref([]);
-const replyList = ref([]);
+// 因為評論和回覆寫在同一個 api ，所以抓回來的時候要先分開
+const commentList = ref([]); // 評論
+const replyList = ref([]); // 回覆
 const userList = ref([]);
 const commentModalStatus = ref(false);
 const api = axios.create({baseURL: 'https://howshonginn-api.herokuapp.com/'});

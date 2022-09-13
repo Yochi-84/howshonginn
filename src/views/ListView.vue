@@ -2,7 +2,7 @@
   <main class="py-20 md:py-34">
     <div class="container">
       <BreadCrumb class="mb-6"></BreadCrumb>
-      <div class="-mx-3 mb-4 flex items-center flex-col md:flex-row gap-y-4">
+      <div class="-mx-3 mb-4 flex flex-col items-center gap-y-4 md:flex-row">
         <div
           :class="[
             'flex-grow px-3 transition-[top] duration-500 lg:static lg:w-1/3 lg:translate-x-0 xl:w-1/4',
@@ -20,7 +20,7 @@
             ]"
           ></SearchBox>
         </div>
-        <div class="px-3 text-right lg:w-2/3 xl:w-3/4 self-end">
+        <div class="self-end px-3 text-right lg:w-2/3 xl:w-3/4">
           <select
             name="sort"
             id="sort"
@@ -35,7 +35,7 @@
       </div>
       <div class="-mx-3 flex flex-wrap justify-center">
         <aside class="w-full px-3 lg:w-1/3 xl:w-1/4">
-          <Filter></Filter>
+          <Filter @filterParameter="filterResult"></Filter>
         </aside>
         <Loading class="px-3 lg:w-2/3 xl:w-3/4" v-if="loadingShow"></Loading>
         <section
@@ -93,15 +93,42 @@ const sortMethod = ref('id');
 const scrollStatus = inject('scrollStatus');
 const route = useRoute();
 let routeQuery = computed(() => route.query);
+const filterParameter = ref({});
 
 const showList = computed(() => {
   let list = [];
-  if (route.query.q) {
-    list = place.value.filter((item) =>
-      item.name.toLowerCase().includes(route.query.q.toLowerCase())
-    );
+  if (Object.entries(filterParameter.value).length === 0) {
+    // 關鍵字搜尋
+    if (route.query.q) {
+      list = place.value.filter((item) =>
+        item.name.toLowerCase().includes(route.query.q.toLowerCase())
+      );
+    } else {
+      list = [...place.value];
+    }
   } else {
-    list = [...place.value];
+    // 條件篩選
+    list = place.value.filter((item) =>
+      item.county.includes(filterParameter.value.filterArea.replace('臺','台'))
+    );
+    if (filterParameter.value.filterTag.length > 0) {
+      if (!filterParameter.value.tagFilterMode) {
+        // 一般模式
+        list = list.filter((item) =>
+          filterParameter.value.filterTag.some(
+            (ele) => item.tags.indexOf(ele) > -1
+          )
+        );
+        console.log(list);
+      } else {
+        //嚴格模式
+        list = list.filter((item) =>
+          filterParameter.value.filterTag.every(
+            (ele) => item.tags.indexOf(ele) > -1
+          )
+        );
+      }
+    }
   }
 
   switch (sortMethod.value) {
@@ -116,6 +143,12 @@ const showList = computed(() => {
 
 const hasResult = computed(() => showList.value.length > 0);
 const totalPage = computed(() => Math.ceil(showList.value.length / 12));
+
+// filter 傳來篩選參數進行篩選
+function filterResult(filterObj) {
+  filterParameter.value = filterObj;
+  console.log(filterParameter.value);
+}
 
 onMounted(() => {
   axios

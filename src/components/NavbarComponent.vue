@@ -261,9 +261,8 @@ onMounted(() => {
 });
 
 function showLoginModal() {
-  store.loginModal = true;
   store.navStatus = false;
-  store.toggleMask(true, true, false);
+  store.toggleLoginModal();
 }
 
 

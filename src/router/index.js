@@ -93,8 +93,7 @@ const routes = [
     component: () => import("../views/NewsView.vue"),
     beforeEnter() {
       if (!useStore().userInfo.status) {
-        useStore().loginModal = true;
-        useStore().toggleMask(true, true, false);
+        useStore().toggleLoginModal();
         return {};
       }
     },
@@ -116,8 +115,7 @@ const routes = [
     component: () => import("../views/SettingView.vue"),
     beforeEnter() {
       if (!useStore().userInfo.status) {
-        useStore().loginModal = true;
-        useStore().toggleMask(true, true, false);
+        useStore().toggleLoginModal();
         return {};
       }
     },
@@ -139,8 +137,7 @@ const routes = [
     component: () => import("../views/FavoriteView.vue"),
     beforeEnter() {
       if (!useStore().userInfo.status) {
-        useStore().loginModal = true;
-        useStore().toggleMask(true, true, false);
+        useStore().toggleLoginModal();
         return {};
       }
     },

@@ -101,12 +101,14 @@
             />
             <label
               for="modeSwitcher"
-              class="mr-2 inline-block h-5 w-10 cursor-pointer rounded-huge bg-primary-light ring-1 ring-primary duration-300 peer-checked:bg-secondary-light peer-checked:ring-secondary shadow-inner shadow-primary-dark peer-checked:shadow-secondary-dark"
+              class="mr-2 inline-block h-5 w-10 cursor-pointer rounded-huge bg-primary-light shadow-inner shadow-primary-dark ring-1 ring-primary duration-300 peer-checked:bg-secondary-light peer-checked:shadow-secondary-dark peer-checked:ring-secondary"
             >
               <span
                 :class="[
                   'inline-block h-5 w-5 rounded-full duration-300',
-                  filterItem.tagFilterMode ? 'ml-5 bg-secondary-dark' : 'bg-primary-dark',
+                  filterItem.tagFilterMode
+                    ? 'ml-5 bg-secondary-dark'
+                    : 'bg-primary-dark',
                 ]"
               ></span>
             </label>
@@ -178,6 +180,7 @@ import { onMounted, ref, watch, computed, inject } from 'vue';
 import { useStore } from '@/stores/index';
 import axios from 'axios';
 
+const emits = defineEmits(['filterParameter']);
 const store = useStore();
 const countyCity = ref({}); //全台區域資料
 const filterStatus = ref(false); //filter 是否顯示
@@ -226,7 +229,7 @@ const filterItem = ref({
       selected: false,
     },
     {
-      tag: '近市區',
+      tag: '少帳包場',
       selected: false,
     },
     {
@@ -254,25 +257,41 @@ const filterItem = ref({
       selected: false,
     },
     {
-      tag: '免裝備露營',
+      tag: '可停露營車',
       selected: false,
     },
   ],
-  tagFilterMode: false //標籤篩選模式，false 為一般模式
+  tagFilterMode: false, //標籤篩選模式，false 為一般模式
 });
 
 function filterSubmit() {
-  if(filterItem.value.countySelect !== "") {
-    console.log("縣市篩選")
+  let filterParameter = {};
+  if (filterItem.value.countySelect !== '') {
+    let filterArea = countyCity.value[filterItem.value.countySelect].CityName;
+    filterItem.value.townSelect !== ''
+      ? (filterArea += filterItem.value.townSelect)
+      : null;
+
+    filterParameter.filterArea = filterArea;
   } else {
-    console.log("縣市篩選2")
+
+    // TODO: 區域篩選
+    filterParameter.filterArea = '';
   }
+
+  let filterTag = [];
+  filterItem.value.tagList.forEach((item) => {
+    if (item.selected) filterTag.push(item.tag);
+  });
+  filterParameter.filterTag = filterTag;
+  filterParameter.tagFilterMode = filterItem.value.tagFilterMode;
+  emits('filterParameter', filterParameter);
   filterStatus.value = false;
 }
 
-// FIXME:按第一下沒反應
+// 選擇區域則清空下拉式選單
 function areaSelect(area) {
-  if (filterItem.value.countySelect) filterItem.value.countySelect = '';
+  if (filterItem.value.countySelect !== '') filterItem.value.countySelect = '';
   area.selected = !area.selected;
 }
 
@@ -292,18 +311,16 @@ const townList = computed(
 );
 
 // 監聽全部用 deep，只監聽其中一樣先 computed
-const countySelect = computed(() => filterItem.value.countySelect)
-watch(
-  countySelect,
-  (newV) => {
-    if (newV > -1) {
-      for (let item of filterItem.value.areaList) {
-        item.selected = false;
-      }
-      filterItem.value.townSelect = '';
+const countySelect = computed(() => filterItem.value.countySelect);
+watch(countySelect, (newV) => {
+  // 清空時為 ""(string)，選擇時為 number
+  if (typeof newV !== 'string') {
+    for (let item of filterItem.value.areaList) {
+      item.selected = false;
     }
+    filterItem.value.townSelect = '';
   }
-);
+});
 
 // 點擊區域外關閉
 watch(filterModeDirection, (newV) => {
