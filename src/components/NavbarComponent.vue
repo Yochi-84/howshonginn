@@ -71,25 +71,25 @@
             </div>
           </li>
           <li v-show="store.userInfo.status">
-            <a href="#" class="block py-3" @click.prevent="routeTo('favorite')">
+            <router-link to="/favorite" class="block py-3">
               <font-awesome-icon icon="fa-solid fa-heart" class="mr-2" />
               我的收藏
-            </a>
+            </router-link>
           </li>
           <li v-show="store.userInfo.status">
-            <a href="#" @click.prevent="routeTo('news')" class="block py-3"
+            <router-link to="/news" class="block py-3"
               ><font-awesome-icon
                 icon="fa-solid fa-bullhorn"
                 class="mr-2"
-              />系統消息</a
+              />系統消息</router-link
             >
           </li>
           <li v-show="store.userInfo.status">
-            <a href="#" @click.prevent="routeTo('/')" class="block py-3"
+            <router-link to="/setting" class="block py-3"
               ><font-awesome-icon
                 icon="fa-solid fa-gear"
                 class="mr-2"
-              />會員設定</a
+              />會員設定</router-link
             >
           </li>
           <li v-show="store.userInfo.status">
@@ -202,7 +202,7 @@
                   <li
                     class="whitespace-nowrap text-white duration-300 hover:text-secondary"
                   >
-                    <router-link to="/" class="block py-2 px-4"
+                    <router-link to="/setting" class="block py-2 px-4"
                       ><font-awesome-icon
                         icon="fa-solid fa-gear"
                         class="mr-2"

@@ -73,16 +73,27 @@ module.exports = {
           "65%,100%": { right: "150%" },
         },
         "bigger": {
-          '0%': {boxShadow: '0 0 0 #408560'},
-          '12.5%': {boxShadow: '0 0 0 2px #408560'},
-          '25%,100%': {boxShadow: '0 0 0 #408560'}
+          '0%': { boxShadow: '0 0 0 #408560' },
+          '12.5%': { boxShadow: '0 0 0 2px #408560' },
+          '25%,100%': { boxShadow: '0 0 0 #408560' }
+        },
+        "scale": {
+          '0%,100%': {
+            transform: "scaleX(2.2)",
+            animationTimingFunction: "cubic-bezier(0.8, 0, 1, 1)"
+          },
+          '50%': {
+            transform: "scaleX(1)",
+            animationTimingFunction: "cubic-bezier(0, 0, 0.2, 1)"
+          }
         }
       },
       animation: {
         typing:
           "typing-effect 6s steps(14) infinite,blink 0.5s step-end infinite alternate",
         twinkle: "twinkle-effect 3s ease-out infinite",
-        bigger: "bigger 1s linear infinite"
+        bigger: "bigger 1s linear infinite",
+        scale: "scale 1s infinite"
       },
       zIndex: {
         1: "1",

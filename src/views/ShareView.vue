@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <h2>Share</h2>
-  </div>
+  <Working>
+    Share
+  </Working>
 </template>
 <script setup>
-
+import Working from '@/components/WorkingComponent';
 </script>

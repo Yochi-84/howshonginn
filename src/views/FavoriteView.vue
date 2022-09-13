@@ -1,6 +1,6 @@
 <template>
-  <div>
-   <h2>Favorite</h2>
-  </div>
+  <Working> Favorite </Working>
 </template>
-
+<script setup>
+import Working from '@/components/WorkingComponent';
+</script>
