@@ -5,6 +5,7 @@ import router from "./router";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import "./assets/css/all.css";
+import { useStore } from "@/stores/index";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 
@@ -87,5 +88,6 @@ createApp(App)
   .mount("#app");
 
 router.afterEach(() => {
+  useStore().navStatus = false;
   window.scrollTo(0, 0);
 });

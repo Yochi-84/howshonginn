@@ -111,6 +111,29 @@ const routes = [
     },
   },
   {
+    path: "/setting",
+    name: "setting",
+    component: () => import("../views/SettingView.vue"),
+    beforeEnter() {
+      if (!useStore().userInfo.status) {
+        useStore().loginModal = true;
+        useStore().toggleMask(true, true, false);
+        return {};
+      }
+    },
+    meta: {
+      breadcrumb: [
+        {
+          name: "首頁",
+          link: "/",
+        },
+        {
+          name: "會員設定"
+        }
+      ],
+    },
+  },
+  {
     path: "/favorite",
     name: "favorite",
     component: () => import("../views/FavoriteView.vue"),

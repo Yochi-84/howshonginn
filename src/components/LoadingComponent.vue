@@ -27,7 +27,7 @@
       ></li>
     </ul>
     <h3 class="text-center text-3xl font-bold text-primary-dark">
-      努力加載中...
+      努力載入中...
     </h3>
   </div>
 </template>

@@ -7,6 +7,7 @@ const api = axios.create({
 export const useStore = defineStore('main', {
   state: () => {
     return {
+      navStatus: false,
       userInfo: { status: false },
       loginModal: false,
       mask: {

@@ -15,13 +15,13 @@
     >
       <span
         class="block text-3xl leading-none text-primary-dark md:hidden"
-        @click="navStatus = !navStatus"
+        @click="store.navStatus = !store.navStatus"
         ><font-awesome-icon icon="fa-solid fa-bars"
       /></span>
       <ul
         :class="[
           'absolute bottom-0 left-0 right-0 z-5 translate-y-full overflow-hidden whitespace-nowrap bg-white text-center text-primary-dark duration-300 md:hidden',
-          navStatus
+          store.navStatus
             ? 'max-h-screen shadow-[0_2px_5px_1px_rgba(0,0,0,0.3)_inset]'
             : 'max-h-0',
         ]"
@@ -30,18 +30,18 @@
           <SearchBox class="mx-auto w-[90%] border border-black text-black" />
         </li>
         <li>
-          <a href="#" @click.prevent="routeTo('list')" class="block py-3"
-            >所有營地</a
+          <router-link to="/list" class="block py-3"
+            >所有營地</router-link
           >
         </li>
         <li>
-          <a href="#" @click.prevent="routeTo('share')" class="block py-3"
-            >分享營地</a
+          <router-link to="/share" class="block py-3"
+            >分享營地</router-link
           >
         </li>
         <li>
-          <a href="#" @click.prevent="routeTo('contact')" class="block py-3"
-            >聯絡我們</a
+          <router-link to="/contact" class="block py-3"
+            >聯絡我們</router-link
           >
         </li>
         <li v-if="!store.userInfo.status">
@@ -232,14 +232,13 @@
 <script setup>
 import SearchBox from '@/components/SearchBoxComponent';
 import { useStore } from '@/stores/index';
-import { ref, onMounted, watch } from 'vue';
+import { ref,computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 
 const route = useRoute();
 const store = useStore();
 const emits = defineEmits(['scrollStatus']);
-let navStatus = ref(false);
 let top = 0;
 let scrollStatus = ref('top');
 const userMenuStatus = ref(false);
@@ -263,14 +262,10 @@ onMounted(() => {
 
 function showLoginModal() {
   store.loginModal = true;
-  navStatus.value = false;
+  store.navStatus = false;
   store.toggleMask(true, true, false);
 }
 
-function routeTo(url) {
-  navStatus.value = false;
-  router.push({ path: `/${url}` });
-}
 
 function logout() {
   userMenuStatus.value = false;
@@ -278,6 +273,8 @@ function logout() {
   store.userInfo = { status: false };
 }
 
+
+const navStatus = computed(() => store.navStatus)
 watch(navStatus, (newV) => {
   if (!store.loginModal) {
     store.toggleMask(newV);

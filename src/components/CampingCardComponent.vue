@@ -70,7 +70,7 @@ const name = computed(() =>
 );
 
 const mark = computed(() => {
-  if (props.cardInfo.want > 500) {
+  if (props.cardInfo.favorite > 500) {
     return { color: 'danger-dark', title: '熱門' };
   } else if (props.cardInfo.tags.length > 6) {
     return { color: 'sky-600', title: '超多特色' };
@@ -80,6 +80,7 @@ const mark = computed(() => {
 });
 
 const transitionDelay = computed(() => props.delay + 's');
+
 </script>
 <style>
 .v-enter-active,

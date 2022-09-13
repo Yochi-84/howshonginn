@@ -27,8 +27,13 @@
             }}
           </h4>
         </div>
-        <!-- TODO: 連結 -->
-        <router-link to="/" class="after:absolute after:inset-0" />
+        <router-link
+          :to="'/info?id=' + info.id"
+          :class="[
+            'after:absolute after:inset-0',
+            { hidden: currentSlide !== index },
+          ]"
+        />
       </div>
     </Slide>
 

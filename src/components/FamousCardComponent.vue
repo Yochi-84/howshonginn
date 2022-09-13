@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-hidden rounded shadow-[0_2px_4px_#333] h-full">
+  <div class="relative h-full overflow-hidden rounded shadow-[0_2px_4px_#333]">
     <div class="h-[280px]">
       <img
         :src="require('../assets/image/' + props.cardInfo.image[0])"
@@ -15,6 +15,10 @@
       </h4>
       <h3 class="text-lg">{{ name }}</h3>
     </div>
+    <router-link
+      :to="'/info?id=' + props.cardInfo.id"
+      class="after:absolute after:inset-0"
+    />
   </div>
 </template>
 <script setup>
