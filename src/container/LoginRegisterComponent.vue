@@ -1,23 +1,9 @@
 <template>
-  <div
-    :class="[
-      'fixed top-1/2 left-1/2 z-50 w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-xl border-[5px]   bg-white py-6 duration-300 md:w-[460px] lg:w-[550px] lg:py-6',
-      currentTab === 'Login' ? 'border-primary' : 'border-secondary',
-    ]"
+  <ModalForm
+    @closeModal="closeModal"
     v-show="store.loginModal"
+    :class="[currentTab === 'Login' ? 'border-primary' : 'border-secondary']"
   >
-    <a
-      href="#"
-      @click.prevent="closeModal"
-      class="mb-2 block px-3 text-right md:px-6"
-    >
-      <span>
-        <font-awesome-icon
-          icon="fa-solid fa-xmark"
-          class="text-3xl hover:text-danger-dark"
-        />
-      </span>
-    </a>
     <ul class="flex items-center px-3 md:px-6">
       <li
         :class="[
@@ -52,9 +38,10 @@
         ></component>
       </keep-alive>
     </transition>
-  </div>
+  </ModalForm>
 </template>
 <script setup>
+import ModalForm from '@/components/ModalFormComponent';
 import Login from '@/components/LoginComponent';
 import Register from '@/components/RegisterComponent';
 import { ref } from 'vue';

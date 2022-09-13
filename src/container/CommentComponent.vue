@@ -1,12 +1,23 @@
 <template>
   <div class="container">
-    <h2
-      class="relative mb-8 border-b-8 border-double border-b-primary-dark pl-12 text-3xl md:text-4xl font-bold tracking-widest text-primary-dark"
+    <div
+      class="mb-8 flex items-end justify-between border-b-8 border-double border-b-primary-dark"
     >
-      評論
-    </h2>
+      <h2
+        class="relative pl-12 text-3xl font-bold tracking-widest text-primary-dark md:text-4xl"
+      >
+        評論
+      </h2>
+      <a
+        href="#"
+        @click.prevent="showModal"
+        class="btn btn-primary rounded-none rounded-tl-lg"
+        v-show="commentList.length > 0"
+        ><font-awesome-icon icon="fa-solid fa-plus" class="mr-2" />發表評論</a
+      >
+    </div>
     <ul v-if="commentList.length > 0" class="divide-y divide-gray-300">
-      <li v-for="comment of commentList" :key="comment.id">
+      <li v-for="(comment, index) of commentList" :key="comment.id">
         <div class="px-4 pt-4">
           <!-- 評論者資訊 -->
           <div class="mb-4 flex items-center gap-x-4">
@@ -23,9 +34,7 @@
             </div>
           </div>
           <!-- 評論內容 -->
-          <div class="mb-4 text-content">
-            <p>{{ comment.content }}</p>
-          </div>
+          <div class="mb-4 text-content" v-html="comment.content"></div>
           <!-- 讚踩按鈕 -->
           <div class="mb-4 text-right md:mb-6">
             <a href="#" class="btn btn-primary mr-4" @click.prevent=""
@@ -104,47 +113,112 @@
                 type="text"
                 class="w-full rounded-sm border border-black py-1 px-4"
                 placeholder="有什麼想說的嗎?"
+                v-model.trim="comment.currentReply"
+                @keydown.enter.exact="reply(index)"
               />
             </div>
           </div>
         </div>
       </li>
     </ul>
-    <div v-else class="text-center py-4 md:py-8">
-      <h3 class="mb-2 md:mb-4 font-bold text-xl md:text-2xl">目前還沒有任何評論喔~~~</h3>
+    <div v-else class="py-4 text-center md:py-8">
+      <h3 class="mb-2 text-xl font-bold md:mb-4 md:text-2xl">
+        目前還沒有任何評論喔~~~
+      </h3>
       <p class="mb-4 md:mb-6 md:text-lg">要不要來發表一下呢？</p>
-      <a href="#" @click.prevent="" class="btn btn-large btn-primary"><font-awesome-icon icon="fa-regular fa-comment-dots" class="mr-2" />發表評論</a>
+      <a href="#" @click.prevent="showModal" class="btn btn-large btn-primary"
+        ><font-awesome-icon
+          icon="fa-regular fa-comment-dots"
+          class="mr-2"
+        />發表評論</a
+      >
     </div>
   </div>
+  <CommentForm
+    :showModal="commentModalStatus"
+    @closeModal="closeModal"
+    @newComment="newComment"
+  ></CommentForm>
 </template>
 <script setup>
-import axios from "axios";
-import { ref, onMounted } from "vue";
+import CommentForm from '@/components/CommentFormComponent';
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+import { useStore } from '@/stores/index';
 
-const commentList = ref([]);
-const replyList = ref([]);
-const userList = ref([]);
 const props = defineProps({
   id: {
     type: String,
-    default: "0",
+    default: '0',
   },
 });
+const store = useStore();
+const commentList = ref([]);
+const replyList = ref([]);
+const userList = ref([]);
+const commentModalStatus = ref(false);
+const api = axios.create({baseURL: 'https://howshonginn-api.herokuapp.com/'});
 
-const getComment = () =>
-  axios.get(`https://howshonginn-api.herokuapp.com/comment/?campID=${props.id}`);
-const getUser = () => axios.get(`https://howshonginn-api.herokuapp.com/user`);
+function showModal() {
+  commentModalStatus.value = true;
+  store.toggleMask(true, true, false);
+}
+function closeModal() {
+  commentModalStatus.value = false;
+  store.toggleMask(false);
+}
+
+function newComment(obj) {
+  commentList.value.push(obj);
+}
+
+function reply(index) {
+  const now = new Date();
+  const replyComment = commentList.value[index];
+  // 確認是否已登入
+  if (!store.userInfo.status) {
+    store.toggleLoginModal();
+  } else {
+    if (replyComment.currentReply !== '') {
+      const replyInfo = {
+        commentTime: `${now.getFullYear()}/${
+          now.getMonth() + 1
+        }/${now.getDate()} ${now.getHours()}:${now.getMinutes()}`,
+        campID: replyComment.campID,
+        userID: store.userInfo.id.toString(),
+        replyID: replyComment.id,
+        content: replyComment.currentReply,
+        agree: [],
+        disagree: [],
+      };
+
+      api
+        .post('comment', replyInfo)
+        .then((res) => {
+          replyList.value.push(res.data);
+          commentList.value[index].currentReply = '';
+        })
+        .catch((err) => console.log(err));
+    }
+  }
+}
+
+const getComment = () => api.get(`comment/?campID=${props.id}`);
+const getUser = () => api.get(`user`);
 
 onMounted(() => {
   axios
     .all([getComment(), getUser()])
     .then(
       axios.spread((acct, perms) => {
-        acct.data.forEach((item) =>
-          !item.replyID
-            ? commentList.value.push(item)
-            : replyList.value.push(item)
-        );
+        acct.data.forEach((item) => {
+          if (!item.replyID) {
+            item.currentReply = '';
+            commentList.value.push(item);
+          } else {
+            replyList.value.push(item);
+          }
+        });
 
         userList.value = perms.data.reduce(
           (acc, cur) => ({ ...acc, [cur.id]: cur }),

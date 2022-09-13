@@ -104,8 +104,13 @@ module.exports = {
       },
       padding: {
         '34': '8.5rem',
+      },
+      width: {
+        '320': '320px',
+        '460': '460px',
+        '550': '550px'
       }
-    },
+    }
   },
   plugins: [
     require('@tailwindcss/aspect-ratio'),

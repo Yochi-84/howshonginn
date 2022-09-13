@@ -2,11 +2,11 @@
 ![](https://i.imgur.com/R0nwMxJ.png)
 
 ### Demo
-[https://yochi-84.github.io/howshonginn/](https://yochi-84.github.io/howshonginn/)      
+[https://yochi-84.github.io/howshonginn/](https://yochi-84.github.io/howshonginn/)<br>
 
-體驗帳號: root@example.com    
-密碼: 12345678    
-or   
+體驗帳號: root@example.com<br>
+密碼: 12345678<br>
+or<br>
 註冊帳號
 ### 使用技術
 * vue-cli

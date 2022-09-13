@@ -37,6 +37,7 @@ import {
   faCircleXmark,
   faGear,
   faQuestion,
+  faPlus
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -76,7 +77,8 @@ library.add(
   faCircleXmark,
   faGear,
   faQuestion,
-  faFaceSadCry
+  faFaceSadCry,
+  faPlus
 );
 
 const pinia = createPinia();

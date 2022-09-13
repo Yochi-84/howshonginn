@@ -30,9 +30,20 @@
               </h3>
               <a href="#" @click.prevent="store.toggleFavorite(info.id)">
                 <font-awesome-icon
-                  :icon="[store.userInfo.status && store.userInfo.favorite.indexOf(info.id) > -1 ? 'fa-solid' : 'fa-regular','fa-heart']"
+                  :icon="[
+                    store.userInfo.status &&
+                    store.userInfo.favorite.indexOf(info.id) > -1
+                      ? 'fa-solid'
+                      : 'fa-regular',
+                    'fa-heart',
+                  ]"
                   class="text-2xl text-danger-dark duration-300 hover:scale-125"
-                  :title="(store.userInfo.status && store.userInfo.favorite.indexOf(info.id) > -1 ? '移除' : '加入') + '收藏'"
+                  :title="
+                    (store.userInfo.status &&
+                    store.userInfo.favorite.indexOf(info.id) > -1
+                      ? '移除'
+                      : '加入') + '收藏'
+                  "
                 />
               </a>
             </div>
@@ -221,19 +232,27 @@
                   </div>
                   <div class="hidden basis-1/8 py-2 md:block">
                     {{ kind[1].normalPrice ? kind[1].normalPrice : '' }}
-                    <span class="hidden lmd:inline">元/晚</span>
+                    <span class="hidden lmd:inline" v-if="kind[1].normalPrice"
+                      >元/晚</span
+                    >
                   </div>
                   <div class="hidden basis-1/8 py-2 md:block">
                     {{ kind[1].weekendPrice ? kind[1].weekendPrice : '' }}
-                    <span class="hidden lmd:inline">元/晚</span>
+                    <span class="hidden lmd:inline" v-if="kind[1].weekendPrice"
+                      >元/晚</span
+                    >
                   </div>
                   <div class="hidden basis-1/8 py-2 md:block">
                     {{ kind[1].holidayPrice ? kind[1].holidayPrice : '' }}
-                    <span class="hidden lmd:inline">元/晚</span>
+                    <span class="hidden lmd:inline" v-if="kind[1].holidayPrice"
+                      >元/晚</span
+                    >
                   </div>
                   <div class="hidden basis-1/8 py-2 pr-2 md:block">
                     {{ kind[1].newYearPrice ? kind[1].newYearPrice : '' }}
-                    <span class="hidden lmd:inline">元/晚</span>
+                    <span class="hidden lmd:inline" v-if="kind[1].newYearPrice">
+                      元/晚</span
+                    >
                   </div>
                 </li>
               </ul>
@@ -252,11 +271,11 @@
 <script setup>
 import axios from 'axios';
 import BreadCrumb from '@/components/BreadCrumbComponent';
-import Comment from '@/components/CommentComponent';
+import Comment from '@/container/CommentComponent';
 import Loading from '@/components/LoadingComponent';
 import { VueperSlides, VueperSlide } from 'vueperslides';
 import 'vueperslides/dist/vueperslides.css';
-import { ref,computed, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from '@/stores/index';
 

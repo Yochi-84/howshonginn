@@ -153,7 +153,7 @@
         </ul>
       </div>
     </div>
-    <div class="-mx-1d flex justify-between border-t border-t-primary-dark p-4">
+    <div class="-mx-1 flex justify-between border-t border-t-primary-dark p-4">
       <div class="w-1/2 px-1">
         <a
           href="#"

@@ -45,14 +45,19 @@ export const useStore = defineStore('main', {
       }
     },
     clearUserInfo() {
-      console.log(this.userInfo.mode)
       this.userInfo.mode === 'session' ? sessionStorage.removeItem("userInfo") : localStorage.removeItem("userInfo");
+    },
+    /**
+     * 彈出登入互動視窗
+     */
+    toggleLoginModal() {
+      this.loginModal = true;
+      this.toggleMask(true, true, false);
     },
     toggleFavorite(id) {
       // 如果沒登入，彈出 login modal
       if (!this.userInfo.status) {
-        this.loginModal = true;
-        this.toggleMask(true, true, false);
+        this.toggleLoginModal();
       } else {
         const index = this.userInfo.favorite.indexOf(id);
         if (index > -1) {
@@ -61,6 +66,7 @@ export const useStore = defineStore('main', {
           this.userInfo.favorite.push(id);
         }
 
+        // TODO: favorite array 處理
         api.get('user')
           .then(res => console.log(res.data))
           .catch(err => console.log(err))
