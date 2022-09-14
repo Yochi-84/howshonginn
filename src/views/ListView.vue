@@ -168,12 +168,12 @@ function filterResult(filterObj) {
 
 onMounted(() => {
   axios
-    .get(`https://howshonginn-api.herokuapp.com/camp`)
+    .get(`https://howshonginn-api.herokuapp.com/campingPlace`)
     .then((res) => {
       place.value = res.data;
       loadingShow.value = false;
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(err));
 });
 
 watch(routeQuery, () => {

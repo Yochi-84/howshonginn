@@ -158,6 +158,7 @@ const commentList = ref([]); // 評論
 const replyList = ref([]); // 回覆
 const userList = ref([]);
 const commentModalStatus = ref(false);
+
 const api = axios.create({baseURL: 'https://howshonginn-api.herokuapp.com/'});
 
 function showModal() {
@@ -199,7 +200,7 @@ function reply(index) {
           replyList.value.push(res.data);
           commentList.value[index].currentReply = '';
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     }
   }
 }
@@ -227,6 +228,6 @@ onMounted(() => {
         );
       })
     )
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(err));
 });
 </script>

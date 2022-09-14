@@ -20,7 +20,7 @@
       /></a>
       <div class="h-[280px] overflow-hidden">
         <img
-          :src="require('../assets/image/' + props.cardInfo.image[0])"
+          :src="require('../assets/image/' + cardInfo.image[0])"
           :alt="name"
           :onerror="require('../assets/image/error_pic.jpg')"
           class="h-full w-full object-cover object-bottom"
@@ -37,7 +37,7 @@
       <div class="bg-white p-4 text-center md:px-6 md:text-left">
         <h4 class="mb-2 text-primary-dark md:mb-3">
           <font-awesome-icon icon="fa-solid fa-location-dot" class="mr-2" />{{
-            props.cardInfo.county
+            cardInfo.county
           }}
         </h4>
         <h3
@@ -47,12 +47,16 @@
           {{ name }}
         </h3>
       </div>
-      <router-link :to="'/info?id=' + cardInfo.id" target="_blank" class="absolute inset-0" />
+      <router-link
+        :to="'/info?id=' + cardInfo.id"
+        target="_blank"
+        class="absolute inset-0"
+      />
     </div>
   </Transition>
 </template>
 <script setup>
-import { computed } from 'vue';
+import { computed, toRefs } from 'vue';
 import { useStore } from '@/stores/index';
 
 const store = useStore();
@@ -64,21 +68,23 @@ const props = defineProps({
   },
 });
 
+const { cardInfo, delay } = toRefs(props);
+
 const name = computed(() =>
-  props.cardInfo.name.slice(props.cardInfo.name.indexOf(' ') + 1)
+  cardInfo.value.name.slice(cardInfo.value.name.indexOf(' ') + 1)
 );
 
 const mark = computed(() => {
-  if (props.cardInfo.favorite > 500) {
+  if (cardInfo.value.favorite > 500) {
     return { color: 'danger-dark', title: '熱門' };
-  } else if (props.cardInfo.tags.length > 6) {
+  } else if (cardInfo.value.tags.length > 6) {
     return { color: 'sky-600', title: '超多特色' };
   } else {
     return { color: 'secondary-dark', title: '最近新增' };
   }
 });
 
-const transitionDelay = computed(() => props.delay + 's');
+const transitionDelay = computed(() => delay.value + 's');
 </script>
 <style>
 .v-enter-active,

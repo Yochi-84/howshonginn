@@ -120,12 +120,13 @@ function submitEditor() {
       agree: [],
       disagree: [],
   }
+
   axios
     .post('https://howshonginn-api.herokuapp.com/comment', commentInfo)
     .then((res) => {
       emits("newComment", res.data)
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(err));
   clearEditor();
   closeModal();
 }

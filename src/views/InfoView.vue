@@ -230,6 +230,7 @@
                       </li>
                     </ul>
                   </div>
+                  <!-- 桌機版 -->
                   <div class="hidden basis-1/8 py-2 md:block">
                     {{ kind[1].normalPrice ? kind[1].normalPrice : '' }}
                     <span class="hidden lmd:inline" v-if="kind[1].normalPrice"
@@ -302,7 +303,7 @@ const infoExist = computed(
 
 onMounted(() => {
   axios
-    .get(`https://howshonginn-api.herokuapp.com/camp?id=${route.query.id}`)
+    .get(`https://howshonginn-api.herokuapp.com/campingPlace?id=${route.query.id}`)
     .then((res) => (info.value = res.data[0]))
     .then(() => {
       info.value.name = info.value.name.slice(info.value.name.indexOf(' ') + 1);
@@ -318,7 +319,7 @@ onMounted(() => {
 
       infoOperated.value = true;
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(err));
 });
 </script>
 <style lang="scss" scoped>

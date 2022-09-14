@@ -366,6 +366,6 @@ onMounted(() => {
       'https://raw.githubusercontent.com/donma/TaiwanAddressCityAreaRoadChineseEnglishJSON/master/CityCountyData.json'
     )
     .then((res) => (countyCity.value = res.data))
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(err));
 });
 </script>

@@ -148,7 +148,7 @@ function register() {
           errorMsg.value = '此暱稱已被使用，請嘗試更換暱稱';
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }
 }
 function checkNickname() {
@@ -161,6 +161,6 @@ function checkNickname() {
         nicknameStatus.value = true;
       }
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(err));
 }
 </script>

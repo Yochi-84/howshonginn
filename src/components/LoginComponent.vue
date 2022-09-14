@@ -104,7 +104,7 @@ function submit() {
           errorMsg.value = 'errorInfo';
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }
 }
 </script>

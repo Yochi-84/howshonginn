@@ -122,10 +122,10 @@ const famous = ref([]);
 const share = ref([]);
 
 const famousIndexList = [27, 63, 192, 273];
-const shareIndexList = [62, 98, 128, 147, 244];
+const shareIndexList = [60, 98, 128, 146, 243];
 
 const api = axios.create({
-  baseURL: 'https://howshonginn-api.herokuapp.com/camp',
+  baseURL: 'https://howshonginn-api.herokuapp.com/campingPlace',
 });
 const getFamous = () => api.get(`?id=${famousIndexList.join('&id=')}`);
 const getShare = () => api.get(`?id=${shareIndexList.join('&id=')}`);
