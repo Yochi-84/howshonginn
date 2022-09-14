@@ -18,6 +18,7 @@
                 ? 'border-primary bg-transparent text-primary duration-300 focus-within:bg-white focus-within:text-black focus-within:drop-shadow-[0_0_8px_#408560] lg:focus-within:drop-shadow-none'
                 : 'border-black',
             ]"
+            ref="searchbox"
           ></SearchBox>
         </div>
         <div class="self-end px-3 text-right lg:w-2/3 xl:w-3/4">
@@ -35,7 +36,7 @@
       </div>
       <div class="-mx-3 flex flex-wrap justify-center">
         <aside class="w-full px-3 lg:w-1/3 xl:w-1/4">
-          <Filter @filterParameter="filterResult"></Filter>
+          <Filter @filterParameter="filterResult" ref="filter"></Filter>
         </aside>
         <Loading class="px-3 lg:w-2/3 xl:w-3/4" v-if="loadingShow"></Loading>
         <section
@@ -84,6 +85,7 @@ import CampingCard from '@/components/CampingCardComponent';
 import Loading from '@/components/LoadingComponent';
 import { ref, onMounted, watch, computed, inject } from 'vue';
 import { useRoute } from 'vue-router';
+import { useStore } from '@/stores/index';
 import axios from 'axios';
 
 const loadingShow = ref(true);
@@ -92,12 +94,20 @@ const currentPage = ref(1);
 const sortMethod = ref('id');
 const scrollStatus = inject('scrollStatus');
 const route = useRoute();
+const store = useStore();
 let routeQuery = computed(() => route.query);
 const filterParameter = ref({});
+const searchbox = ref(null);
+const filter = ref(null);
 
 const showList = computed(() => {
-  let list = [];
-  if (Object.entries(filterParameter.value).length === 0) {
+  let list = [...place.value];
+  if (store.filterMode === 'keyword') {
+    if(Object.entries(filterParameter.value).length > 0) {
+      // 清空 filterParameter 並清除篩選區已選擇的項目
+      filterResult({});
+      filter.value.clearFilter();
+    }
     // 關鍵字搜尋
     if (route.query.q) {
       list = place.value.filter((item) =>
@@ -106,11 +116,19 @@ const showList = computed(() => {
     } else {
       list = [...place.value];
     }
-  } else {
+  } else if(store.filterMode === 'filter' && Object.entries(filterParameter.value).length > 0){
+    // 清空 searchbox
+    searchbox.value.clearInput();
     // 條件篩選
-    list = place.value.filter((item) =>
-      item.county.includes(filterParameter.value.filterArea.replace('臺','台'))
-    );
+    if(typeof filterParameter.value.filterArea === 'string') {
+      // 下拉選單縣市鄉鎮篩選
+      list = place.value.filter((item) =>
+        item.county.includes(filterParameter.value.filterArea.replace('臺', '台'))
+      );
+    } else {
+      // 區域篩選
+      list = place.value.filter(item => filterParameter.value.filterArea.some(ele => item.county.includes(ele)) )
+    }
     if (filterParameter.value.filterTag.length > 0) {
       if (!filterParameter.value.tagFilterMode) {
         // 一般模式
@@ -119,7 +137,6 @@ const showList = computed(() => {
             (ele) => item.tags.indexOf(ele) > -1
           )
         );
-        console.log(list);
       } else {
         //嚴格模式
         list = list.filter((item) =>
@@ -144,10 +161,9 @@ const showList = computed(() => {
 const hasResult = computed(() => showList.value.length > 0);
 const totalPage = computed(() => Math.ceil(showList.value.length / 12));
 
-// filter 傳來篩選參數進行篩選
+// 接收 filter 傳來的參數或要清空時呼叫
 function filterResult(filterObj) {
   filterParameter.value = filterObj;
-  console.log(filterParameter.value);
 }
 
 onMounted(() => {

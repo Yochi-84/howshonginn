@@ -263,8 +263,13 @@ const filterItem = ref({
   ],
   tagFilterMode: false, //標籤篩選模式，false 為一般模式
 });
+// 暴露方法讓父元件可以呼叫
+defineExpose({
+  clearFilter,
+});
 
 function filterSubmit() {
+  store.toggleFilterMode('filter');
   let filterParameter = {};
   if (filterItem.value.countySelect !== '') {
     let filterArea = countyCity.value[filterItem.value.countySelect].CityName;
@@ -274,9 +279,22 @@ function filterSubmit() {
 
     filterParameter.filterArea = filterArea;
   } else {
+    const area = {
+      北部: ['台北', '新北', '基隆', '桃園', '新竹', '宜蘭'],
+      中部: ['苗栗', '台中', '彰化', '南投', '雲林'],
+      南部: ['嘉義', '台南', '高雄', '屏東'],
+      東部: ['花蓮', '台東'],
+      離島: ['連江', '金門', '澎湖'],
+    };
 
-    // TODO: 區域篩選
-    filterParameter.filterArea = '';
+    // 篩選出所選區域的縣市
+    filterParameter.filterArea = filterItem.value.areaList.reduce((acc,cur) => {
+      if(cur.selected) {
+        return [...acc,...area[cur.area]]
+      } else {
+        return acc
+      }
+    },[]);
   }
 
   let filterTag = [];

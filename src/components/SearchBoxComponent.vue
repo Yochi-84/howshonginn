@@ -18,16 +18,27 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
-import router from "@/router";
-const keyword = ref("");
+import { ref } from 'vue';
+import router from '@/router';
+import { useStore } from '@/stores/index';
+
+const store = useStore();
+const keyword = ref('');
+defineExpose({
+  clearInput
+})
 
 function search() {
+  store.toggleFilterMode('keyword');
   router.push({
-    name: "list",
+    name: 'list',
     query: {
       q: keyword.value,
     },
   });
+}
+
+function clearInput() {
+  keyword.value = "";
 }
 </script>

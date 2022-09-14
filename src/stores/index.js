@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import router from '@/router';
 
 const api = axios.create({
   baseURL: 'https://howshonginn-api.herokuapp.com/'
@@ -14,7 +15,8 @@ export const useStore = defineStore('main', {
         status: false,
         'z-index': 20,
         'lg-hidden': true,
-      }
+      },
+      filterMode: 'keyword'
     }
   },
   getters: {
@@ -88,6 +90,20 @@ export const useStore = defineStore('main', {
       this.mask.status = status;
       this.mask['z-index'] = higherZ ? 40 : 20;
       this.mask['lg-hidden'] = hidden;
+    },
+    /**
+     *
+     * @param {string} mode - 篩選方式 ('keyword' 或 'filter')
+     */
+    toggleFilterMode(mode = "keyword") {
+      if(mode === 'keyword') {
+        this.filterMode = mode;
+      } else if(mode === 'filter') {
+        this.filterMode = mode;
+        router.replace({'query': null});
+      } else {
+        console.error('toggleFilterMode(mode) - 未知參數');
+      }
     }
   }
 })

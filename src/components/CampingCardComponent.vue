@@ -2,9 +2,6 @@
   <Transition appear>
     <div
       class="backface-hidden group relative h-full cursor-pointer overflow-hidden rounded shadow-[1px_1px_0_1px_#777] ring-1 ring-content-light duration-300 after:absolute after:bottom-0 after:z-1 after:h-full after:w-1/4 after:skew-x-[35deg] after:bg-gradient-to-l after:from-white/[0.1] after:via-white/[0.4] after:to-white/[0.1] after:opacity-0 hover:after:animate-twinkle hover:after:opacity-40"
-      @click="
-        blankTo(router.resolve({ name: 'info', query: { id: cardInfo.id } }))
-      "
     >
       <a
         href="#"
@@ -50,12 +47,12 @@
           {{ name }}
         </h3>
       </div>
+      <router-link :to="'/info?id=' + cardInfo.id" target="_blank" class="absolute inset-0" />
     </div>
   </Transition>
 </template>
 <script setup>
 import { computed } from 'vue';
-import router from '@/router';
 import { useStore } from '@/stores/index';
 
 const store = useStore();
@@ -82,10 +79,6 @@ const mark = computed(() => {
 });
 
 const transitionDelay = computed(() => props.delay + 's');
-
-function blankTo(url) {
-  window.open(url.href, '_blank');
-}
 </script>
 <style>
 .v-enter-active,

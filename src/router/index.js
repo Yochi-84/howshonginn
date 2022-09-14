@@ -152,12 +152,18 @@ const routes = [
         }
       ],
     },
-  }
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+// 跳轉後回到頂部並關閉 mobile navbar
+router.afterEach(() => {
+  useStore().navStatus = false;
+  window.scrollTo(0, 0);
 });
 
 export default router;
