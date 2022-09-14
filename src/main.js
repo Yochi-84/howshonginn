@@ -38,10 +38,15 @@ import {
   faGear,
   faQuestion,
   faPlus,
+  faMinus,
   faFlag,
   faImages,
   faDisplay,
-  faTent
+  faTent,
+  faPenToSquare,
+  faCoins,
+  faAnglesLeft,
+  faAnglesRight,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -83,10 +88,15 @@ library.add(
   faQuestion,
   faFaceSadCry,
   faPlus,
+  faMinus,
   faFlag,
   faImages,
   faDisplay,
-  faTent
+  faTent,
+  faPenToSquare,
+  faCoins,
+  faAnglesLeft,
+  faAnglesRight,
 );
 
 const pinia = createPinia();

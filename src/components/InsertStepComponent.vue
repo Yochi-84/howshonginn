@@ -22,7 +22,7 @@
           'cursor-pointer border-primary bg-primary-dark text-white': isActive,
         },
       ]"
-      @click="jumpTo(index)"
+      @click="jumpTo(stepIndex)"
     >
       <slot name="icon"></slot>
       <slot name="name"></slot>

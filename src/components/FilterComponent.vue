@@ -288,13 +288,16 @@ function filterSubmit() {
     };
 
     // 篩選出所選區域的縣市
-    filterParameter.filterArea = filterItem.value.areaList.reduce((acc,cur) => {
-      if(cur.selected) {
-        return [...acc,...area[cur.area]]
-      } else {
-        return acc
-      }
-    },[]);
+    filterParameter.filterArea = filterItem.value.areaList.reduce(
+      (acc, cur) => {
+        if (cur.selected) {
+          return [...acc, ...area[cur.area]];
+        } else {
+          return acc;
+        }
+      },
+      []
+    );
   }
 
   let filterTag = [];
@@ -336,8 +339,8 @@ watch(countySelect, (newV) => {
     for (let item of filterItem.value.areaList) {
       item.selected = false;
     }
-    filterItem.value.townSelect = '';
   }
+  filterItem.value.townSelect = '';
 });
 
 // 點擊區域外關閉

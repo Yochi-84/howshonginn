@@ -1,5 +1,5 @@
 <template>
-    <Working></Working>
+  <Working></Working>
 </template>
 <script setup>
 import Working from "@/components/WorkingComponent";

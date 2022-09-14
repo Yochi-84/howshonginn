@@ -123,11 +123,11 @@ const showList = computed(() => {
     if(typeof filterParameter.value.filterArea === 'string') {
       // 下拉選單縣市鄉鎮篩選
       list = place.value.filter((item) =>
-        item.county.includes(filterParameter.value.filterArea.replace('臺', '台'))
+        item.county.includes(filterParameter.value.filterArea)
       );
     } else {
       // 區域篩選
-      list = place.value.filter(item => filterParameter.value.filterArea.some(ele => item.county.includes(ele)) )
+      list = place.value.filter(item => filterParameter.value.filterArea.some(ele => item.county.includes(ele)))
     }
     if (filterParameter.value.filterTag.length > 0) {
       if (!filterParameter.value.tagFilterMode) {
@@ -150,7 +150,7 @@ const showList = computed(() => {
 
   switch (sortMethod.value) {
     case 'favorite':
-      return list.sort((prev, next) => next.want - prev.want);
+      return list.sort((prev, next) => next.favorite - prev.favorite);
     case 'random':
       return list.sort(() => 0.5 - Math.random());
     default:

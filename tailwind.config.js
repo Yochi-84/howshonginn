@@ -86,14 +86,34 @@ module.exports = {
             transform: "scaleX(1)",
             animationTimingFunction: "cubic-bezier(0, 0, 0.2, 1)"
           }
-        }
+        },
+        "move-right": {
+          '0%': {
+            opacity: '1',
+          },
+          '70%,100%': {
+            opacity: '0',
+            transform: "translateX(30px)"
+          }
+        },
+        "move-left": {
+          '0%': {
+            opacity: '1',
+          },
+          '70%,100%': {
+            opacity: '0',
+            transform: "translateX(-30px)"
+          }
+        },
       },
       animation: {
         typing:
           "typing-effect 6s steps(14) infinite,blink 0.5s step-end infinite alternate",
         twinkle: "twinkle-effect 3s ease-out infinite",
         bigger: "bigger 1s linear infinite",
-        scale: "scale 1s infinite"
+        scale: "scale 1s infinite",
+        right: "move-right 1s infinite",
+        left: "move-left 1s infinite",
       },
       zIndex: {
         1: "1",

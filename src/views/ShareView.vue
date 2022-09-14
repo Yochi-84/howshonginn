@@ -1,5 +1,5 @@
 <template>
-  <main class="py-20 md:py-34">
+  <main class="py-20 md:py-34 overflow-x-hidden">
     <div class="container">
       <BreadCrumb class="mb-6"></BreadCrumb>
       <ul class="mb-8 flex w-full items-center justify-center">
@@ -25,7 +25,7 @@
       </ul>
       <section>
         <h2
-          class="mb-6 border-b-8 border-double border-b-primary-dark pb-2 text-center text-3xl font-bold text-primary-dark"
+          class="mb-6 border-b-8 border-double border-b-primary-dark pb-2 text-center text-2xl font-bold text-primary-dark md:text-3xl"
         >
           <font-awesome-icon
             :icon="['fa-solid', 'fa-' + steps[currentStep].icon]"
@@ -34,22 +34,25 @@
         </h2>
         <transition :name="transitionDirection" mode="out-in">
           <keep-alive>
-            <component :is="stepView[currentStep]" class="mb-6"></component>
+            <component :is="stepView[currentStep]" class="mb-10"></component>
           </keep-alive>
         </transition>
       </section>
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-center gap-x-6 px-3 xl:px-20">
         <a
           href="#"
-          :class="['btn btn-danger',{'invisible opacity-0': currentStep === 0}]"
+          :class="[
+            'btn btn-danger md:btn-large group',
+            { 'invisible opacity-0': currentStep === 0 },
+          ]"
           @click.prevent="prevStep"
-          >上一步</a
+          ><font-awesome-icon icon="fa-solid fa-angles-left" class="mr-2 group-hover:animate-left"/>上一步</a
         >
         <a
           href="#"
-          class="btn btn-primary float-right"
+          class="btn btn-primary md:btn-large group"
           @click.prevent="nextStep"
-          >下一步</a
+          >下一步<font-awesome-icon icon="fa-solid fa-angles-right" class="ml-2 group-hover:animate-right"/></a
         >
       </div>
     </div>
@@ -60,6 +63,9 @@ import BreadCrumb from '@/components/BreadCrumbComponent';
 import InsertStep from '@/components/InsertStepComponent';
 import InsertInfo from '@/components/InsertInfoComponent';
 import InsertPicture from '@/components/InsertPictureComponent';
+import InsertTag from '@/components/InsertTagComponent';
+import InsertPreview from '@/components/InsertPreviewComponent';
+
 import { ref } from 'vue';
 
 const currentStep = ref(0);
@@ -88,12 +94,14 @@ const steps = ref([
 ]);
 const transitionDirection = ref('left');
 
-const stepView = [InsertInfo, InsertPicture];
+const stepView = [InsertInfo, InsertPicture, InsertTag, InsertPreview];
 
 function jumpToStep(index) {
+  transitionDirection.value = index > currentStep.value ? 'left': 'right';
   steps.value[currentStep.value].active = false;
   currentStep.value = index;
   steps.value[currentStep.value].active = true;
+  window.scrollTo(0, 80);
 }
 
 function prevStep() {
@@ -101,6 +109,7 @@ function prevStep() {
   steps.value[currentStep.value].active = false;
   currentStep.value -= 1;
   steps.value[currentStep.value].active = true;
+  window.scrollTo(0, 80);
 }
 
 function nextStep() {
@@ -109,6 +118,7 @@ function nextStep() {
   currentStep.value += 1;
   steps.value[currentStep.value].active = true;
   maxStep.value = currentStep.value;
+  window.scrollTo(0, 80);
 }
 </script>
 <style scoped>
@@ -131,7 +141,6 @@ function nextStep() {
 }
 
 .right-enter-active,
-
 .right-leave-active {
   transition: 0.5s ease;
 }
