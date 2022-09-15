@@ -32,7 +32,12 @@
             <font-awesome-icon
               :icon="['fa-solid', 'fa-' + steps[currentStep].icon]"
               class="mr-4"
-            />{{ steps[currentStep].name }}
+            />
+            <span>{{ steps[currentStep].name }}</span>
+            <span
+              class="ml-2 font-mono text-xl font-bold uppercase text-secondary-dark md:text-2xl"
+              >{{ steps[currentStep].english }}</span
+            >
           </h2>
         </transition>
         <div class="mb-6 border-b-8 border-double border-b-primary-dark"></div>
@@ -45,7 +50,7 @@
           <a
             href="#"
             :class="[
-              'btn btn-danger lg:btn-large xl:btn-circle group xl:absolute xl:top-1/2 xl:left-0 xl:h-18 xl:w-18 xl:text-2xl xl:ring-2 xl:ring-danger-dark',
+              'btn btn-danger lg:btn-large xl:btn-circle group xl:absolute xl:left-0 xl:top-72 xl:h-18 xl:w-18 xl:text-2xl xl:ring-2 xl:ring-danger-dark',
               { 'invisible opacity-0': currentStep === 0 },
             ]"
             @click.prevent="prevStep"
@@ -56,7 +61,7 @@
           >
           <a
             href="#"
-            class="btn btn-primary lg:btn-large xl:btn-circle group xl:absolute xl:top-1/2 xl:right-0 xl:h-18 xl:w-18 xl:text-2xl xl:ring-2 xl:ring-primary-dark"
+            class="btn btn-primary lg:btn-large xl:btn-circle group xl:absolute xl:top-72 xl:right-0 xl:h-18 xl:w-18 xl:text-2xl xl:ring-2 xl:ring-primary-dark"
             @click.prevent="nextStep"
             v-show="currentStep !== steps.length - 1"
             ><span class="inline xl:hidden">下一步</span
@@ -66,12 +71,12 @@
           /></a>
           <a
             href="#"
-            class="btn btn-secondary lg:btn-large xl:btn-circle group xl:absolute xl:top-1/2 xl:right-0 xl:h-18 xl:w-18 xl:text-2xl xl:ring-2 xl:ring-secondary-dark"
-            @click.prevent="nextStep"
+            class="btn btn-secondary lg:btn-large xl:btn-circle group xl:absolute xl:right-0 xl:top-72 xl:h-18 xl:w-18 xl:text-2xl xl:ring-2 xl:ring-secondary-dark"
+            @click.prevent="finishStep"
             v-show="currentStep === steps.length - 1"
             ><span class="inline lg:hidden">完成</span
             ><font-awesome-icon
-              icon="fa-solid fa-gear"
+              icon="fa-solid fa-check"
               class="ml-2 group-hover:animate-right lg:ml-0"
           /></a>
         </div>
@@ -94,21 +99,25 @@ const maxStep = ref(0);
 const steps = ref([
   {
     name: '營地資訊',
+    english: 'Information',
     icon: 'flag',
     active: true,
   },
   {
     name: '營地照片',
+    english: 'Pictures',
     icon: 'images',
     active: false,
   },
   {
     name: '特色標籤',
+    english: 'Tags',
     icon: 'tags',
     active: false,
   },
   {
     name: '畫面預覽',
+    english: 'Preview',
     icon: 'display',
     active: false,
   },
@@ -140,6 +149,11 @@ function nextStep() {
   steps.value[currentStep.value].active = true;
   maxStep.value = currentStep.value;
   window.scrollTo(0, 80);
+}
+
+// TODO:確認
+function finishStep() {
+  console.info('完成!!!');
 }
 </script>
 <style scoped>

@@ -184,6 +184,7 @@
           </button>
         </div>
       </div>
+      <!-- TODO:RWD -->
       <div class="mb-1 flex border-b border-primary-dark py-1 font-bold">
         <span class="basis-1/4 px-1">區域名稱</span>
         <span class="basis-1/12 px-1">帳/區數</span>

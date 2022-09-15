@@ -47,6 +47,8 @@ import {
   faCoins,
   faAnglesLeft,
   faAnglesRight,
+  faCheck,
+  faTrashCan
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -97,6 +99,8 @@ library.add(
   faCoins,
   faAnglesLeft,
   faAnglesRight,
+  faCheck,
+  faTrashCan
 );
 
 const pinia = createPinia();
