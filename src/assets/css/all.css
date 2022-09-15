@@ -1,5 +1,5 @@
-@import "https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap";
-@import "https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap";
+@import 'https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap';
+@import 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -26,18 +26,30 @@
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    @apply bg-green-800 rounded;
+    @apply rounded bg-green-800;
   }
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-primary;
   }
+
+  /* Hide spinner of input which type is number */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    @apply m-0;
+  }
+
+  /* Firefox */
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
 }
 
 @layer components {
   .btn {
-    @apply inline-block rounded py-3 px-6 leading-none text-black duration-300 md:py-3 md:px-8 tracking-wider;
+    @apply inline-block rounded py-3 px-6 leading-none tracking-wider text-black transition-colors duration-300 md:py-3 md:px-8;
   }
 
   .btn-primary {
@@ -60,6 +72,10 @@
     @apply w-full py-4 px-0 text-center md:w-auto md:py-4 md:px-[6.5rem];
   }
 
+  .btn-circle {
+    @apply flex items-center justify-center rounded-full p-0;
+  }
+
   .btn-fluid {
     @apply block rounded-none border-0 py-4 text-center md:py-4;
   }
@@ -79,6 +95,6 @@
   }
 
   .content-\[\>\] {
-    content: ">";
+    content: '>';
   }
 }

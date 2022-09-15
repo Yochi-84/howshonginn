@@ -1,5 +1,5 @@
 <template>
-  <main class="py-20 md:py-34 overflow-x-hidden">
+  <main class="overflow-x-hidden py-20 md:py-34">
     <div class="container">
       <BreadCrumb class="mb-6"></BreadCrumb>
       <ul class="mb-8 flex w-full items-center justify-center">
@@ -23,38 +23,59 @@
           </template>
         </InsertStep>
       </ul>
-      <section>
-        <h2
-          class="mb-6 border-b-8 border-double border-b-primary-dark pb-2 text-center text-2xl font-bold text-primary-dark md:text-3xl"
-        >
-          <font-awesome-icon
-            :icon="['fa-solid', 'fa-' + steps[currentStep].icon]"
-            class="mr-4"
-          />{{ steps[currentStep].name }}
-        </h2>
+      <section class="relative">
+        <transition :name="transitionDirection" mode="out-in">
+          <h2
+            class="mb-2 text-center text-2xl font-bold text-primary-dark md:text-3xl"
+            :key="steps[currentStep].name"
+          >
+            <font-awesome-icon
+              :icon="['fa-solid', 'fa-' + steps[currentStep].icon]"
+              class="mr-4"
+            />{{ steps[currentStep].name }}
+          </h2>
+        </transition>
+        <div class="mb-6 border-b-8 border-double border-b-primary-dark"></div>
         <transition :name="transitionDirection" mode="out-in">
           <keep-alive>
             <component :is="stepView[currentStep]" class="mb-10"></component>
           </keep-alive>
         </transition>
+        <div class="flex items-center justify-center gap-x-6 px-3">
+          <a
+            href="#"
+            :class="[
+              'btn btn-danger lg:btn-large xl:btn-circle group xl:absolute xl:top-1/2 xl:left-0 xl:h-18 xl:w-18 xl:text-2xl xl:ring-2 xl:ring-danger-dark',
+              { 'invisible opacity-0': currentStep === 0 },
+            ]"
+            @click.prevent="prevStep"
+            ><font-awesome-icon
+              icon="fa-solid fa-angles-left"
+              class="mr-2 group-hover:animate-left xl:mr-0"
+            /><span class="inline xl:hidden">上一步</span></a
+          >
+          <a
+            href="#"
+            class="btn btn-primary lg:btn-large xl:btn-circle group xl:absolute xl:top-1/2 xl:right-0 xl:h-18 xl:w-18 xl:text-2xl xl:ring-2 xl:ring-primary-dark"
+            @click.prevent="nextStep"
+            v-show="currentStep !== steps.length - 1"
+            ><span class="inline xl:hidden">下一步</span
+            ><font-awesome-icon
+              icon="fa-solid fa-angles-right"
+              class="ml-2 group-hover:animate-right xl:ml-0"
+          /></a>
+          <a
+            href="#"
+            class="btn btn-secondary lg:btn-large xl:btn-circle group xl:absolute xl:top-1/2 xl:right-0 xl:h-18 xl:w-18 xl:text-2xl xl:ring-2 xl:ring-secondary-dark"
+            @click.prevent="nextStep"
+            v-show="currentStep === steps.length - 1"
+            ><span class="inline lg:hidden">完成</span
+            ><font-awesome-icon
+              icon="fa-solid fa-gear"
+              class="ml-2 group-hover:animate-right lg:ml-0"
+          /></a>
+        </div>
       </section>
-      <div class="flex items-center justify-center gap-x-6 px-3 xl:px-20">
-        <a
-          href="#"
-          :class="[
-            'btn btn-danger md:btn-large group',
-            { 'invisible opacity-0': currentStep === 0 },
-          ]"
-          @click.prevent="prevStep"
-          ><font-awesome-icon icon="fa-solid fa-angles-left" class="mr-2 group-hover:animate-left"/>上一步</a
-        >
-        <a
-          href="#"
-          class="btn btn-primary md:btn-large group"
-          @click.prevent="nextStep"
-          >下一步<font-awesome-icon icon="fa-solid fa-angles-right" class="ml-2 group-hover:animate-right"/></a
-        >
-      </div>
     </div>
   </main>
 </template>
@@ -97,7 +118,7 @@ const transitionDirection = ref('left');
 const stepView = [InsertInfo, InsertPicture, InsertTag, InsertPreview];
 
 function jumpToStep(index) {
-  transitionDirection.value = index > currentStep.value ? 'left': 'right';
+  transitionDirection.value = index > currentStep.value ? 'left' : 'right';
   steps.value[currentStep.value].active = false;
   currentStep.value = index;
   steps.value[currentStep.value].active = true;

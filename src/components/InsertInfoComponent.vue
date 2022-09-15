@@ -16,6 +16,7 @@
             id="name"
             class="w-full rounded border border-black py-1 px-4 focus:shadow-around-primary focus:outline-none"
             placeholder="請輸入營地名稱"
+            v-model.lazy.trim="name"
           />
         </li>
         <li>
@@ -32,6 +33,7 @@
             id="phone"
             class="w-full rounded border border-black py-1 px-4 focus:shadow-around-primary focus:outline-none"
             placeholder="請輸入營主的聯絡電話"
+            v-model.trim="campingInfo.phone"
           />
         </li>
         <li>
@@ -48,6 +50,7 @@
             id="address"
             class="w-full rounded border border-black py-1 px-4 focus:shadow-around-primary focus:outline-none"
             placeholder="請輸入營地所在地址"
+            v-model.trim="campingInfo.address"
           />
         </li>
         <li>
@@ -65,6 +68,7 @@
             id="website"
             class="w-full rounded border border-black py-1 px-4 focus:shadow-around-primary focus:outline-none"
             placeholder="請輸入營地網站"
+            v-model.trim="campingInfo.website"
           />
         </li>
         <li class="-mx-3 flex flex-wrap gap-y-4">
@@ -124,6 +128,7 @@
               name="altitude"
               id="altitude"
               class="rounded border border-black py-1 px-2 text-center focus:shadow-around-primary focus:outline-none"
+              v-model="campingInfo.height"
             >
               <option value="" disabled selected>--- 海拔高度範圍 ---</option>
               <option value="300m以下">300m以下</option>
@@ -148,13 +153,11 @@
             class="mr-2"
           />簡介:</label
         >
-        <ckeditor
-          :editor="editor"
-          :config="editorConfig"
-          tag-name="textarea"
-          v-model="commentContent"
+        <textarea
+          class="h-[359px] w-full resize-none rounded border border-black p-4 focus:shadow-around-primary focus:outline-none"
+          v-model="campingInfo.intro"
           placeholder="簡單介紹一下這個營地吧"
-        ></ckeditor>
+        ></textarea>
       </div>
     </div>
     <div class="w-full px-4">
@@ -166,21 +169,22 @@
           <font-awesome-icon icon="fa-solid fa-coins" class="mr-2" />區域/價位:
         </label>
         <div class="flex">
-          <a
-            href="#"
-            @click.prevent="addRow"
+          <button
+            @click="addRow"
             class="block -skew-x-6 rounded-l bg-primary px-4 py-1 duration-300 hover:bg-primary-dark hover:text-white"
-            ><font-awesome-icon icon="fa-solid fa-plus"
-          /></a>
-          <a
-            href="#"
-            @click.prevent="removeRow"
-            class="block -skew-x-6 rounded-r bg-danger px-4 py-1 duration-300 hover:bg-danger-dark hover:text-white"
-            ><font-awesome-icon icon="fa-solid fa-minus"
-          /></a>
+          >
+            <font-awesome-icon icon="fa-solid fa-plus" />
+          </button>
+          <button
+            @click="removeRow"
+            class="disabled: block -skew-x-6 rounded-r bg-danger px-4 py-1 duration-300 enabled:hover:bg-danger-dark enabled:hover:text-white"
+            :disabled="areaPrice.length <= 0"
+          >
+            <font-awesome-icon icon="fa-solid fa-minus" />
+          </button>
         </div>
       </div>
-      <div class="flex border-b border-primary-dark py-1 font-bold">
+      <div class="mb-1 flex border-b border-primary-dark py-1 font-bold">
         <span class="basis-1/4 px-1">區域名稱</span>
         <span class="basis-1/12 px-1">帳/區數</span>
         <span class="basis-1/6 px-1">平日</span>
@@ -188,85 +192,105 @@
         <span class="basis-1/6 px-1">連假</span>
         <span class="basis-1/6 px-1">年假</span>
       </div>
-      <ul v-if="areaPrice.length">
-        <li v-for="area of areaPrice" :key="area.name" class="flex">
+      <transition-group tag="ul" name="move-up">
+        <li v-for="area of areaPrice" :key="area" class="flex">
           <div class="basis-1/4 p-1">
             <input
               type="text"
               class="w-full rounded border border-black py-1 px-2 focus:shadow-around-primary focus:outline-none"
-              v-model="area.name"
+              v-model.trim="area.name"
             />
           </div>
           <div class="basis-1/12 p-1">
             <input
-              type="text"
+              type="number"
               class="w-full rounded border border-black py-1 px-2 focus:shadow-around-primary focus:outline-none"
-              v-model="area.number"
+              v-model.number.trim="area.number"
             />
           </div>
           <div class="basis-1/6 p-1">
             <input
-              type="text"
+              type="number"
               class="w-full rounded border border-black py-1 px-2 focus:shadow-around-primary focus:outline-none"
               placeholder="單位:元/晚"
-              v-model="area.normalPrice"
+              v-model.number.trim="area.normalPrice"
             />
           </div>
           <div class="basis-1/6 p-1">
             <input
-              type="text"
+              type="number"
               class="w-full rounded border border-black py-1 px-2 focus:shadow-around-primary focus:outline-none"
               placeholder="單位:元/晚"
-              v-model="area.weekendPrice"
+              v-model.number.trim="area.weekendPrice"
             />
           </div>
           <div class="basis-1/6 p-1">
             <input
-              type="text"
+              type="number"
               class="w-full rounded border border-black py-1 px-2 focus:shadow-around-primary focus:outline-none"
               placeholder="單位:元/晚"
-              v-model="area.holidayPrice"
+              v-model.number.trim="area.holidayPrice"
             />
           </div>
           <div class="basis-1/6 p-1">
             <input
-              type="text"
-              class="w-full rounded border border-black py-1 px-2 focus:shadow-around-primary focus:outline-none"
+              type="number"
+              class="w-full appearance-none rounded border border-black py-1 px-2 focus:shadow-around-primary focus:outline-none"
               placeholder="單位:元/晚"
-              v-model="area.newYearPrice"
+              v-model.trim="area.newYearPrice"
             />
           </div>
         </li>
-      </ul>
+      </transition-group>
     </div>
   </div>
 </template>
 <script setup>
 import axios from 'axios';
-import CKEditor from '@ckeditor/ckeditor5-vue';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import '@ckeditor/ckeditor5-build-classic/build/translations/zh.js';
-import { ref, computed, onMounted, defineComponent } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
-const ckeditor = defineComponent(CKEditor.component);
-const editor = ClassicEditor;
-const commentContent = ref('');
-const editorConfig = {
-  language: 'zh',
-  allowedContent: true,
-  toolbar: {
-    items: ['selectAll', '|', 'bold', 'italic'],
-    shouldNotGroupWhenFull: true,
-  },
-};
 const countyCity = ref([]);
-const countySelect = ref('');
 const townList = computed(
   () => Array.from(countyCity.value)[countySelect.value]?.AreaList
 );
-const townSelect = ref('');
-// 除了 name ，最後記得轉 Number
+
 const areaPrice = ref([]);
+
+// 資料格式重整區
+const name = ref('');
+const countySelect = ref('');
+const townSelect = ref('');
+const formatName = computed(() => {
+  let tempName = '';
+  if (countySelect.value !== '') {
+    tempName += countyCity.value[countySelect.value].CityName.slice(0, -1);
+
+    if (townSelect.value !== '') {
+      tempName += townSelect.value.slice(0, -1);
+    }
+  }
+
+  tempName += ' ' + name.value;
+
+  return tempName;
+});
+
+const formatPrice = computed(() => {
+  let obj = {}
+  areaPrice.value.forEach(item => obj[item.name] = item);
+  return obj;
+});
+
+const campingInfo = ref({
+  name: formatName,
+  phone: '',
+  address: '',
+  website: '',
+  height: '',
+  county: countyCity.value[countySelect.value]?.CityName + townSelect.value,
+  intro: '',
+  price: formatPrice,
+});
 
 function addRow() {
   areaPrice.value.push({
@@ -293,53 +317,14 @@ onMounted(() => {
 });
 </script>
 <style>
-.ck-editor__editable {
-  height: 310px;
+.move-up-enter-from,
+.move-up-leave-to {
+  transform: translateY(30px);
+  opacity: 0;
 }
 
-.ck-content p {
-  font-size: revert;
-}
-
-.ck-content ul,
-.ck-content ol {
-  list-style: revert;
-  margin: revert;
-  padding: revert;
-}
-:root {
-  /* Overrides the border radius setting in the theme. */
-  --ck-border-radius: 4px;
-
-  /* Overrides the default font size in the theme. */
-  --ck-font-size-base: 16px;
-
-  /* Helper variables to avoid duplication in the colors. */
-  --ck-custom-background: #e9f4ee;
-  --ck-custom-foreground: #e3a864;
-  --ck-color-base-border: black;
-
-  /* -- Overrides generic colors. ------------------------------------------------------------- */
-
-  --ck-color-base-foreground: var(--ck-custom-background);
-  --ck-color-focus-border: black;
-  --ck-color-text: #408560;
-
-  /* -- Overrides the default .ck-button class colors. ---------------------------------------- */
-
-  --ck-color-button-default-background: var(--ck-custom-background);
-  --ck-color-button-default-hover-background: #88c6a5;
-  --ck-color-button-default-active-background: #d28226;
-  --ck-color-button-default-active-shadow: hsl(270, 2%, 23%);
-
-  --ck-color-button-on-background: var(--ck-custom-foreground);
-  --ck-color-button-on-hover-background: #d28226;
-  --ck-color-button-on-active-background: #d28226;
-  --ck-color-button-on-active-shadow: #d28226;
-  --ck-color-button-on-disabled-background: var(--ck-custom-foreground);
-
-  /* -- Overrides the default .ck-toolbar class colors. --------------------------------------- */
-
-  --ck-color-toolbar-background: var(--ck-custom-background);
+.move-up-leave-active,
+.move-up-enter-active {
+  transition: 0.5s ease-in-out;
 }
 </style>

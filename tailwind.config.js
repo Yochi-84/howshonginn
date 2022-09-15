@@ -93,7 +93,7 @@ module.exports = {
           },
           '70%,100%': {
             opacity: '0',
-            transform: "translateX(30px)"
+            transform: "translateX(20px)"
           }
         },
         "move-left": {
@@ -102,7 +102,7 @@ module.exports = {
           },
           '70%,100%': {
             opacity: '0',
-            transform: "translateX(-30px)"
+            transform: "translateX(-20px)"
           }
         },
       },
@@ -126,10 +126,15 @@ module.exports = {
         '34': '8.5rem',
       },
       width: {
+        '18': '4.5rem',
         '25': '6.25rem',
         '320': '320px',
         '460': '460px',
         '550': '550px'
+      },
+      height: {
+        '18': '4.5rem',
+        '25': '6.25rem',
       }
     }
   },
