@@ -211,56 +211,7 @@ const filterItem = ref({
       selected: false,
     },
   ],
-  tagList: [
-    {
-      tag: '有夜景',
-      selected: false,
-    },
-    {
-      tag: '裝備出租',
-      selected: false,
-    },
-    {
-      tag: '有雨棚',
-      selected: false,
-    },
-    {
-      tag: '小包區',
-      selected: false,
-    },
-    {
-      tag: '少帳包場',
-      selected: false,
-    },
-    {
-      tag: '近溪流',
-      selected: false,
-    },
-    {
-      tag: '有雲海',
-      selected: false,
-    },
-    {
-      tag: '免裝備露營',
-      selected: false,
-    },
-    {
-      tag: '有遊戲設施',
-      selected: false,
-    },
-    {
-      tag: '螢火蟲季',
-      selected: false,
-    },
-    {
-      tag: '團露大草皮',
-      selected: false,
-    },
-    {
-      tag: '可停露營車',
-      selected: false,
-    },
-  ],
+  tagList:[],
   tagFilterMode: false, //標籤篩選模式，false 為一般模式
 });
 // 暴露方法讓父元件可以呼叫
@@ -364,11 +315,27 @@ function closeDirection() {
 
 // 抓取鄉鎮資料
 onMounted(() => {
-  axios
-    .get(
+  const getCountyCity = () =>
+    axios.get(
       'https://raw.githubusercontent.com/donma/TaiwanAddressCityAreaRoadChineseEnglishJSON/master/CityCountyData.json'
+    );
+  const getTags = () => axios.get('https://howshonginn-api.herokuapp.com/tags');
+  axios
+    .all([getCountyCity(), getTags()])
+    .then(
+      axios.spread((acct, perms) => {
+        countyCity.value = acct.data;
+
+        filterItem.value.tagList = Object.values(perms.data[0])
+          .reduce((acc, cur) => [...acc, ...cur], [])
+          .map((item) => {
+            return {
+              tag: item,
+              selected: false,
+            };
+          });
+      })
     )
-    .then((res) => (countyCity.value = res.data))
     .catch((err) => console.error(err));
 });
 </script>

@@ -6,7 +6,7 @@
       <a
         href="#"
         @click.prevent.stop="store.toggleFavorite(cardInfo.id)"
-        class="absolute left-4 top-4 text-2xl text-danger-dark md:text-xl"
+        class="absolute left-4 top-4 text-2xl text-danger-dark md:text-xl z-10"
       >
         <font-awesome-icon
           :icon="[

@@ -122,7 +122,7 @@ const famous = ref([]);
 const share = ref([]);
 
 const famousIndexList = [27, 63, 192, 273];
-const shareIndexList = [60, 98, 128, 146, 243];
+const shareIndexList = [60, 97, 128, 146, 242];
 
 const api = axios.create({
   baseURL: 'https://howshonginn-api.herokuapp.com/campingPlace',
@@ -136,9 +136,12 @@ onMounted(() => {
       axios.spread((acct, perms) => {
         famous.value = acct.data;
 
-        share.value = perms.data;
+        share.value = perms.data.map(item => {
+          item.name = item.name.slice(item.name.indexOf(' ') + 1);
+          return item
+        });
       })
     )
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(err));
 });
 </script>

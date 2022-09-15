@@ -77,7 +77,7 @@
             ><span class="inline lg:hidden">完成</span
             ><font-awesome-icon
               icon="fa-solid fa-check"
-              class="ml-2 group-hover:animate-right lg:ml-0"
+              class="ml-2 group-hover:animate-pulse lg:ml-0"
           /></a>
         </div>
       </section>
