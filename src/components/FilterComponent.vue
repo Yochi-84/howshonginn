@@ -180,7 +180,6 @@ import { onMounted, ref, watch, computed, inject } from 'vue';
 import { useStore } from '@/stores/index';
 import axios from 'axios';
 
-const baseURL = inject('baseURL');
 const emits = defineEmits(['filterParameter']);
 const store = useStore();
 const countyCity = ref({}); //全台區域資料
@@ -320,7 +319,7 @@ onMounted(() => {
     axios.get(
       'https://raw.githubusercontent.com/donma/TaiwanAddressCityAreaRoadChineseEnglishJSON/master/CityCountyData.json'
     );
-  const getTags = () => axios.get(`${baseURL.value}tags`);
+  const getTags = () => axios.get(`${process.env.VUE_APP_API_PATH}/tags`);
   axios
     .all([getCountyCity(), getTags()])
     .then(

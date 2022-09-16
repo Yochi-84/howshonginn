@@ -31,16 +31,15 @@
 <script setup>
 import axios from 'axios';
 import Loading from '@/components/LoadingComponent';
-import { ref, watch, onMounted, inject } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 
-const baseURL = inject("baseURL");
 const emits = defineEmits(['campTags']);
 const tags = ref({});
 const loadingStatus = ref(true);
 
 onMounted(() => {
   axios
-    .get(`${baseURL.value}tags`)
+    .get(`${process.env.VUE_APP_API_PATH}/tags`)
     .then((res) => {
       let temp = {};
       Object.entries(res.data[0]).forEach((item) => {

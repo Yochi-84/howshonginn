@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main v-if="!loadingStatus">
     <!-- Banner -->
     <section
       class="clip-triangle flex h-[500px] items-center justify-center bg-[url('../image/banner.jpg')] bg-cover bg-bottom bg-no-repeat md:h-screen lg:bg-fixed"
@@ -109,6 +109,7 @@
       </div>
     </section>
   </main>
+  <Loading v-else></Loading>
 </template>
 
 <script setup>
@@ -116,9 +117,10 @@ import axios from 'axios';
 import SearchBox from '@/components/SearchBoxComponent';
 import FamousCard from '@/components/FamousCardComponent';
 import ShareCard from '@/components/ShareCardComponent';
-import { ref, onMounted, inject } from 'vue';
+import Loading from '@/components/LoadingComponent';
+import { ref, onMounted} from 'vue';
 
-const baseURL = inject("baseURL");
+const loadingStatus = ref(false);
 const famous = ref([]);
 const share = ref([]);
 
@@ -126,11 +128,12 @@ const famousIndexList = [27, 63, 192, 273];
 const shareIndexList = [60, 97, 128, 146, 242];
 
 const api = axios.create({
-  baseURL: `${baseURL.value}campingPlace`,
+  baseURL: `${process.env.VUE_APP_API_PATH}/campingPlace`,
 });
 const getFamous = () => api.get(`?id=${famousIndexList.join('&id=')}`);
 const getShare = () => api.get(`?id=${shareIndexList.join('&id=')}`);
 onMounted(() => {
+  loadingStatus.value = true
   axios
     .all([getFamous(), getShare()])
     .then(
@@ -143,6 +146,7 @@ onMounted(() => {
         });
       })
     )
+    .then(() => loadingStatus.value = false)
     .catch((err) => console.error(err));
 });
 </script>

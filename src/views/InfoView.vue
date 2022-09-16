@@ -276,11 +276,10 @@ import Comment from '@/container/CommentComponent';
 import Loading from '@/components/LoadingComponent';
 import { VueperSlides, VueperSlide } from 'vueperslides';
 import 'vueperslides/dist/vueperslides.css';
-import { ref, computed, onMounted, inject } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from '@/stores/index';
 
-const baseURL = inject("baseURL");
 const store = useStore();
 const route = useRoute();
 const info = ref({});
@@ -304,7 +303,7 @@ const infoExist = computed(
 
 onMounted(() => {
   axios
-    .get(`${baseURL.value}campingPlace?id=${route.query.id}`)
+    .get(`${process.env.VUE_APP_API_PATH}/campingPlace?id=${route.query.id}`)
     .then((res) => (info.value = res.data[0]))
     .then(() => {
       info.value.name = info.value.name.slice(info.value.name.indexOf(' ') + 1);

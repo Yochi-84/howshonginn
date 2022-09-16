@@ -58,12 +58,11 @@ import '@ckeditor/ckeditor5-build-classic/build/translations/zh.js';
 // import ItalicPlugin from '@ckeditor/ckeditor5-basic-styles/src/italic';
 // import FontColorPlugin from '@ckeditor/ckeditor5-font/src/fontcolor';
 // import FontBackgroundColorPlugin from '@ckeditor/ckeditor5-font/src/fontbackgroundcolor';
-import { ref, defineComponent, inject } from 'vue';
+import { ref, defineComponent } from 'vue';
 import { useStore } from '@/stores/index';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 
-const baseURL = inject("baseURL");
 const props = defineProps({
   showModal: {
     type: Boolean,
@@ -123,7 +122,7 @@ function submitEditor() {
   }
 
   axios
-    .post(`${baseURL.value}comment`, commentInfo)
+    .post(`${process.env.VUE_APP_API_PATH}/comment`, commentInfo)
     .then((res) => {
       emits("newComment", res.data)
     })

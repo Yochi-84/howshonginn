@@ -3,7 +3,7 @@ import axios from 'axios';
 import router from '@/router';
 
 const api = axios.create({
-  baseURL: 'https://howshonginn-api.herokuapp.com/'
+  baseURL: process.env.VUE_APP_API_PATH
 });
 export const useStore = defineStore('main', {
   state: () => {
@@ -69,11 +69,11 @@ export const useStore = defineStore('main', {
         }
 
         // TODO: favorite array 處理
-        api.get('user')
+        api.get('/user')
           .then(res => console.log(res.data))
           .catch(err => console.log(err))
 
-        api.patch(`user/${this.userInfo.id}`, { favorite: this.userInfo.favorite })
+        api.patch(`/user/${this.userInfo.id}`, { favorite: this.userInfo.favorite })
           .then(res => res.data)
           .catch(err => console.log(err));
 

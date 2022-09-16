@@ -88,7 +88,6 @@ import { useRoute } from 'vue-router';
 import { useStore } from '@/stores/index';
 import axios from 'axios';
 
-const baseURL = inject('baseURL');
 const loadingShow = ref(true);
 const place = ref([]);
 const currentPage = ref(1);
@@ -176,7 +175,7 @@ function filterResult(filterObj) {
 
 onMounted(() => {
   axios
-    .get(`${baseURL.value}campingPlace`)
+    .get(`${process.env.VUE_APP_API_PATH}/campingPlace`)
     .then((res) => {
       place.value = res.data;
       loadingShow.value = false;

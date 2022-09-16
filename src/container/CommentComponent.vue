@@ -143,10 +143,9 @@
 <script setup>
 import CommentForm from '@/components/CommentFormComponent';
 import axios from 'axios';
-import { ref, onMounted, inject } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useStore } from '@/stores/index';
 
-const baseURL = inject('baseURL');
 const props = defineProps({
   id: {
     type: String,
@@ -160,7 +159,7 @@ const replyList = ref([]); // 回覆
 const userList = ref([]);
 const commentModalStatus = ref(false);
 
-const api = axios.create({ baseURL: baseURL.value });
+const api = axios.create({ baseURL: process.env.VUE_APP_API_PATH });
 
 function showModal() {
   commentModalStatus.value = true;
@@ -196,7 +195,7 @@ function reply(index) {
       };
 
       api
-        .post('comment', replyInfo)
+        .post('/comment', replyInfo)
         .then((res) => {
           replyList.value.push(res.data);
           commentList.value[index].currentReply = '';
@@ -206,8 +205,8 @@ function reply(index) {
   }
 }
 
-const getComment = () => api.get(`comment/?campID=${props.id}`);
-const getUser = () => api.get(`user`);
+const getComment = () => api.get(`/comment/?campID=${props.id}`);
+const getUser = () => api.get(`/user`);
 
 onMounted(() => {
   axios

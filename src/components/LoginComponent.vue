@@ -77,9 +77,8 @@
 // import { mapState } from 'pinia';
 import { useStore } from '@/stores/index';
 import axios from 'axios';
-import { ref, inject } from 'vue';
+import { ref } from 'vue';
 
-const baseURL = inject('baseURL');
 const store = useStore();
 const loginData = ref({
   email: '',
@@ -96,7 +95,7 @@ function submit() {
   } else {
     axios
       .get(
-        `${baseURL.value}user?email=${loginData.value.email}&password=${loginData.value.password}`
+        `${process.env.VUE_APP_API_PATH}/user?email=${loginData.value.email}&password=${loginData.value.password}`
       )
       .then((res) => {
         if (res.data.length > 0) {

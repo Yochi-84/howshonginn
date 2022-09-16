@@ -88,10 +88,9 @@
 </template>
 <script setup>
 import axios from 'axios';
-import { ref, inject } from 'vue';
+import { ref } from 'vue';
 import { useStore } from '@/stores/index';
 
-const baseURL = inject('baseURL');
 const store = useStore();
 const registerData = ref({
   email: '',
@@ -103,7 +102,7 @@ const nicknameStatus = ref('false');
 const errorMsg = ref('');
 
 const api = axios.create({
-  baseURL: baseURL.value,
+  baseURL: process.env.VUE_APP_API_PATH,
 });
 function register() {
   if (registerData.value.email === '') {
@@ -118,7 +117,7 @@ function register() {
     checkPassword.value = '';
   } else {
     api
-      .get(`user?email=${registerData.value.email}`)
+      .get(`/user?email=${registerData.value.email}`)
       .then((res) => {
         if (res.data.length > 0) {
           errorMsg.value = '此信箱已被註冊，請再次確認';
@@ -130,7 +129,7 @@ function register() {
             favorite: [],
           };
           api
-            .post('user', data)
+            .post('/user', data)
             .then(() => {
               store.userInfo = {
                 status: true,
@@ -154,7 +153,7 @@ function register() {
 }
 function checkNickname() {
   api
-    .get(`user?nickname=${registerData.value.nickname}`)
+    .get(`/user?nickname=${registerData.value.nickname}`)
     .then((res) => {
       if (res.data.length > 0) {
         nicknameStatus.value = false;
