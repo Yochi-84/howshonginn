@@ -88,6 +88,7 @@ import { useRoute } from 'vue-router';
 import { useStore } from '@/stores/index';
 import axios from 'axios';
 
+const baseURL = inject('baseURL');
 const loadingShow = ref(true);
 const place = ref([]);
 const currentPage = ref(1);
@@ -103,7 +104,7 @@ const filter = ref(null);
 const showList = computed(() => {
   let list = [...place.value];
   if (store.filterMode === 'keyword') {
-    if(Object.entries(filterParameter.value).length > 0) {
+    if (Object.entries(filterParameter.value).length > 0) {
       // 清空 filterParameter 並清除篩選區已選擇的項目
       filterResult({});
       filter.value.clearFilter();
@@ -116,18 +117,25 @@ const showList = computed(() => {
     } else {
       list = [...place.value];
     }
-  } else if(store.filterMode === 'filter' && Object.entries(filterParameter.value).length > 0){
+  } else if (
+    store.filterMode === 'filter' &&
+    Object.entries(filterParameter.value).length > 0
+  ) {
     // 清空 searchbox
     searchbox.value.clearInput();
     // 條件篩選
-    if(typeof filterParameter.value.filterArea === 'string') {
+    if (typeof filterParameter.value.filterArea === 'string') {
       // 下拉選單縣市鄉鎮篩選
       list = place.value.filter((item) =>
         item.county.includes(filterParameter.value.filterArea)
       );
     } else {
       // 區域篩選
-      list = place.value.filter(item => filterParameter.value.filterArea.some(ele => item.county.includes(ele)))
+      list = place.value.filter((item) =>
+        filterParameter.value.filterArea.some((ele) =>
+          item.county.includes(ele)
+        )
+      );
     }
     if (filterParameter.value.filterTag.length > 0) {
       if (!filterParameter.value.tagFilterMode) {
@@ -168,7 +176,7 @@ function filterResult(filterObj) {
 
 onMounted(() => {
   axios
-    .get(`https://howshonginn-api.herokuapp.com/campingPlace`)
+    .get(`${baseURL.value}campingPlace`)
     .then((res) => {
       place.value = res.data;
       loadingShow.value = false;

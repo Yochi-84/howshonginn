@@ -1,6 +1,6 @@
 <template>
   <Navbar @scrollStatus="getScrollStatus"></Navbar>
-  <router-view/>
+  <router-view />
 
   <Footer></Footer>
 
@@ -19,12 +19,14 @@ import { useStore } from '@/stores/index';
 
 const store = useStore();
 const scrollStatus = ref('top');
+const baseURL = ref('https://howshonginn-api.herokuapp.com/');
 
 function getScrollStatus(status) {
   scrollStatus.value = status;
 }
 
 provide('scrollStatus', scrollStatus);
+provide('baseURL', baseURL);
 
 // 確認是否存在使用者登入資訊
 onMounted(() => {
@@ -32,13 +34,13 @@ onMounted(() => {
 });
 </script>
 <style scoped>
-  .fade-enter-active,
-  .fade-leave-active {
-    transition: opacity 0.5s;
-  }
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
 
-  .fade-enter,
-  .fade-leave-to {
-    opacity: 0;
-  }
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>

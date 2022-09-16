@@ -1,5 +1,5 @@
 <template>
-  <main class="overflow-x-hidden py-20 md:py-34">
+  <main class="overflow-x-hidden py-20 md:pt-34 md:pb-20">
     <div class="container">
       <BreadCrumb class="mb-6"></BreadCrumb>
       <ul class="mb-8 flex w-full items-center justify-center">
@@ -43,7 +43,14 @@
         <div class="mb-6 border-b-8 border-double border-b-primary-dark"></div>
         <transition :name="transitionDirection" mode="out-in">
           <keep-alive>
-            <component :is="stepView[currentStep]" class="mb-10"></component>
+            <component
+              :is="stepView[currentStep]"
+              class="mb-10"
+              @campInfo="getInfo"
+              @campPicture="getPicture"
+              @campTags="getTags"
+              :previewInfo="tempAll"
+            ></component>
           </keep-alive>
         </transition>
         <div class="flex items-center justify-center gap-x-6 px-3">
@@ -92,7 +99,7 @@ import InsertPicture from '@/components/InsertPictureComponent';
 import InsertTag from '@/components/InsertTagComponent';
 import InsertPreview from '@/components/InsertPreviewComponent';
 
-import { ref } from 'vue';
+import { ref,computed } from 'vue';
 
 const currentStep = ref(0);
 const maxStep = ref(0);
@@ -155,6 +162,33 @@ function nextStep() {
 function finishStep() {
   console.info('完成!!!');
 }
+
+const tempInfo = ref({});
+const tempPicture = ref(["init_pic.jpg"]);
+const tempTags = ref([]);
+function getInfo(obj) {
+  tempInfo.value = JSON.parse(JSON.stringify(obj));
+}
+
+function getPicture(arr) {
+  let tempArr = [...arr];
+  if(!tempArr.length) {
+    tempArr.push("init_pic.jpg");
+  }
+  tempPicture.value = [...arr];
+}
+
+function getTags(arr) {
+  tempTags.value = [...arr];
+}
+
+const tempAll = computed(() => {
+  return {
+    ...tempInfo.value,
+    tags: [...tempTags.value],
+    image: [...tempPicture.value]
+  }
+})
 </script>
 <style scoped>
 .left-enter-active,

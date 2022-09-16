@@ -31,14 +31,16 @@
 <script setup>
 import axios from 'axios';
 import Loading from '@/components/LoadingComponent';
-import { ref, onMounted } from 'vue';
+import { ref, watch, onMounted, inject } from 'vue';
 
+const baseURL = inject("baseURL");
+const emits = defineEmits(['campTags']);
 const tags = ref({});
 const loadingStatus = ref(true);
 
 onMounted(() => {
   axios
-    .get('https://howshonginn-api.herokuapp.com/tags')
+    .get(`${baseURL.value}tags`)
     .then((res) => {
       let temp = {};
       Object.entries(res.data[0]).forEach((item) => {
@@ -54,4 +56,18 @@ onMounted(() => {
     })
     .catch((err) => console.error(err));
 });
+
+watch(
+  tags,
+  (newV) => {
+    let checkedList = Object.values(newV)
+      .reduce((acc, cur) => [...acc, ...cur], [])
+      .filter((item) => item.checked)
+      .map((ele) => ele.tag);
+    emits('campTags', checkedList);
+  },
+  {
+    deep: true
+  }
+);
 </script>

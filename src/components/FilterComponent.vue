@@ -180,6 +180,7 @@ import { onMounted, ref, watch, computed, inject } from 'vue';
 import { useStore } from '@/stores/index';
 import axios from 'axios';
 
+const baseURL = inject('baseURL');
 const emits = defineEmits(['filterParameter']);
 const store = useStore();
 const countyCity = ref({}); //全台區域資料
@@ -211,7 +212,7 @@ const filterItem = ref({
       selected: false,
     },
   ],
-  tagList:[],
+  tagList: [],
   tagFilterMode: false, //標籤篩選模式，false 為一般模式
 });
 // 暴露方法讓父元件可以呼叫
@@ -319,7 +320,7 @@ onMounted(() => {
     axios.get(
       'https://raw.githubusercontent.com/donma/TaiwanAddressCityAreaRoadChineseEnglishJSON/master/CityCountyData.json'
     );
-  const getTags = () => axios.get('https://howshonginn-api.herokuapp.com/tags');
+  const getTags = () => axios.get(`${baseURL.value}tags`);
   axios
     .all([getCountyCity(), getTags()])
     .then(

@@ -93,7 +93,7 @@
                   >{{ info.website }}</a
                 >
               </li>
-              <li class="space-y-2 md:inline-block md:w-1/3">
+              <li class="space-y-2 md:inline-block md:align-top md:w-1/3">
                 <div>
                   <font-awesome-icon
                     icon="fa-solid fa-mountain-sun"
@@ -105,7 +105,7 @@
                   >{{ info.height }}</span
                 >
               </li>
-              <li class="space-y-2 md:inline-block md:w-2/3">
+              <li class="space-y-2 md:inline-block md:align-top md:w-2/3">
                 <div>
                   <font-awesome-icon
                     icon="fa-solid fa-tags"
@@ -276,10 +276,11 @@ import Comment from '@/container/CommentComponent';
 import Loading from '@/components/LoadingComponent';
 import { VueperSlides, VueperSlide } from 'vueperslides';
 import 'vueperslides/dist/vueperslides.css';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, inject } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from '@/stores/index';
 
+const baseURL = inject("baseURL");
 const store = useStore();
 const route = useRoute();
 const info = ref({});
@@ -303,7 +304,7 @@ const infoExist = computed(
 
 onMounted(() => {
   axios
-    .get(`https://howshonginn-api.herokuapp.com/campingPlace?id=${route.query.id}`)
+    .get(`${baseURL.value}campingPlace?id=${route.query.id}`)
     .then((res) => (info.value = res.data[0]))
     .then(() => {
       info.value.name = info.value.name.slice(info.value.name.indexOf(' ') + 1);

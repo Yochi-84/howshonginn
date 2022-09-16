@@ -88,9 +88,10 @@
 </template>
 <script setup>
 import axios from 'axios';
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { useStore } from '@/stores/index';
 
+const baseURL = inject('baseURL');
 const store = useStore();
 const registerData = ref({
   email: '',
@@ -102,7 +103,7 @@ const nicknameStatus = ref('false');
 const errorMsg = ref('');
 
 const api = axios.create({
-  baseURL: `https://howshonginn-api.herokuapp.com/`,
+  baseURL: baseURL.value,
 });
 function register() {
   if (registerData.value.email === '') {

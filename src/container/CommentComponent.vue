@@ -143,9 +143,10 @@
 <script setup>
 import CommentForm from '@/components/CommentFormComponent';
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import { useStore } from '@/stores/index';
 
+const baseURL = inject('baseURL');
 const props = defineProps({
   id: {
     type: String,
@@ -159,7 +160,7 @@ const replyList = ref([]); // 回覆
 const userList = ref([]);
 const commentModalStatus = ref(false);
 
-const api = axios.create({baseURL: 'https://howshonginn-api.herokuapp.com/'});
+const api = axios.create({ baseURL: baseURL.value });
 
 function showModal() {
   commentModalStatus.value = true;

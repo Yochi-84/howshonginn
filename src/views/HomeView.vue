@@ -116,8 +116,9 @@ import axios from 'axios';
 import SearchBox from '@/components/SearchBoxComponent';
 import FamousCard from '@/components/FamousCardComponent';
 import ShareCard from '@/components/ShareCardComponent';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 
+const baseURL = inject("baseURL");
 const famous = ref([]);
 const share = ref([]);
 
@@ -125,7 +126,7 @@ const famousIndexList = [27, 63, 192, 273];
 const shareIndexList = [60, 97, 128, 146, 242];
 
 const api = axios.create({
-  baseURL: 'https://howshonginn-api.herokuapp.com/campingPlace',
+  baseURL: `${baseURL.value}campingPlace`,
 });
 const getFamous = () => api.get(`?id=${famousIndexList.join('&id=')}`);
 const getShare = () => api.get(`?id=${shareIndexList.join('&id=')}`);

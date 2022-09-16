@@ -42,7 +42,7 @@
           ><font-awesome-icon
             icon="fa-solid fa-images"
             class="mr-2"
-          />上傳照片</label
+          />上傳照片({{ uploadImage.length }}/4)</label
         >
         <input
           type="file"
@@ -93,8 +93,9 @@
 <script setup>
 import { VueperSlides, VueperSlide } from 'vueperslides';
 import 'vueperslides/dist/vueperslides.css';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
+const emits = defineEmits(['campPicture']);
 const currentSlide = ref(0);
 const uploadImage = ref(['init_pic.jpg']);
 const slides = ref(null);
@@ -120,4 +121,6 @@ function clearUpload() {
   uploadImage.value.length = 0;
   uploadImage.value.push('init_pic.jpg');
 }
+
+watch(uploadImage, (newV) => emits('campPicture', newV), { deep: true });
 </script>

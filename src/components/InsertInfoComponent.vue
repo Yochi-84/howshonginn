@@ -9,7 +9,9 @@
             ><font-awesome-icon
               icon="fa-solid fa-tent"
               class="mr-2"
-            />營地名稱:</label
+            />營地名稱<span class="ml-2 text-base text-danger-dark"
+              >*</span
+            ></label
           >
           <input
             type="text"
@@ -26,7 +28,7 @@
             ><font-awesome-icon
               icon="fa-solid fa-phone"
               class="mr-2"
-            />聯絡電話:</label
+            />聯絡電話</label
           >
           <input
             type="tel"
@@ -40,10 +42,10 @@
           <label
             for="address"
             class="mb-1 block text-lg font-bold text-primary-dark"
-            ><font-awesome-icon
-              icon="fa-solid fa-map"
-              class="mr-2"
-            />地址:</label
+            ><font-awesome-icon icon="fa-solid fa-map" class="mr-2" />地址<span
+              class="ml-2 text-base text-danger-dark"
+              >*</span
+            ></label
           >
           <input
             type="text"
@@ -61,7 +63,7 @@
             <font-awesome-icon
               icon="fa-solid fa-globe"
               class="mr-2"
-            />網站:</label
+            />網站</label
           >
           <input
             type="text"
@@ -79,7 +81,9 @@
               ><font-awesome-icon
                 icon="fa-solid fa-location-dot"
                 class="mr-2"
-              />所在區域</label
+              />所在區域<span class="ml-2 text-base text-danger-dark"
+                >*</span
+              ></label
             >
             <div class="flex gap-x-3">
               <select
@@ -137,7 +141,7 @@
               <option value="801~1000m">801~1000m</option>
               <option value="1001~1500m">1001~1500m</option>
               <option value="1501m以上">1501m以上</option>
-              <option value="unknown">不清楚</option>
+              <option value="0">不清楚</option>
             </select>
           </div>
         </li>
@@ -151,7 +155,7 @@
           ><font-awesome-icon
             icon="fa-solid fa-pen-to-square"
             class="mr-2"
-          />簡介:</label
+          />簡介<span class="ml-2 text-base text-danger-dark">*</span></label
         >
         <textarea
           class="h-[359px] w-full resize-none rounded border border-black p-4 focus:shadow-around-primary focus:outline-none"
@@ -166,7 +170,7 @@
           for="price"
           class="mb-1 block text-lg font-bold text-primary-dark"
         >
-          <font-awesome-icon icon="fa-solid fa-coins" class="mr-2" />區域/價位:
+          <font-awesome-icon icon="fa-solid fa-coins" class="mr-2" />區域/價位
         </label>
         <div class="flex">
           <button
@@ -186,58 +190,118 @@
       </div>
       <!-- TODO:RWD -->
       <div class="mb-1 flex border-b border-primary-dark py-1 font-bold">
-        <span class="basis-1/4 px-1">區域名稱</span>
-        <span class="basis-1/12 px-1">帳/區數</span>
-        <span class="basis-1/6 px-1">平日</span>
-        <span class="basis-1/6 px-1">週末</span>
-        <span class="basis-1/6 px-1">連假</span>
-        <span class="basis-1/6 px-1">年假</span>
+        <span class="flex-grow basis-1/4 px-1">區域名稱</span>
+        <span class="basis-1/4 px-1 md:basis-1/8">帳/區數</span>
+        <span class="basis-1/12 md:hidden"></span>
+        <span class="hidden basis-1/8 px-1 md:block">平日</span>
+        <span class="hidden basis-1/8 px-1 md:block">週末</span>
+        <span class="hidden basis-1/8 px-1 md:block">連假</span>
+        <span class="hidden basis-1/8 px-1 md:block">年假</span>
       </div>
       <transition-group tag="ul" name="move-up">
-        <li v-for="area of areaPrice" :key="area" class="flex">
-          <div class="basis-1/4 p-1">
+        <li v-for="area of areaPrice" :key="area" class="flex flex-wrap">
+          <div class="flex-grow basis-1/4 p-1">
             <input
               type="text"
               class="w-full rounded border border-black py-1 px-2 focus:shadow-around-primary focus:outline-none"
               v-model.trim="area.name"
+              placeholder="Ex: 碎石雨棚區"
             />
           </div>
-          <div class="basis-1/12 p-1">
+          <div class="basis-1/4 p-1 md:basis-1/8">
             <input
               type="number"
               class="w-full rounded border border-black py-1 px-2 focus:shadow-around-primary focus:outline-none"
               v-model.number.trim="area.number"
+              placeholder="Ex: 5"
             />
           </div>
-          <div class="basis-1/6 p-1">
+          <div
+            class="flex basis-1/12 items-center justify-center px-1 md:hidden"
+          >
+            <a
+              href="#"
+              class="after:absolute after:inset-x-0 after:top-0 after:z-1 after:h-10"
+              @click.prevent="area.collapse = !area.collapse"
+              ><font-awesome-icon
+                icon="fa-solid fa-caret-up"
+                :class="['duration-300', { 'rotate-180': area.collapse }]"
+            /></a>
+          </div>
+          <div
+            :class="[
+              'w-full overflow-hidden bg-primary-dark text-white transition-all duration-300 md:hidden',
+              area.collapse ? 'max-h-0' : 'max-h-screen',
+            ]"
+          >
+            <ul class="-mx-4 flex flex-wrap gap-y-2 py-2 px-2 text-center">
+              <li class="w-1/2 px-4">
+                平日
+                <input
+                  type="number"
+                  class="w-full rounded border border-black py-1 px-2 text-black focus:shadow-around-primary focus:outline-none"
+                  placeholder="元/晚"
+                  v-model.number.trim="area.normalPrice"
+                />
+              </li>
+              <li class="w-1/2 px-4">
+                週末
+                <input
+                  type="number"
+                  class="w-full rounded border border-black py-1 px-2 text-black focus:shadow-around-primary focus:outline-none"
+                  placeholder="元/晚"
+                  v-model.number.trim="area.weekendPrice"
+                />
+              </li>
+              <li class="w-1/2 px-4">
+                <div class="mb-1">連假</div>
+                <input
+                  type="number"
+                  class="w-full rounded border border-black py-1 px-2 text-black focus:shadow-around-primary focus:outline-none"
+                  placeholder="元/晚"
+                  v-model.number.trim="area.holidayPrice"
+                />
+              </li>
+              <li class="w-1/2 px-4">
+                <div class="mb-1">年假</div>
+                <input
+                  type="number"
+                  class="w-full appearance-none rounded border border-black py-1 px-2 text-black focus:shadow-around-primary focus:outline-none"
+                  placeholder="元/晚"
+                  v-model.trim="area.newYearPrice"
+                />
+              </li>
+            </ul>
+          </div>
+          <div class="hidden basis-1/8 p-1 md:block">
             <input
               type="number"
               class="w-full rounded border border-black py-1 px-2 focus:shadow-around-primary focus:outline-none"
-              placeholder="單位:元/晚"
+              placeholder="元/晚"
               v-model.number.trim="area.normalPrice"
             />
           </div>
-          <div class="basis-1/6 p-1">
+          <div class="hidden basis-1/8 p-1 md:block">
             <input
               type="number"
               class="w-full rounded border border-black py-1 px-2 focus:shadow-around-primary focus:outline-none"
-              placeholder="單位:元/晚"
+              placeholder="元/晚"
               v-model.number.trim="area.weekendPrice"
             />
           </div>
-          <div class="basis-1/6 p-1">
+          <div class="hidden basis-1/8 p-1 md:block">
             <input
               type="number"
               class="w-full rounded border border-black py-1 px-2 focus:shadow-around-primary focus:outline-none"
-              placeholder="單位:元/晚"
+              placeholder="元/晚"
               v-model.number.trim="area.holidayPrice"
             />
           </div>
-          <div class="basis-1/6 p-1">
+          <div class="hidden basis-1/8 p-1 md:block">
             <input
               type="number"
               class="w-full appearance-none rounded border border-black py-1 px-2 focus:shadow-around-primary focus:outline-none"
-              placeholder="單位:元/晚"
+              placeholder="元/晚"
               v-model.trim="area.newYearPrice"
             />
           </div>
@@ -248,8 +312,9 @@
 </template>
 <script setup>
 import axios from 'axios';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 
+const emits = defineEmits(['campInfo']);
 const countyCity = ref([]);
 const townList = computed(
   () => Array.from(countyCity.value)[countySelect.value]?.AreaList
@@ -266,19 +331,21 @@ const formatName = computed(() => {
   if (countySelect.value !== '') {
     tempName += countyCity.value[countySelect.value].CityName.slice(0, -1);
 
-    if (townSelect.value !== '') {
-      tempName += townSelect.value.slice(0, -1);
-    }
+    townSelect.value.length > 2
+      ? (tempName += townSelect.value.slice(0, -1))
+      : (tempName += townSelect.value);
   }
 
   tempName += ' ' + name.value;
 
   return tempName;
 });
-
+const formatCounty = computed(
+  () => countyCity.value[countySelect.value]?.CityName + townSelect.value
+);
 const formatPrice = computed(() => {
-  let obj = {}
-  areaPrice.value.forEach(item => obj[item.name] = item);
+  let obj = {};
+  areaPrice.value.forEach((item) => (obj[item.name] = item));
   return obj;
 });
 
@@ -288,7 +355,7 @@ const campingInfo = ref({
   address: '',
   website: '',
   height: '',
-  county: countyCity.value[countySelect.value]?.CityName + townSelect.value,
+  county: formatCounty,
   intro: '',
   price: formatPrice,
 });
@@ -301,6 +368,7 @@ function addRow() {
     weekendPrice: '',
     holidayPrice: '',
     newYearPrice: '',
+    collapse: false,
   });
 }
 
@@ -316,6 +384,8 @@ onMounted(() => {
     .then((res) => (countyCity.value = res.data))
     .catch((err) => console.error(err));
 });
+
+watch(campingInfo, (newV) => emits('campInfo', newV), { deep: true });
 </script>
 <style>
 .move-up-enter-from,
