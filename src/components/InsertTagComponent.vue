@@ -31,7 +31,7 @@
 <script setup>
 import axios from 'axios';
 import Loading from '@/components/LoadingComponent';
-import { ref, watch, onMounted } from 'vue';
+import { ref, onDeactivated, onMounted } from 'vue';
 
 const emits = defineEmits(['campTags']);
 const tags = ref({});
@@ -56,17 +56,12 @@ onMounted(() => {
     .catch((err) => console.error(err));
 });
 
-watch(
-  tags,
-  (newV) => {
-    let checkedList = Object.values(newV)
+// 離開元件時將資料傳給父層
+onDeactivated(() => {
+  let checkedList = Object.values(tags.value)
       .reduce((acc, cur) => [...acc, ...cur], [])
       .filter((item) => item.checked)
       .map((ele) => ele.tag);
     emits('campTags', checkedList);
-  },
-  {
-    deep: true
-  }
-);
+})
 </script>

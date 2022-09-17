@@ -93,7 +93,7 @@
 <script setup>
 import { VueperSlides, VueperSlide } from 'vueperslides';
 import 'vueperslides/dist/vueperslides.css';
-import { ref, watch } from 'vue';
+import { ref, onDeactivated } from 'vue';
 
 const emits = defineEmits(['campPicture']);
 const currentSlide = ref(0);
@@ -122,5 +122,9 @@ function clearUpload() {
   uploadImage.value.push('init_pic.jpg');
 }
 
-watch(uploadImage, (newV) => emits('campPicture', newV), { deep: true });
+// 離開元件時將資料傳給父層
+onDeactivated(() => {
+  emits('campPicture', uploadImage.value);
+})
+
 </script>

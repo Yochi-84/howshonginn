@@ -1,5 +1,5 @@
 <template>
-  <main class="overflow-x-hidden py-20 md:pt-34 md:pb-20">
+  <div class="overflow-x-hidden py-20 md:pt-34 md:pb-20">
     <div class="container">
       <BreadCrumb class="mb-6"></BreadCrumb>
       <ul class="mb-8 flex w-full items-center justify-center">
@@ -89,7 +89,7 @@
         </div>
       </section>
     </div>
-  </main>
+  </div>
 </template>
 <script setup>
 import BreadCrumb from '@/components/BreadCrumbComponent';
@@ -98,8 +98,9 @@ import InsertInfo from '@/components/InsertInfoComponent';
 import InsertPicture from '@/components/InsertPictureComponent';
 import InsertTag from '@/components/InsertTagComponent';
 import InsertPreview from '@/components/InsertPreviewComponent';
+import axios from 'axios';
 
-import { ref,computed } from 'vue';
+import { ref, computed } from 'vue';
 
 const currentStep = ref(0);
 const maxStep = ref(0);
@@ -160,11 +161,37 @@ function nextStep() {
 
 // TODO:確認
 function finishStep() {
-  console.info('完成!!!');
+  if (tempAll.value.name === '') {
+    alert('名稱不可為空');
+    jumpToStep(0);
+  } else if (tempAll.value.address === '') {
+    alert('地址不可為空');
+    jumpToStep(0);
+  } else if (tempAll.value.county === 'undefined') {
+    alert('所在區域不可為空');
+    jumpToStep(0);
+  } else if (tempAll.value.intro === '') {
+    alert('簡介不可為空');
+    jumpToStep(0);
+  } else if (!tempAll.value.address.includes(tempAll.value.county)) {
+    alert('地址與所在區域似乎不符合喔!請再次確認');
+    jumpToStep(0);
+  } else {
+    console.log(tempAll.value)
+    axios
+      .post(`${process.env.VUE_APP_API_PATH}/campingPlace`, tempAll.value)
+      .then(() => {
+        alert('新增成功，請等待審核!!');
+      })
+      .catch((err) => {
+        alert('新增失敗!!我看看為什麼\n' + err);
+        console.error(err);
+      });
+  }
 }
 
 const tempInfo = ref({});
-const tempPicture = ref(["init_pic.jpg"]);
+const tempPicture = ref(['init_pic.jpg']);
 const tempTags = ref([]);
 function getInfo(obj) {
   tempInfo.value = JSON.parse(JSON.stringify(obj));
@@ -172,8 +199,8 @@ function getInfo(obj) {
 
 function getPicture(arr) {
   let tempArr = [...arr];
-  if(!tempArr.length) {
-    tempArr.push("init_pic.jpg");
+  if (!tempArr.length) {
+    tempArr.push('init_pic.jpg');
   }
   tempPicture.value = [...arr];
 }
@@ -186,9 +213,9 @@ const tempAll = computed(() => {
   return {
     ...tempInfo.value,
     tags: [...tempTags.value],
-    image: [...tempPicture.value]
-  }
-})
+    image: [...tempPicture.value],
+  };
+});
 </script>
 <style scoped>
 .left-enter-active,

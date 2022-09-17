@@ -104,7 +104,7 @@
                   </div>
                   <span
                     class="mr-4 inline-block cursor-default rounded border border-danger-dark py-1 px-3 text-base text-danger-dark"
-                    >{{ info.height ? info.height : '不明' }}</span
+                    >{{ info.height.length > 1 ? info.height : '不明' }}</span
                   >
                 </li>
                 <li class="space-y-2 md:inline-block md:w-2/3 md:align-top">

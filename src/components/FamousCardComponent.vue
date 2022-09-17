@@ -1,6 +1,6 @@
 <template>
-  <div class="relative h-full overflow-hidden rounded shadow-[0_2px_4px_#333]">
-    <div class="h-[280px]">
+  <div class="relative h-full overflow-hidden rounded shadow-[0_2px_4px_#333] hover:-translate-y-4 duration-300">
+    <div class="h-[280px] overflow-hidden">
       <img
         :src="require('../assets/image/' + props.cardInfo.image[0])"
         :alt="props.cardInfo.name"

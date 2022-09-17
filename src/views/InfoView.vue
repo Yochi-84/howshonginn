@@ -1,5 +1,5 @@
 <template>
-  <main class="py-20 md:py-34">
+  <div class="py-20 md:py-34">
     <div class="container mb-10">
       <BreadCrumb v-if="routeChange"></BreadCrumb>
     </div>
@@ -196,7 +196,7 @@
           </div>
           <div class="w-full px-3 lg:w-3/5">
             <iframe
-              :src="`https://www.google.com/maps?q=${info.address}(${info.name})&hl=zh-TW&z=16&output=embed`"
+              :src="`https://www.google.com/maps?q=${info.gps ? info.gps : info.address}(${info.name})&hl=zh-TW&z=16&output=embed`"
               allowfullscreen=""
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade"
@@ -358,7 +358,7 @@
     <section>
       <Comment :id="route.query.id"></Comment>
     </section>
-  </main>
+  </div>
   <LoadingFull bgOpacity="0.6" v-if="loadingStatus"></LoadingFull>
 </template>
 <script setup>

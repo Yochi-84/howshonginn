@@ -1,5 +1,5 @@
 <template>
-  <main v-if="domReady">
+  <div>
     <!-- Banner -->
     <section
       class="clip-triangle flex h-[500px] items-center justify-center bg-[url('../image/banner.jpg')] bg-cover bg-bottom bg-no-repeat md:h-screen lg:bg-fixed"
@@ -33,7 +33,7 @@
     </section>
 
     <!-- Feature -->
-    <section class="relative py-6 md:pt-[5.5rem] md:pb-16">
+    <section class="relative py-6 md:pb-16 lg:pt-[5.5rem]">
       <div
         class="hidden lg:absolute lg:inset-0 lg:-z-10 lg:block lg:bg-[url('https://images.unsplash.com/photo-1470582891830-22e103e72deb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1246&q=80')] lg:bg-cover lg:bg-fixed lg:bg-bottom lg:bg-no-repeat lg:opacity-80"
       ></div>
@@ -108,8 +108,8 @@
         <ShareCard :cardInfo="share" />
       </div>
     </section>
-  </main>
-  <LoadingFull :bgOpacity="loadingOpacity" v-if="loadingStatus"></LoadingFull>
+  </div>
+  <LoadingFull bgOpacity="1" v-if="loadingStatus"></LoadingFull>
 </template>
 
 <script setup>
@@ -119,12 +119,8 @@ import FamousCard from '@/components/FamousCardComponent';
 import ShareCard from '@/components/ShareCardComponent';
 import LoadingFull from '@/components/LoadingFullComponent';
 import { ref, onMounted } from 'vue';
-import { useStore } from '@/stores/index';
 
 const loadingStatus = ref(false);
-const loadingOpacity = ref(0.5);
-const domReady = ref(false);
-const store = useStore();
 const famous = ref([]);
 const share = ref([]);
 
@@ -138,11 +134,6 @@ const getFamous = () => api.get(`?id=${famousIndexList.join('&id=')}`);
 const getShare = () => api.get(`?id=${shareIndexList.join('&id=')}`);
 
 onMounted(() => {
-  if (store.firstEnter) {
-    loadingOpacity.value = 1;
-  } else {
-    loadingOpacity.value = 0.6;
-  }
   loadingStatus.value = true;
   axios
     .all([getFamous(), getShare()])
@@ -157,11 +148,9 @@ onMounted(() => {
       })
     )
     .then(() => {
-      domReady.value = true;
       window.setTimeout(() => {
         loadingStatus.value = false;
-      }, 1000);
-      store.firstEnter = false;
+      }, 3000);
     })
     .catch((err) => console.error(err));
 });

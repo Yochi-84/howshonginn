@@ -18,7 +18,7 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref,computed } from 'vue';
 import router from '@/router';
 import { useStore } from '@/stores/index';
 
@@ -28,12 +28,13 @@ defineExpose({
   clearInput
 })
 
+const formatKeyword = computed(() => keyword.value.replaceAll("台","臺"))
 function search() {
   store.toggleFilterMode('keyword');
   router.push({
     name: 'list',
     query: {
-      q: keyword.value,
+      q: formatKeyword.value,
     },
   });
 }

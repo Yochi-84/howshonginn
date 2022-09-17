@@ -1,7 +1,6 @@
 <template>
   <ModalForm
     @closeModal="closeModal"
-    v-show="store.loginModal"
     :class="[currentTab === 'Login' ? 'border-primary' : 'border-secondary']"
   >
     <ul class="flex items-center px-3 md:px-6">
@@ -52,7 +51,6 @@ const store = useStore();
 function closeModal() {
   store.loginModal = false;
   store.toggleMask(false);
-  currentTab.value = 'Login';
 }
 
 const currentTab = ref('Login');

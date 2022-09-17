@@ -62,7 +62,7 @@
           Copyright© By Chi
         </p>
         <p class="relative w-full text-sm text-white md:w-auto md:text-base">
-          此網頁為個人練習用作品，不作為商業用途
+          此網頁為個人練習用作品，不做任何商業用途
         </p>
       </div>
     </div>

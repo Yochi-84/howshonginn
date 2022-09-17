@@ -1,5 +1,5 @@
 <template>
-  <main class="py-20 md:py-34">
+  <div class="py-20 md:py-34">
     <div class="container">
       <BreadCrumb class="mb-6"></BreadCrumb>
       <div class="-mx-3 mb-4 flex flex-col items-center gap-y-4 md:flex-row">
@@ -60,7 +60,7 @@
               href="#"
               class="inline-block border border-black px-6 py-2 duration-300 hover:border-primary-dark hover:bg-primary-dark hover:text-primary-light"
               @click.prevent="currentPage++"
-              >載入更多...</a
+              >載入更多...({{ currentPage }} / {{ totalPage }})</a
             >
           </div>
         </section>
@@ -75,7 +75,7 @@
         </div>
       </div>
     </div>
-  </main>
+  </div>
 </template>
 <script setup>
 import BreadCrumb from '@/components/BreadCrumbComponent';

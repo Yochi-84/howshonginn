@@ -312,7 +312,7 @@
 </template>
 <script setup>
 import axios from 'axios';
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, onMounted, onDeactivated } from 'vue';
 
 const emits = defineEmits(['campInfo']);
 const countyCity = ref([]);
@@ -385,7 +385,11 @@ onMounted(() => {
     .catch((err) => console.error(err));
 });
 
-watch(campingInfo, (newV) => emits('campInfo', newV), { deep: true });
+// 離開元件時將資料傳給父層
+onDeactivated(() => {
+  emits('campInfo', campingInfo.value);
+})
+
 </script>
 <style>
 .move-up-enter-from,

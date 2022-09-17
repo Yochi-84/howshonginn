@@ -1,14 +1,18 @@
 <template>
   <Navbar @scrollStatus="getScrollStatus"></Navbar>
-  <router-view v-slot="{ Component }">
-    <transition name="fade">
-      <component :is="Component" />
-    </transition>
-  </router-view>
+
+  <Transition name="fade" mode="out-in">
+    <RouterView v-slot="{ Component, route }">
+      <KeepAlive>
+        <Component :is="Component" v-if="route.meta.keepAlive" />
+      </KeepAlive>
+      <Component :is="Component" v-if="!route.meta.keepAlive" />
+    </RouterView>
+  </Transition>
 
   <Footer></Footer>
 
-  <LoginRegister></LoginRegister>
+  <LoginRegister v-if="store.loginModal"></LoginRegister>
   <Mask></Mask>
   <ToTop></ToTop>
 </template>
@@ -36,13 +40,13 @@ onMounted(() => {
 });
 </script>
 <style scoped>
-  .fade-enter-from,
-  .fade-leave-to {
-    opacity: 0;
-  }
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 
-  .fade-enter-from,
-  .fade-leave-active {
-    transition: opacity 0.4s;
-  }
+.fade-enter-from,
+.fade-leave-active {
+  transition: opacity 0.4s;
+}
 </style>
