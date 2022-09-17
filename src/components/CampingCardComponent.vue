@@ -49,7 +49,6 @@
       </div>
       <router-link
         :to="'/info?id=' + cardInfo.id"
-        target="_blank"
         class="absolute inset-0"
       />
     </div>

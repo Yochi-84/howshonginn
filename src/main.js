@@ -2,10 +2,10 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import { createPinia } from 'pinia'
 import router from "./router";
+import { useStore } from "@/stores/index";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import "./assets/css/all.css";
-// import { useStore } from "@/stores/index";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 
@@ -110,3 +110,22 @@ createApp(App)
   .use(VueAxios, axios)
   .use(router)
   .mount("#app");
+
+
+router.beforeEach((to,from,next) => {
+  if(to.meta.requiresAuth) {
+    if(useStore().userInfo.status) {
+      next();
+    } else {
+      useStore().toggleLoginModal();
+    }
+  } else {
+    next();
+  }
+})
+
+// 跳轉後回到頂部並關閉 mobile navbar
+router.afterEach(() => {
+  useStore().navStatus = false;
+  window.scrollTo(0, 0);
+});

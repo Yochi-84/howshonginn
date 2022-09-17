@@ -5,14 +5,13 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply text-gray-700;
-
-    line-height: 1.5;
+  html {
+    @apply min-h-full relative;
   }
 
-  a {
-    text-align: center;
+  body {
+    @apply text-gray-700 leading-normal;
+    margin-bottom: 407px;
   }
 
   ::-webkit-scrollbar {

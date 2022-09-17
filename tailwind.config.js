@@ -104,7 +104,7 @@ module.exports = {
             opacity: '0',
             transform: "translateX(-20px)"
           }
-        },
+        }
       },
       animation: {
         typing:

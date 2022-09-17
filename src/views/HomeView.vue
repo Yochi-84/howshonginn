@@ -1,5 +1,5 @@
 <template>
-  <main v-if="!loadingStatus">
+  <main v-if="domReady">
     <!-- Banner -->
     <section
       class="clip-triangle flex h-[500px] items-center justify-center bg-[url('../image/banner.jpg')] bg-cover bg-bottom bg-no-repeat md:h-screen lg:bg-fixed"
@@ -109,7 +109,7 @@
       </div>
     </section>
   </main>
-  <Loading v-else></Loading>
+  <LoadingFull :bgOpacity="loadingOpacity" v-if="loadingStatus"></LoadingFull>
 </template>
 
 <script setup>
@@ -117,10 +117,14 @@ import axios from 'axios';
 import SearchBox from '@/components/SearchBoxComponent';
 import FamousCard from '@/components/FamousCardComponent';
 import ShareCard from '@/components/ShareCardComponent';
-import Loading from '@/components/LoadingComponent';
-import { ref, onMounted} from 'vue';
+import LoadingFull from '@/components/LoadingFullComponent';
+import { ref, onMounted } from 'vue';
+import { useStore } from '@/stores/index';
 
 const loadingStatus = ref(false);
+const loadingOpacity = ref(0.5);
+const domReady = ref(false);
+const store = useStore();
 const famous = ref([]);
 const share = ref([]);
 
@@ -132,21 +136,33 @@ const api = axios.create({
 });
 const getFamous = () => api.get(`?id=${famousIndexList.join('&id=')}`);
 const getShare = () => api.get(`?id=${shareIndexList.join('&id=')}`);
+
 onMounted(() => {
-  loadingStatus.value = true
+  if (store.firstEnter) {
+    loadingOpacity.value = 1;
+  } else {
+    loadingOpacity.value = 0.6;
+  }
+  loadingStatus.value = true;
   axios
     .all([getFamous(), getShare()])
     .then(
       axios.spread((acct, perms) => {
         famous.value = acct.data;
 
-        share.value = perms.data.map(item => {
+        share.value = perms.data.map((item) => {
           item.name = item.name.slice(item.name.indexOf(' ') + 1);
-          return item
+          return item;
         });
       })
     )
-    .then(() => loadingStatus.value = false)
+    .then(() => {
+      domReady.value = true;
+      window.setTimeout(() => {
+        loadingStatus.value = false;
+      }, 1000);
+      store.firstEnter = false;
+    })
     .catch((err) => console.error(err));
 });
 </script>

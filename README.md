@@ -17,6 +17,7 @@ or<br>
 ### 使用套件
 * [Vue3-carousel](https://ismail9k.github.io/vue3-carousel/)
 * [vueper-slides](https://antoniandre.github.io/vueper-slides/)
+* [content-loader](https://github.com/egoist/vue-content-loader?ref=madewithvuejs.com)
 
 ### 資料來源
 * [露營樂](https://www.easycamp.com.tw/)

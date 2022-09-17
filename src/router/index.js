@@ -1,6 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import { useStore } from "@/stores/index";
 
 const routes = [
   {
@@ -32,13 +31,6 @@ const routes = [
     path: "/share",
     name: "share",
     component: () => import("../views/ShareView.vue"),
-    beforeEnter() {
-      if (!useStore().userInfo.status) {
-        useStore().loginModal = true;
-        useStore().toggleMask(true, true, false);
-        return {};
-      }
-    },
     meta: {
       breadcrumb: [
         {
@@ -49,6 +41,7 @@ const routes = [
           name: "分享營地",
         },
       ],
+      requiresAuth: true
     },
   },
   {
@@ -91,12 +84,6 @@ const routes = [
     path: "/news",
     name: "news",
     component: () => import("../views/NewsView.vue"),
-    beforeEnter() {
-      if (!useStore().userInfo.status) {
-        useStore().toggleLoginModal();
-        return {};
-      }
-    },
     meta: {
       breadcrumb: [
         {
@@ -107,18 +94,13 @@ const routes = [
           name: "系統消息"
         }
       ],
+      requiresAuth: true
     },
   },
   {
     path: "/setting",
     name: "setting",
     component: () => import("../views/SettingView.vue"),
-    beforeEnter() {
-      if (!useStore().userInfo.status) {
-        useStore().toggleLoginModal();
-        return {};
-      }
-    },
     meta: {
       breadcrumb: [
         {
@@ -129,18 +111,13 @@ const routes = [
           name: "會員設定"
         }
       ],
+      requiresAuth: true
     },
   },
   {
     path: "/favorite",
     name: "favorite",
     component: () => import("../views/FavoriteView.vue"),
-    beforeEnter() {
-      if (!useStore().userInfo.status) {
-        useStore().toggleLoginModal();
-        return {};
-      }
-    },
     meta: {
       breadcrumb: [
         {
@@ -151,19 +128,14 @@ const routes = [
           name: "我的收藏"
         }
       ],
+      requiresAuth: true
     },
-  },
+  }
 ];
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
-});
-
-// 跳轉後回到頂部並關閉 mobile navbar
-router.afterEach(() => {
-  useStore().navStatus = false;
-  window.scrollTo(0, 0);
 });
 
 export default router;

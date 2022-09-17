@@ -1,6 +1,10 @@
 <template>
   <Navbar @scrollStatus="getScrollStatus"></Navbar>
-  <router-view />
+  <router-view v-slot="{ Component }">
+    <transition name="fade">
+      <component :is="Component" />
+    </transition>
+  </router-view>
 
   <Footer></Footer>
 
@@ -31,4 +35,14 @@ onMounted(() => {
   if (!store.userInfo.status) store.getUserInfo();
 });
 </script>
+<style scoped>
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+  }
 
+  .fade-enter-from,
+  .fade-leave-active {
+    transition: opacity 0.4s;
+  }
+</style>
