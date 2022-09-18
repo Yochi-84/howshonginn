@@ -1,28 +1,28 @@
 <template>
   <ModalForm
     @closeModal="closeModal"
-    :class="[currentTab === 'Login' ? 'border-primary' : 'border-secondary']"
+    :class="[currentTab === 'AdminLogin' ? 'border-primary' : 'border-secondary']"
   >
     <ul class="flex items-center px-3 md:px-6">
       <li
         :class="[
           'w-1/2 cursor-pointer border-b-2 pb-3 text-center duration-300 md:text-lg',
-          currentTab === 'Login'
+          currentTab === 'AdminLogin'
             ? 'border-b-current font-bold text-primary'
             : 'border-b-transparent text-content',
         ]"
-        @click="currentTab = 'Login'"
+        @click="currentTab = 'AdminLogin'"
       >
         <font-awesome-icon icon="fa-solid fa-user-alt" class="mr-2" />登入
       </li>
       <li
         :class="[
           'w-1/2 cursor-pointer border-b-2 pb-3 text-center duration-300 md:text-lg',
-          currentTab === 'Register'
+          currentTab === 'AdminRegister'
             ? 'border-b-current font-bold text-secondary'
             : 'border-b-transparent text-content',
         ]"
-        @click="currentTab = 'Register'"
+        @click="currentTab = 'AdminRegister'"
       >
         <font-awesome-icon icon="fa-solid fa-user-plus" class="mr-2" />註冊
       </li>
@@ -41,8 +41,8 @@
 </template>
 <script setup>
 import ModalForm from '@/components/ModalFormComponent';
-import Login from '@/components/LoginComponent';
-import Register from '@/components/RegisterComponent';
+import AdminLogin from '@/components/AdminLoginComponent';
+import AdminRegister from '@/components/AdminRegisterComponent';
 import { ref } from 'vue';
 import { useStore } from '@/stores/index';
 
@@ -53,10 +53,10 @@ function closeModal() {
   store.toggleMask(false);
 }
 
-const currentTab = ref('Login');
+const currentTab = ref('AdminLogin');
 const tab = {
-  Login,
-  Register,
+  AdminLogin,
+  AdminRegister,
 };
 </script>
 <style scoped>

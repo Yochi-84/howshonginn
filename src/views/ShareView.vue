@@ -61,7 +61,7 @@
               'btn btn-danger lg:btn-large xl:btn-circle group xl:absolute xl:left-0 xl:top-72 xl:h-18 xl:w-18 xl:text-2xl xl:ring-2 xl:ring-danger-dark',
               { 'invisible opacity-0': currentStep === 0 },
             ]"
-            @click.prevent="prevStep"
+            @click.prevent="doStep(false)"
             ><font-awesome-icon
               icon="fa-solid fa-angles-left"
               class="mr-2 group-hover:animate-left xl:mr-0"
@@ -70,7 +70,7 @@
           <a
             href="#"
             class="btn btn-primary lg:btn-large xl:btn-circle group xl:absolute xl:top-72 xl:right-0 xl:h-18 xl:w-18 xl:text-2xl xl:ring-2 xl:ring-primary-dark"
-            @click.prevent="nextStep"
+            @click.prevent="doStep(true)"
             v-show="currentStep !== steps.length - 1"
             ><span class="inline xl:hidden">下一步</span
             ><font-awesome-icon
@@ -93,7 +93,11 @@
   </div>
   <LoadingFull bgOpacity="0.7" v-if="loadingStatus">
     <template #title>
-      <h2 class="text-3xl font-bold text-primary-dark tracking-widest">{{loadingTitle}}</h2>
+      <h2
+        class="z-5 text-3xl font-bold tracking-widest text-primary-dark md:text-4xl"
+      >
+        {{ loadingTitle }}
+      </h2>
     </template>
   </LoadingFull>
 </template>
@@ -105,15 +109,14 @@ import InsertPicture from '@/components/InsertPictureComponent';
 import InsertTag from '@/components/InsertTagComponent';
 import InsertPreview from '@/components/InsertPreviewComponent';
 import LoadingFull from '@/components/LoadingFullComponent';
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css';
 import axios from 'axios';
 import { ref, computed } from 'vue';
-import { useStore } from '@/stores/index';
 import router from '@/router';
 
-
 const loadingStatus = ref(false);
-const loadingTitle = ref("");
-const store = useStore();
+const loadingTitle = ref('');
 const currentStep = ref(0);
 const maxStep = ref(0);
 const steps = ref([
@@ -154,39 +157,54 @@ function jumpToStep(index) {
   window.scrollTo(0, 80);
 }
 
-function prevStep() {
-  transitionDirection.value = 'right';
+/**
+ *
+ * @param {Boolean} forward - 上一步或下一步
+ */
+function doStep(forward) {
+  transitionDirection.value = forward ? 'left' : 'right';
   steps.value[currentStep.value].active = false;
-  currentStep.value -= 1;
+  forward ? (currentStep.value += 1) : (currentStep.value -= 1);
   steps.value[currentStep.value].active = true;
-  window.scrollTo(0, 80);
-}
-
-function nextStep() {
-  transitionDirection.value = 'left';
-  steps.value[currentStep.value].active = false;
-  currentStep.value += 1;
-  steps.value[currentStep.value].active = true;
-  maxStep.value = currentStep.value;
+  maxStep.value = forward ?  currentStep.value : maxStep.value;
   window.scrollTo(0, 80);
 }
 
 function finishStep() {
+  let errorInfo = {
+    info: '',
+    type: 'warning',
+    bgColor: '#408560',
+  };
   if (tempAll.value.name === '') {
-    alert('名稱不可為空');
-    jumpToStep(0);
+    errorInfo.info = '營地名稱不可空白';
   } else if (tempAll.value.address === '') {
-    alert('地址不可為空');
-    jumpToStep(0);
+    errorInfo.info = '營地地址不可為空白';
   } else if (tempAll.value.county === 'undefined') {
-    alert('所在區域不可為空');
-    jumpToStep(0);
+    errorInfo.info = '營地所在區域不可為空白';
   } else if (tempAll.value.intro === '') {
-    alert('簡介不可為空');
-    jumpToStep(0);
+    errorInfo.info = '營地簡介不可為空白';
   } else if (!tempAll.value.address.includes(tempAll.value.county)) {
-    alert('地址與所在區域似乎不符合喔!請再次確認');
+    errorInfo.info = '地址與所在區域似乎不符合!請再次確認';
+    errorInfo.type = 'danger';
+    errorInfo.bgColor = '#D28226';
+  }
+  if (errorInfo !== '') {
     jumpToStep(0);
+    createToast(
+      {
+        title: '溫馨提醒',
+        description: errorInfo.info,
+      },
+      {
+        type: errorInfo.type,
+        position: 'top-center',
+        timeout: 3000,
+        toastBackgroundColor: errorInfo.bgColor,
+        showIcon: 'true',
+        transition: 'zoom',
+      }
+    );
   } else {
     loadingStatus.value = true;
     upload();
@@ -197,6 +215,7 @@ const tempInfo = ref({});
 const tempPicture = ref(['init_pic.jpg']);
 const tempOriginPicture = ref([]);
 const tempTags = ref([]);
+
 function getInfo(obj) {
   tempInfo.value = obj;
 }
@@ -249,16 +268,17 @@ async function upload() {
       form.append('title', finalInfo.name);
       form.append('album', process.env.VUE_APP_IMGUR_ALBUM);
 
-      config.data = form;
+      let tempConfig = { ...config };
+      tempConfig.data = form;
 
-      apiCallList.push(config);
+      apiCallList.push(tempConfig);
     }
 
-    loadingTitle.value = "圖片上傳中...";
+    loadingTitle.value = '圖片上傳中...';
     for (let i of apiCallList) {
       await axios(i)
         .then((res) => {
-          pictureLink.push(res.data.data.link)
+          pictureLink.push(res.data.data.link);
         })
         .catch(() => (imageUploadStatus = false));
     }
@@ -278,7 +298,7 @@ async function upload() {
     now.getMonth() + 1
   }/${now.getDate()} ${now.getHours()}:${now.getMinutes()}`;
 
-  loadingTitle.value = "資料上傳中...";
+  loadingTitle.value = '資料上傳中...';
   await axios
     .post(`${process.env.VUE_APP_API_PATH}/campingPlace`, finalInfo)
     .then((res) => res)
@@ -286,14 +306,39 @@ async function upload() {
       infoUploadStatus = false;
     })
     .finally(() => {
+      let errorInfo = {
+        info: '',
+        type: 'warning',
+        bgColor: '#408560',
+      };
       if (!infoUploadStatus) {
-        alert('新增失敗!!暫時我也不知道怎麼辦T_T  Sorry...');
+        errorInfo.info = "新增失敗!!可能哪裡出了問題";
+        errorInfo.type = 'danger';
+        errorInfo.bgColor = "#A31C3D";
       } else if (infoUploadStatus && !imageUploadStatus) {
-        alert('新增營地成功，但是圖片上傳有可能失敗了 QAQ');
+        errorInfo.info = "新增營地成功，但是圖片上傳有可能失敗了 QAQ";
+        errorInfo.type = 'warning';
+        errorInfo.bgColor = "#D28226";
       } else {
-        alert('新增成功，請等待審核!!(其實不用...)');
+        errorInfo.info = "新增營地成功";
+        errorInfo.type = 'success';
+        errorInfo.bgColor = "#408560";
       }
       router.push({ name: 'home' });
+      createToast(
+        {
+          title: '溫馨提醒',
+          description: errorInfo.info,
+        },
+        {
+          type: errorInfo.type,
+          position: 'top-center',
+          timeout: 3000,
+          toastBackgroundColor: errorInfo.bgColor,
+          showIcon: 'true',
+          transition: 'zoom',
+        }
+      );
     });
 }
 </script>

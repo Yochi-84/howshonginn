@@ -334,9 +334,11 @@ const formatName = computed(() => {
     townSelect.value.length > 2
       ? (tempName += townSelect.value.slice(0, -1))
       : (tempName += townSelect.value);
+
+    tempName += ' ';
   }
 
-  tempName += ' ' + name.value;
+  tempName += name.value;
 
   return tempName;
 });
@@ -388,8 +390,7 @@ onMounted(() => {
 // 離開元件時將資料傳給父層
 onDeactivated(() => {
   emits('campInfo', campingInfo.value);
-})
-
+});
 </script>
 <style>
 .move-up-enter-from,

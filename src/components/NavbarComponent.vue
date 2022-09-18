@@ -30,19 +30,13 @@
           <SearchBox class="mx-auto w-[90%] border border-black text-black" />
         </li>
         <li>
-          <router-link to="/list" class="block py-3"
-            >所有營地</router-link
-          >
+          <router-link to="/list" class="block py-3">所有營地</router-link>
         </li>
         <li>
-          <router-link to="/share" class="block py-3"
-            >分享營地</router-link
-          >
+          <router-link to="/share" class="block py-3">分享營地</router-link>
         </li>
         <li>
-          <router-link to="/contact" class="block py-3"
-            >聯絡我們</router-link
-          >
+          <router-link to="/contact" class="block py-3">聯絡我們</router-link>
         </li>
         <li v-if="!store.userInfo.status">
           <a href="#" class="block py-3" @click.prevent="showLoginModal"
@@ -52,13 +46,18 @@
             />登入</a
           >
         </li>
-        <ul class="border-t border-t-secondary-dark text-secondary bg-secondary-light" v-else>
+        <ul
+          class="border-t border-t-secondary-dark bg-secondary-light text-secondary"
+          v-else
+        >
           <li>
             <div
               class="flex cursor-pointer select-none items-center justify-center py-3"
               @click.stop="userMenuStatus = !userMenuStatus"
             >
-              <span class="mr-2 font-bold text-lg">{{ store.userInfo.nickname }}</span>
+              <span class="mr-2 text-lg font-bold">{{
+                store.userInfo.nickname
+              }}</span>
               <img
                 :src="
                   store.userInfo.pic !== ''
@@ -66,7 +65,7 @@
                     : require('@/assets/image/user_init.jpg')
                 "
                 :alt="store.userInfo.nickname"
-                class="h-8 ring-2 ring-secondary-dark w-8 rounded-full"
+                class="h-8 w-8 rounded-full ring-2 ring-secondary-dark"
               />
             </div>
           </li>
@@ -232,7 +231,7 @@
 <script setup>
 import SearchBox from '@/components/SearchBoxComponent';
 import { useStore } from '@/stores/index';
-import { ref,computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 
@@ -265,15 +264,14 @@ function showLoginModal() {
   store.toggleLoginModal();
 }
 
-
 function logout() {
   userMenuStatus.value = false;
   store.clearUserInfo();
   store.userInfo = { status: false };
+  router.push({ name: 'home' });
 }
 
-
-const navStatus = computed(() => store.navStatus)
+const navStatus = computed(() => store.navStatus);
 watch(navStatus, (newV) => {
   if (!store.loginModal) {
     store.toggleMask(newV);
