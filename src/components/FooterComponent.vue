@@ -1,6 +1,6 @@
 <template>
   <footer
-    class="md:pt-18 absolute bottom-0 w-full overflow-hidden pt-16 after:absolute after:left-1/2 after:top-0 after:-z-10 after:h-[600vw] after:w-[600vw] after:-translate-x-1/2 after:rounded-full after:bg-primary-dark"
+    class="md:pt-18 relative overflow-hidden pt-16 after:absolute after:left-1/2 after:top-0 after:-z-10 after:h-[600vw] after:w-[600vw] after:-translate-x-1/2 after:rounded-full after:bg-primary-dark"
   >
     <div class="container">
       <div

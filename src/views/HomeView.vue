@@ -150,8 +150,21 @@ onMounted(() => {
     .then(() => {
       window.setTimeout(() => {
         loadingStatus.value = false;
-      }, 3000);
+      }, 2000);
     })
     .catch((err) => console.error(err));
 });
 </script>
+<style scoped>
+.loading-full-enter-from,
+.loading-full-leave-to {
+  opacity: 0;
+}
+
+.loading-full-enter-active {
+  transition: opacity 2s ease-in;
+}
+.loading-full-leave-active {
+  transition: opacity 2s ease-out;
+}
+</style>

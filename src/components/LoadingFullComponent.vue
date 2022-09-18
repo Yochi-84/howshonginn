@@ -16,7 +16,7 @@
         alt="LOADING ICON"
       />
       <ul
-        class="z-5 flex w-[232px] origin-left -translate-y-20 rotate-45 items-end gap-x-6 translate-x-1/2"
+        class="z-5 flex w-[232px] origin-left -translate-y-20 translate-x-1/2 rotate-45 items-end gap-x-6"
       >
         <li
           v-for="step of footprint"
@@ -31,6 +31,7 @@
           />
         </li>
       </ul>
+      <slot name="title"></slot>
     </div>
   </Teleport>
 </template>
@@ -66,7 +67,7 @@ onMounted(() => {
   observer.observe(document.querySelector('#loading_full'));
 
   timer.value = window.setInterval(() => {
-    footprint.value = (footprint.value + 4 ) % 4 + 1;
+    footprint.value = ((footprint.value + 4) % 4) + 1;
   }, 500);
 });
 
@@ -74,3 +75,4 @@ onUnmounted(() => {
   window.clearInterval(timer.value);
 });
 </script>
+

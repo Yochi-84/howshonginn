@@ -48,6 +48,7 @@
               class="mb-10"
               @campInfo="getInfo"
               @campPicture="getPicture"
+              @campPictureOrigin="getOriginPicture"
               @campTags="getTags"
               :previewInfo="tempAll"
             ></component>
@@ -90,6 +91,11 @@
       </section>
     </div>
   </div>
+  <LoadingFull bgOpacity="0.7" v-if="loadingStatus">
+    <template #title>
+      <h2 class="text-3xl font-bold text-primary-dark tracking-widest">{{loadingTitle}}</h2>
+    </template>
+  </LoadingFull>
 </template>
 <script setup>
 import BreadCrumb from '@/components/BreadCrumbComponent';
@@ -98,10 +104,16 @@ import InsertInfo from '@/components/InsertInfoComponent';
 import InsertPicture from '@/components/InsertPictureComponent';
 import InsertTag from '@/components/InsertTagComponent';
 import InsertPreview from '@/components/InsertPreviewComponent';
+import LoadingFull from '@/components/LoadingFullComponent';
 import axios from 'axios';
-
 import { ref, computed } from 'vue';
+import { useStore } from '@/stores/index';
+import router from '@/router';
 
+
+const loadingStatus = ref(false);
+const loadingTitle = ref("");
+const store = useStore();
 const currentStep = ref(0);
 const maxStep = ref(0);
 const steps = ref([
@@ -159,7 +171,6 @@ function nextStep() {
   window.scrollTo(0, 80);
 }
 
-// TODO:確認
 function finishStep() {
   if (tempAll.value.name === '') {
     alert('名稱不可為空');
@@ -177,24 +188,17 @@ function finishStep() {
     alert('地址與所在區域似乎不符合喔!請再次確認');
     jumpToStep(0);
   } else {
-    console.log(tempAll.value)
-    axios
-      .post(`${process.env.VUE_APP_API_PATH}/campingPlace`, tempAll.value)
-      .then(() => {
-        alert('新增成功，請等待審核!!');
-      })
-      .catch((err) => {
-        alert('新增失敗!!我看看為什麼\n' + err);
-        console.error(err);
-      });
+    loadingStatus.value = true;
+    upload();
   }
 }
 
 const tempInfo = ref({});
 const tempPicture = ref(['init_pic.jpg']);
+const tempOriginPicture = ref([]);
 const tempTags = ref([]);
 function getInfo(obj) {
-  tempInfo.value = JSON.parse(JSON.stringify(obj));
+  tempInfo.value = obj;
 }
 
 function getPicture(arr) {
@@ -203,6 +207,9 @@ function getPicture(arr) {
     tempArr.push('init_pic.jpg');
   }
   tempPicture.value = [...arr];
+}
+function getOriginPicture(arr) {
+  tempOriginPicture.value = [...arr];
 }
 
 function getTags(arr) {
@@ -214,8 +221,81 @@ const tempAll = computed(() => {
     ...tempInfo.value,
     tags: [...tempTags.value],
     image: [...tempPicture.value],
+    originPicture: [...tempOriginPicture.value],
   };
 });
+
+async function upload() {
+  let imageUploadStatus = true; // 記錄圖片上傳狀態
+  let infoUploadStatus = true; // 記錄資料上傳狀態/
+  const finalInfo = { ...tempAll.value };
+  let pictureLink = [];
+
+  // 如果有圖片就上傳
+  if (finalInfo.originPicture.length > 0) {
+    const config = {
+      method: 'POST',
+      url: 'https://api.imgur.com/3/image',
+      headers: {
+        Authorization: `Bearer ${process.env.VUE_APP_IMGUR_TOKEN}`,
+      },
+    };
+
+    const apiCallList = [];
+    for (let i = 0; i < finalInfo.originPicture.length; i++) {
+      let form = new FormData();
+      form.append('image', finalInfo.originPicture[i]);
+      form.append('type', 'file');
+      form.append('title', finalInfo.name);
+      form.append('album', process.env.VUE_APP_IMGUR_ALBUM);
+
+      config.data = form;
+
+      apiCallList.push(config);
+    }
+
+    loadingTitle.value = "圖片上傳中...";
+    for (let i of apiCallList) {
+      await axios(i)
+        .then((res) => {
+          pictureLink.push(res.data.data.link)
+        })
+        .catch(() => (imageUploadStatus = false));
+    }
+
+    if (pictureLink.length) {
+      // 把圖片網址換成回傳回來的
+      finalInfo.image = pictureLink;
+    }
+  }
+
+  // 原位址上傳完用不到了，刪掉
+  delete finalInfo.originPicture;
+
+  // 加入新增時間
+  const now = new Date();
+  finalInfo.createTime = `${now.getFullYear()}/${
+    now.getMonth() + 1
+  }/${now.getDate()} ${now.getHours()}:${now.getMinutes()}`;
+
+  loadingTitle.value = "資料上傳中...";
+  await axios
+    .post(`${process.env.VUE_APP_API_PATH}/campingPlace`, finalInfo)
+    .then((res) => res)
+    .catch(() => {
+      infoUploadStatus = false;
+    })
+    .finally(() => {
+      if (!infoUploadStatus) {
+        alert('新增失敗!!暫時我也不知道怎麼辦T_T  Sorry...');
+      } else if (infoUploadStatus && !imageUploadStatus) {
+        alert('新增營地成功，但是圖片上傳有可能失敗了 QAQ');
+      } else {
+        alert('新增成功，請等待審核!!(其實不用...)');
+      }
+      router.push({ name: 'home' });
+    });
+}
 </script>
 <style scoped>
 .left-enter-active,

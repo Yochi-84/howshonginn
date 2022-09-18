@@ -13,7 +13,7 @@
             <img
               :src="
                 image === 'init_pic.jpg'
-                  ? require('@/assets/image/init_pic.jpg')
+                  ? require('../assets/image/init_pic.jpg')
                   : image
               "
               :alt="'image' + index"
@@ -80,7 +80,7 @@
           :key="index"
           :image="
             image === 'init_pic.jpg'
-              ? require('@/assets/image/init_pic.jpg')
+              ? require('../assets/image/init_pic.jpg')
               : image
           "
           class="overflow-hidden rounded-lg"
@@ -95,22 +95,27 @@ import { VueperSlides, VueperSlide } from 'vueperslides';
 import 'vueperslides/dist/vueperslides.css';
 import { ref, onDeactivated } from 'vue';
 
-const emits = defineEmits(['campPicture']);
+const emits = defineEmits(['campPicture', 'campPictureOrigin']);
 const currentSlide = ref(0);
 const uploadImage = ref(['init_pic.jpg']);
+const uploadOriginImage = ref([]);
 const slides = ref(null);
 
 function upload(e) {
-  let tempList = [];
+  let tempOriginList = []; // 原位址，上傳用
+  let tempList = []; // 預覽用
   let fileLength = Math.min(4, e.target.files.length);
   for (let i = 0; i < fileLength; i++) {
+    tempOriginList.push(e.target.files[i]);
     const src = URL.createObjectURL(e.target.files[i]);
     tempList.push(src);
   }
+  uploadOriginImage.value = tempOriginList;
   uploadImage.value = tempList;
 }
 
 function removeImage(index) {
+  uploadOriginImage.value.splice(index, 1);
   uploadImage.value.splice(index, 1);
   if (uploadImage.value.length === 0) {
     uploadImage.value.push('init_pic.jpg');
@@ -118,6 +123,7 @@ function removeImage(index) {
 }
 
 function clearUpload() {
+  uploadOriginImage.value.length = 0;
   uploadImage.value.length = 0;
   uploadImage.value.push('init_pic.jpg');
 }
@@ -125,6 +131,6 @@ function clearUpload() {
 // 離開元件時將資料傳給父層
 onDeactivated(() => {
   emits('campPicture', uploadImage.value);
-})
-
+  emits('campPictureOrigin', uploadOriginImage.value);
+});
 </script>

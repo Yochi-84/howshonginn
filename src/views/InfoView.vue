@@ -14,7 +14,11 @@
             <VueperSlide
               v-for="image of info.image"
               :key="image"
-              :image="require('../assets/image/' + image)"
+              :image="
+                image.includes('imgur.com')
+                  ? image
+                  : require('../assets/image/' + image)
+              "
               class="overflow-hidden rounded-lg"
             >
             </VueperSlide>
@@ -196,7 +200,9 @@
           </div>
           <div class="w-full px-3 lg:w-3/5">
             <iframe
-              :src="`https://www.google.com/maps?q=${info.gps ? info.gps : info.address}(${info.name})&hl=zh-TW&z=16&output=embed`"
+              :src="`https://www.google.com/maps?q=${
+                info.gps ? info.gps : info.address
+              }(${info.name})&hl=zh-TW&z=16&output=embed`"
               allowfullscreen=""
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade"
@@ -359,7 +365,7 @@
       <Comment :id="route.query.id"></Comment>
     </section>
   </div>
-  <LoadingFull bgOpacity="0.6" v-if="loadingStatus"></LoadingFull>
+  <LoadingFull bgOpacity="0.7" v-if="loadingStatus"></LoadingFull>
 </template>
 <script setup>
 import axios from 'axios';
@@ -373,7 +379,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from '@/stores/index';
 
-const loadingStatus = ref(true);
+const loadingStatus = ref(false);
 const store = useStore();
 const route = useRoute();
 const info = ref({});

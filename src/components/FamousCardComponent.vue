@@ -2,7 +2,7 @@
   <div class="relative h-full overflow-hidden rounded shadow-[0_2px_4px_#333] hover:-translate-y-4 duration-300">
     <div class="h-[280px] overflow-hidden">
       <img
-        :src="require('../assets/image/' + props.cardInfo.image[0])"
+        :src="props.cardInfo.image[0].includes('imgur.com') ? props.cardInfo.image[0] : require('../assets/image/' + props.cardInfo.image[0])"
         :alt="props.cardInfo.name"
         class="h-full w-full object-cover object-bottom"
       />

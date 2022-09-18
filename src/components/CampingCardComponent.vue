@@ -6,7 +6,7 @@
       <a
         href="#"
         @click.prevent.stop="store.toggleFavorite(cardInfo.id)"
-        class="absolute left-4 top-4 text-2xl text-danger-dark md:text-xl z-10"
+        class="absolute left-4 top-4 z-10 text-2xl text-danger-dark md:text-xl"
       >
         <font-awesome-icon
           :icon="[
@@ -20,7 +20,11 @@
       /></a>
       <div class="h-[280px] overflow-hidden">
         <img
-          :src="require('../assets/image/' + cardInfo.image[0])"
+          :src="
+            cardInfo.image[0].includes('imgur.com')
+              ? cardInfo.image[0]
+              : require('../assets/image/' + cardInfo.image[0])
+          "
           :alt="name"
           :onerror="require('../assets/image/error_pic.jpg')"
           class="h-full w-full object-cover object-bottom"
@@ -47,10 +51,7 @@
           {{ name }}
         </h3>
       </div>
-      <router-link
-        :to="'/info?id=' + cardInfo.id"
-        class="absolute inset-0"
-      />
+      <router-link :to="'/info?id=' + cardInfo.id" class="absolute inset-0" />
     </div>
   </Transition>
 </template>

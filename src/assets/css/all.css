@@ -5,13 +5,8 @@
 @tailwind utilities;
 
 @layer base {
-  html {
-    @apply min-h-full relative;
-  }
-
   body {
     @apply text-gray-700 leading-normal;
-    margin-bottom: 407px;
   }
 
   ::-webkit-scrollbar {

@@ -298,7 +298,8 @@
 import { VueperSlides, VueperSlide } from 'vueperslides';
 import 'vueperslides/dist/vueperslides.css';
 import Loading from '@/components/LoadingComponent';
-import { ref, computed, watch } from 'vue';
+import { ref, reactive, toRefs, onActivated } from 'vue';
+
 const props = defineProps({
   previewInfo: {
     type: Object,
@@ -306,6 +307,7 @@ const props = defineProps({
   },
 });
 
+const { previewInfo } = toRefs(props);
 const breakpoints = ref({
   1026: {
     fixedHeight: '350px',
@@ -317,23 +319,32 @@ const breakpoints = ref({
   },
 });
 
-const previewInfo = computed(() => props.previewInfo);
-const info = ref({});
-watch(
-  previewInfo,
-  (newV) => {
-    info.value = JSON.parse(JSON.stringify(newV));
-    info.value.intro = newV.intro.split('\n');
+let info = reactive({
+  name: '',
+  phone: '',
+  address: '',
+  county: '',
+  height: '',
+  intro: [],
+  image: [],
+  price: [],
+});
 
-    delete info.value.price[''];
-    info.value.price = Object.entries(newV.price);
-    info.value.price.forEach((item) => (item[1].collapse = true));
-  },
-  {
-    deep: true,
-    immediate: true,
+// 每次進入時重新取得資料
+onActivated(() => {
+  let temp = JSON.parse(JSON.stringify(previewInfo.value));
+  info.name = temp.name.slice(temp.name.indexOf(' ') + 1);
+  info.intro = temp.intro.split('\n');
+
+  let copyList = ["county","phone","address","height","website","image","tags"];
+  for(let i of copyList) {
+    info[i] = Array.isArray(temp[i]) ? [...temp[i]] : temp[i];
   }
-);
+
+  delete temp.price[''];
+  info.price = Object.entries(temp.price);
+  info.price.forEach((item) => (item[1].collapse = true));
+});
 </script>
 <style lang="scss" scoped>
 :deep(.vueperslide) {

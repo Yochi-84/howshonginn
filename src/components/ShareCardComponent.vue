@@ -9,7 +9,7 @@
           ]"
         >
           <img
-            :src="require('../assets/image/' + info.image[0])"
+            :src="info.image[0].includes('imgur.com') ? info.image[0] : require('../assets/image/' + info.image[0])"
             :alt="info.name"
             class="h-full w-full object-cover object-bottom"
           />
