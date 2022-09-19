@@ -62,10 +62,10 @@
                 :src="
                   store.userInfo.pic !== ''
                     ? store.userInfo.pic
-                    : require('@/assets/image/user_init.jpg')
+                    : require('../assets/image/user_init.jpg')
                 "
                 :alt="store.userInfo.nickname"
-                class="h-8 w-8 rounded-full ring-2 ring-secondary-dark"
+                class="h-8 w-8 rounded-full ring-2 ring-secondary-dark object-cover"
               />
             </div>
           </li>
@@ -172,11 +172,11 @@
                   :src="
                     store.userInfo.pic !== ''
                       ? store.userInfo.pic
-                      : require('@/assets/image/user_init.jpg')
+                      : require('../assets/image/user_init.jpg')
                   "
                   :alt="store.userInfo.nickname"
                   :class="[
-                    'h-8 w-8 rounded-full ring-2 duration-300 lg:h-10 lg:w-10',
+                    'h-8 w-8 rounded-full ring-2 duration-300 lg:h-10 lg:w-10 object-cover',
                     scrollStatus !== 'top' ? 'ring-primary-dark' : 'ring-white',
                   ]"
                 />

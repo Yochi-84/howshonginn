@@ -74,7 +74,6 @@
   </div>
 </template>
 <script setup>
-// import { mapState } from 'pinia';
 import { useStore } from '@/stores/index';
 import axios from 'axios';
 import { ref } from 'vue';

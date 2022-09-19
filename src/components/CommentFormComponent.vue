@@ -1,7 +1,7 @@
 <template>
   <ModalForm
     @closeModal="closeModal"
-    v-show="props.showModal"
+    v-if="props.showModal"
     class="w-full border-primary"
   >
     <div class="px-4 pb-2">

@@ -392,7 +392,7 @@ onDeactivated(() => {
   emits('campInfo', campingInfo.value);
 });
 </script>
-<style>
+<style scoped>
 .move-up-enter-from,
 .move-up-leave-to {
   transform: translateY(30px);
