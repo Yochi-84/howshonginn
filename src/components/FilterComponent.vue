@@ -223,6 +223,7 @@ function filterSubmit() {
   store.toggleFilterMode('filter');
   let filterParameter = {};
   if (filterItem.value.countySelect !== '') {
+    // 下拉選單
     let filterArea = countyCity.value[filterItem.value.countySelect].CityName;
     filterItem.value.townSelect !== ''
       ? (filterArea += filterItem.value.townSelect)
@@ -230,6 +231,7 @@ function filterSubmit() {
 
     filterParameter.filterArea = filterArea;
   } else {
+    // 區域選擇
     const area = {
       北部: ['台北', '新北', '基隆', '桃園', '新竹', '宜蘭'],
       中部: ['苗栗', '台中', '彰化', '南投', '雲林'],

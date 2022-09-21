@@ -56,18 +56,19 @@ watch(loginStatus, (newV) => {
     );
   }
 });
+
 // 確認是否存在使用者登入資訊
 onMounted(() => {
   if (!store.userInfo.status) store.getUserInfo();
 });
 </script>
-<style scoped>
+<style>
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }
 
-.fade-enter-from,
+.fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.4s;
 }

@@ -416,7 +416,7 @@ onMounted(() => {
 
       infoOperated.value = true;
     })
-    .then(() => (loadingStatus.value = false))
+    .then(() => window.setTimeout(() => loadingStatus.value = false,500))
     .catch((err) => console.error(err));
 });
 </script>

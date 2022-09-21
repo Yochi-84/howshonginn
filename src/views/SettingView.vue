@@ -42,14 +42,32 @@
             <label
               for="nickname"
               class="mb-2 block text-lg font-bold text-primary-dark lg:text-xl"
-              >暱稱</label
+              >暱稱<span
+                :class="[
+                  'ml-2 text-sm',
+                  nicknameStatus === 'true'
+                    ? 'text-primary-dark'
+                    : 'text-danger-dark',
+                ]"
+                v-show="nicknameStatus !== ''"
+                ><font-awesome-icon
+                  :icon="[
+                    'fa-solid',
+                    nicknameStatus === 'true'
+                      ? 'fa-circle-check'
+                      : 'fa-circle-xmark',
+                  ]"
+                  class="mr-1"
+                />{{ nicknameStatus === 'true' ? '可使用' : '已被使用' }}</span
+              ></label
             >
             <input
               type="text"
               id="nickname"
               class="mb-6 w-full rounded border border-black py-1 px-4"
-              v-model="tempModifiedInfo.nickname"
+              v-model.trim="tempModifiedInfo.nickname"
               @keyup="changeNickname"
+              @blur="checkRepeatNickname"
             />
             <label
               for="password"
@@ -169,7 +187,9 @@ const store = useStore();
 const newPasswordCheck = ref(null); // 確認新密碼的 input 欄位
 const info = reactive({});
 const modalStatus = ref(false);
+const nicknameStatus = ref(''); // 確認新暱稱是否重複
 let modalContent = ref('pic');
+const api = axios.create({ baseURL: process.env.VUE_APP_API_PATH });
 const tempModifiedInfo = reactive({
   nickname: '',
   pic: '',
@@ -217,6 +237,8 @@ function changeNickname() {
     modifiedInfo.nickname.newValue = tempModifiedInfo.nickname;
   } else {
     modifiedInfo.nickname.modified = false;
+    // 隱藏狀態
+    nicknameStatus.value = '';
   }
 }
 
@@ -245,6 +267,20 @@ function checkPassword() {
   }
 }
 
+function checkRepeatNickname() {
+  // 有改才送
+  if (modifiedInfo.nickname.modified) {
+    api
+      .get(`/user?nickname=${modifiedInfo.nickname.newValue}`)
+      .then((res) =>
+        res.data.length > 0
+          ? (nicknameStatus.value = 'false')
+          : (nicknameStatus.value = 'true')
+      )
+      .catch(() => console.error('API 好像掛了，真是抱歉!!!'));
+  }
+}
+
 function showModal() {
   modalStatus.value = true;
   store.toggleMask(true, true, false);
@@ -270,9 +306,9 @@ function modificationConfirm() {
     modifiedInfo.pic.modified = true;
     closeModal();
   } else {
-    axios
+    api
       .get(
-        `${process.env.VUE_APP_API_PATH}/user?id=${store.userInfo.id}&password=${tempModifiedInfo.oldPassword}`
+        `/user?id=${store.userInfo.id}&password=${tempModifiedInfo.oldPassword}`
       )
       .then((res) => {
         if (res.data.length > 0) {
@@ -302,41 +338,55 @@ function modificationConfirm() {
 }
 
 function modificationSubmit() {
-  const modifiedValue = {};
-  if (modifiedInfo.nickname.modified)
-    modifiedValue.nickname = modifiedInfo.nickname.newValue;
-  if (modifiedInfo.pic.modified) modifiedValue.pic = modifiedInfo.pic.newValue;
-  if (modifiedInfo.password.modified)
-    modifiedValue.password = modifiedInfo.password.newValue;
-  axios
-    .patch(
-      `${process.env.VUE_APP_API_PATH}/user/${store.userInfo.id}`,
-      modifiedValue
-    )
-    .then(() => {
-      // 重新寫入 pinia 與 storage 的資料
-      Object.entries(modifiedValue).forEach(
-        (item) => (store.userInfo[item[0]] = item[1])
-      );
-      store.userInfo.mode === 'session'
-        ? store.userInfoToSessionStorage()
-        : store.userInfoToLocalStorage();
+  if (modifiedInfo.nickname.newValue.length === 0) {
+    createToast(
+      {
+        title: '暱稱不可空白',
+      },
+      {
+        type: 'warning',
+        position: 'top-center',
+        timeout: 3000,
+        toastBackgroundColor: '#E3A864',
+        showIcon: 'true',
+        transition: 'zoom',
+      }
+    );
+  } else {
+    const modifiedValue = {};
+    if (modifiedInfo.nickname.modified)
+      modifiedValue.nickname = modifiedInfo.nickname.newValue;
+    if (modifiedInfo.pic.modified)
+      modifiedValue.pic = modifiedInfo.pic.newValue;
+    if (modifiedInfo.password.modified)
+      modifiedValue.password = modifiedInfo.password.newValue;
+    api
+      .patch(`/user/${store.userInfo.id}`, modifiedValue)
+      .then(() => {
+        // 重新寫入 pinia 與 storage 的資料
+        Object.entries(modifiedValue).forEach(
+          (item) => (store.userInfo[item[0]] = item[1])
+        );
+        store.userInfo.mode === 'session'
+          ? store.userInfoToSessionStorage()
+          : store.userInfoToLocalStorage();
 
-      createToast(
-        {
-          title: '修改成功',
-        },
-        {
-          type: 'success',
-          position: 'top-center',
-          timeout: 3000,
-          toastBackgroundColor: '#408560',
-          showIcon: 'true',
-          transition: 'zoom',
-        }
-      );
-    })
-    .catch(() => console.error('API 好像掛了，真是抱歉!!!'));
+        createToast(
+          {
+            title: '修改成功',
+          },
+          {
+            type: 'success',
+            position: 'top-center',
+            timeout: 3000,
+            toastBackgroundColor: '#408560',
+            showIcon: 'true',
+            transition: 'zoom',
+          }
+        );
+      })
+      .catch(() => console.error('API 好像掛了，真是抱歉!!!'));
+  }
 }
 
 onMounted(() => {

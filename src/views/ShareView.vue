@@ -24,7 +24,7 @@
         </InsertStep>
       </ul>
       <section class="relative">
-        <transition :name="transitionDirection" mode="out-in">
+        <Transition :name="transitionDirection" mode="out-in">
           <h2
             class="mb-2 text-center text-2xl font-bold text-primary-dark md:text-3xl"
             :key="steps[currentStep].name"
@@ -39,11 +39,11 @@
               >{{ steps[currentStep].english }}</span
             >
           </h2>
-        </transition>
+        </Transition>
         <div class="mb-6 border-b-8 border-double border-b-primary-dark"></div>
-        <transition :name="transitionDirection" mode="out-in">
-          <keep-alive>
-            <component
+        <Transition :name="transitionDirection" mode="out-in">
+          <KeepAlive>
+            <Component
               :is="stepView[currentStep]"
               class="mb-10"
               @campInfo="getInfo"
@@ -51,9 +51,9 @@
               @campPictureOrigin="getOriginPicture"
               @campTags="getTags"
               :previewInfo="tempAll"
-            ></component>
-          </keep-alive>
-        </transition>
+            ></Component>
+          </KeepAlive>
+        </Transition>
         <div class="flex items-center justify-center gap-x-6 px-3">
           <a
             href="#"

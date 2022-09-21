@@ -27,7 +27,10 @@
           :key="info.name"
           class="w-full px-3 md:w-1/2 lg:w-1/4"
         >
-          <FamousCard :cardInfo="info" />
+          <CardNormal
+            :cardInfo="info"
+            class="duration-300 lg:hover:-translate-y-4"
+          />
         </li>
       </ul>
     </section>
@@ -105,7 +108,7 @@
         >
           與你分享
         </h2>
-        <ShareCard :cardInfo="share" />
+        <CardCarousel :cardInfo="share" />
       </div>
     </section>
   </div>
@@ -115,8 +118,8 @@
 <script setup>
 import axios from 'axios';
 import SearchBox from '@/components/SearchBoxComponent';
-import FamousCard from '@/components/FamousCardComponent';
-import ShareCard from '@/components/ShareCardComponent';
+import CardNormal from '@/components/CardNormalComponent';
+import CardCarousel from '@/components/CardCarouselComponent';
 import LoadingFull from '@/components/LoadingFullComponent';
 import { ref, onMounted } from 'vue';
 

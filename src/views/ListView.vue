@@ -46,14 +46,14 @@
         >
           <ul class="-mx-2 mb-8 flex flex-wrap gap-y-4">
             <li
-              class="w-full px-2 md:w-1/2 xl:w-1/3"
+              class="px-2 w-1/2 xl:w-1/3"
               v-for="(item, index) of showList.slice(0, 12 * currentPage)"
               :key="item.name"
             >
-              <CampingCard
+              <CardMarked
                 :cardInfo="item"
                 :delay="(index % 12) * 0.05"
-              ></CampingCard>
+              ></CardMarked>
             </li>
           </ul>
           <div class="text-center" v-show="currentPage < totalPage">
@@ -82,7 +82,7 @@
 import BreadCrumb from '@/components/BreadCrumbComponent';
 import SearchBox from '@/components/SearchBoxComponent';
 import Filter from '@/components/FilterComponent';
-import CampingCard from '@/components/CampingCardComponent';
+import CardMarked from '@/components/CardMarkedComponent';
 import Loading from '@/components/LoadingComponent';
 import { ref, onMounted, watch, computed, inject } from 'vue';
 import { useRoute } from 'vue-router';
@@ -123,13 +123,13 @@ const showList = computed(() => {
   ) {
     // 清空 searchbox
     searchbox.value.clearInput();
-    // 條件篩選
+    // 條件篩選。2 種都沒選就不管，所以不用 else
     if (typeof filterParameter.value.filterArea === 'string') {
       // 下拉選單縣市鄉鎮篩選
       list = place.value.filter((item) =>
         item.county.includes(filterParameter.value.filterArea)
       );
-    } else {
+    } else if (filterParameter.value.filterArea.length) {
       // 區域篩選
       list = place.value.filter((item) =>
         filterParameter.value.filterArea.some((ele) =>
@@ -137,6 +137,7 @@ const showList = computed(() => {
         )
       );
     }
+
     if (filterParameter.value.filterTag.length > 0) {
       if (!filterParameter.value.tagFilterMode) {
         // 一般模式

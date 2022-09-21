@@ -1,6 +1,6 @@
 <template>
   <Teleport to="#app">
-    <transition>
+    <Transition>
       <div
         :class="[
           'fixed inset-0 bg-black bg-opacity-60',
@@ -10,7 +10,7 @@
         id="mask"
         v-show="store.mask.status"
       ></div>
-    </transition>
+    </Transition>
   </Teleport>
 </template>
 <script setup>
@@ -26,8 +26,6 @@ onMounted(() => {
         .querySelector('body')
         .classList.add('overflow-y-hidden', 'max-h-screen');
     } else {
-      document.querySelector('#mask').classList.remove('block');
-      document.querySelector('#mask').classList.add('hidden');
       document
         .querySelector('body')
         .classList.remove('overflow-y-hidden', 'max-h-screen');
@@ -38,13 +36,13 @@ onMounted(() => {
 });
 </script>
 <style scoped>
-  .v-enter-from,
-  .v-leave-to {
-    opacity: 0;
-  }
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 
-  .v-enter-active,
-  .v-leave-active {
-    transition: opacity 0.5s;
-  }
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s;
+}
 </style>

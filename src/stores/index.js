@@ -68,12 +68,7 @@ export const useStore = defineStore('main', {
           this.userInfo.favorite.push(id);
         }
 
-        api.get('/user')
-          .then(res => console.log(res.data))
-          .catch(err => console.log(err))
-
         api.patch(`/user/${this.userInfo.id}`, { favorite: this.userInfo.favorite })
-          .then(res => res.data)
           .catch(err => console.log(err));
 
         this.userInfo.mode === 'session' ? sessionStorage.setItem("userInfo", JSON.stringify(this.userInfo)) : localStorage.setItem("userInfo", JSON.stringify(this.userInfo))

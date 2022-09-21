@@ -8,6 +8,7 @@
 密碼: 12345678<br>
 or<br>
 註冊帳號
+
 ### 使用技術
 * vue-cli
 * tailwind
@@ -20,8 +21,6 @@ or<br>
 * [content-loader](https://github.com/egoist/vue-content-loader?ref=madewithvuejs.com)
 * [mosha-vue-toastify](https://github.com/szboynono/mosha-vue-toastify)
 
-
-
 ### 資料來源
 * [露營樂](https://www.easycamp.com.tw/)
 
@@ -30,6 +29,4 @@ or<br>
 
 ### 已知問題
 1. list 頁面卡片的 transition 在資料內容變動後如果依舊存在時不會觸發
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+2. 路由切換的過渡動畫失效

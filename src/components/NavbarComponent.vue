@@ -103,7 +103,7 @@
       </ul>
       <h1
         :class="[
-          'absolute top-1/2 left-1/2 h-9 w-[143px] -translate-x-1/2 -translate-y-1/2 overflow-hidden whitespace-nowrap bg-[url(../image/logo.svg)] bg-cover bg-center bg-no-repeat indent-[101%]  duration-300 md:static md:h-10 md:w-[159px] md:translate-x-0 md:translate-y-0',
+          'absolute top-1/2 left-1/2 h-9 w-[144px] -translate-x-1/2 -translate-y-1/2 overflow-hidden whitespace-nowrap bg-[url(../image/logo.svg)] bg-cover bg-center bg-no-repeat indent-[101%]  duration-300 md:static md:h-10 md:w-[159px] md:translate-x-0 md:translate-y-0',
           {
             'md:brightness-0 md:invert': scrollStatus === 'top',
           },
