@@ -30,6 +30,7 @@
           >
             <option value="id">預設排序</option>
             <option value="favorite">人氣排序</option>
+            <option value="new">最新排序</option>
             <option value="random">隨機排序</option>
           </select>
         </div>
@@ -158,6 +159,8 @@ const showList = computed(() => {
   switch (sortMethod.value) {
     case 'favorite':
       return list.sort((prev, next) => next.favorite - prev.favorite);
+    case 'new':
+      return list.sort((prev, next) => next.id - prev.id);
     case 'random':
       return list.sort(() => 0.5 - Math.random());
     default:

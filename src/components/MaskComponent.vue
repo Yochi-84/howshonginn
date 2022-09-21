@@ -1,14 +1,16 @@
 <template>
   <Teleport to="#app">
-    <div
-      :class="[
-        'fixed inset-0 bg-black bg-opacity-60',
-        store.mask.status ? 'block' : 'hidden',
-        store.mask['z-index'] === 40 ? 'z-40' : 'z-20',
-        { 'lg:hidden': store.mask['lg-hidden'] },
-      ]"
-      id="mask"
-    ></div>
+    <transition>
+      <div
+        :class="[
+          'fixed inset-0 bg-black bg-opacity-60',
+          store.mask['z-index'] === 40 ? 'z-40' : 'z-20',
+          { 'lg:hidden': store.mask['lg-hidden'] },
+        ]"
+        id="mask"
+        v-show="store.mask.status"
+      ></div>
+    </transition>
   </Teleport>
 </template>
 <script setup>
@@ -35,3 +37,14 @@ onMounted(() => {
   observer.observe(document.querySelector('#mask'));
 });
 </script>
+<style scoped>
+  .v-enter-from,
+  .v-leave-to {
+    opacity: 0;
+  }
+
+  .v-enter-active,
+  .v-leave-active {
+    transition: opacity 0.5s;
+  }
+</style>

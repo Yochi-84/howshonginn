@@ -125,7 +125,7 @@ const famous = ref([]);
 const share = ref([]);
 
 const famousIndexList = [27, 63, 192, 273];
-const shareIndexList = [60, 97, 128, 146, 242];
+const shareIndexList = [60, 97, 128, 146, 242, 272];
 
 const api = axios.create({
   baseURL: `${process.env.VUE_APP_API_PATH}/campingPlace`,
@@ -143,6 +143,7 @@ onMounted(() => {
 
         share.value = perms.data.map((item) => {
           item.name = item.name.slice(item.name.indexOf(' ') + 1);
+          item.image = item.image[0];
           return item;
         });
       })

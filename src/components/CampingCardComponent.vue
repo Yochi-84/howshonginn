@@ -34,6 +34,7 @@
             'absolute right-9 top-6 z-5 flex h-8 w-[160px] origin-center translate-x-1/2 rotate-45 select-none items-center justify-center border-t-2 border-b-2 border-white text-sm tracking-[8px] text-white',
             'bg-' + mark.color,
           ]"
+          v-if="mark"
         >
           {{ mark.title }}
         </div>
@@ -80,8 +81,14 @@ const mark = computed(() => {
   } else if (cardInfo.value.tags.length > 6) {
     return { color: 'sky-600', title: '超多特色' };
   } else {
-    return { color: 'secondary-dark', title: '最近新增' };
-  }
+    const now = new Date();
+    const createTime = new Date(cardInfo.value.createTime);
+    const time = now.getTime() - createTime.getTime();
+    // 7 天內新增的
+    if((time/1000/60/60/24) < 7) {
+      return { color: 'secondary-dark', title: '最近新增' };
+    }
+  } return null;
 });
 
 const transitionDelay = computed(() => delay.value + 's');

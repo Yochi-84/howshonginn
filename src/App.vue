@@ -12,7 +12,7 @@
 
   <Footer></Footer>
 
-  <LoginRegister v-if="store.loginModal"></LoginRegister>
+  <LoginRegister></LoginRegister>
   <Mask></Mask>
   <ToTop></ToTop>
 </template>
