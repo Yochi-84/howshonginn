@@ -12,7 +12,9 @@
 
   <Footer></Footer>
 
-  <LoginRegister></LoginRegister>
+  <Transition name="fade">
+    <LoginRegister v-if="store.loginModal"></LoginRegister>
+  </Transition>
   <Mask></Mask>
   <ToTop></ToTop>
 </template>

@@ -20,18 +20,21 @@
         </div>
         <div
           :class="[
-            'absolute right-0 bottom-6 left-0 px-4 text-center text-white duration-700 flex flex-col items-center',
+            'absolute right-0 bottom-6 left-0 flex flex-col items-center px-4 text-center text-white duration-700',
             currentSlide === index ? 'opacity-100' : 'opacity-0',
           ]"
         >
           <h3 class="lg:text-lg">{{ info.name }}</h3>
-          <h4 class="text-sm lg:text-base mb-2">
+          <h4 class="mb-2 text-sm lg:text-base">
             <font-awesome-icon icon="fa-solid fa-location-dot" class="mr-2" />{{
               info.county
             }}
           </h4>
           <ul
-            class="flex max-h-0 flex-wrap gap-y-2 gap-x-2 overflow-hidden text-sm text-white duration-700 group-hover:max-h-screen"
+            :class="[
+              'flex max-h-0 flex-wrap gap-y-2 gap-x-2 overflow-hidden text-sm text-white duration-700',
+              { 'group-hover:max-h-screen': currentSlide === index },
+            ]"
           >
             <li
               v-for="tag of info.tags"

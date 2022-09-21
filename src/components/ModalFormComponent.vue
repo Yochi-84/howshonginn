@@ -1,8 +1,6 @@
 <template>
-  <Transition>
     <div
       class="fixed top-1/2 left-1/2 z-50 w-[calc(100vw-24px)] -translate-x-1/2 -translate-y-1/2 rounded-xl border-[5px] bg-white py-4 duration-300 md:w-460 lg:w-550"
-      v-if="store.loginModal"
     >
       <a
         href="#"
@@ -18,25 +16,11 @@
       </a>
       <slot></slot>
     </div>
-  </Transition>
 </template>
 <script setup>
-import { useStore } from '@/stores/index';
-
-const store = useStore();
 const emits = defineEmits(['closeModal']);
 function closeModal() {
   emits('closeModal');
 }
 </script>
-<style scoped>
-.v-enter-from,
-.v-leave-to {
-  opacity: 1;
-}
 
-.v-enter-active,
-.v-leave-active {
-  transition: opacity ease;
-}
-</style>

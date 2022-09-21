@@ -68,7 +68,6 @@ export const useStore = defineStore('main', {
           this.userInfo.favorite.push(id);
         }
 
-        // TODO: favorite array 處理
         api.get('/user')
           .then(res => console.log(res.data))
           .catch(err => console.log(err))

@@ -37,22 +37,29 @@
           <div class="mb-4 text-content" v-html="comment.content"></div>
           <!-- 讚踩按鈕 -->
           <div class="mb-4 text-right md:mb-6">
-            <a href="#" class="btn btn-primary mr-4" @click.prevent=""
-              ><font-awesome-icon
+            <button
+              type="button"
+              class="btn btn-primary mr-4"
+              @click="agree(true, comment.id, comment.agree)"
+            >
+              <font-awesome-icon
                 icon="fa-regular fa-thumbs-up"
                 class="mr-2"
               /><span class="hidden md:inline">贊同(</span
-              >{{ comment.agree.length
-              }}<span class="hidden md:inline">)</span></a
+              >{{ comment.agree.length }}<span class="hidden md:inline">)</span>
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              @click="agree(false, comment.id, comment.disagree)"
             >
-            <a href="#" class="btn btn-danger" @click.prevent=""
-              ><font-awesome-icon
+              <font-awesome-icon
                 icon="fa-regular fa-thumbs-down"
                 class="mr-2"
               /><span class="hidden md:inline">不贊同(</span
               >{{ comment.disagree.length
-              }}<span class="hidden md:inline">)</span></a
-            >
+              }}<span class="hidden md:inline">)</span>
+            </button>
           </div>
           <!-- 回覆 -->
           <div
@@ -172,6 +179,32 @@ function closeModal() {
 
 function newComment(obj) {
   commentList.value.push(obj);
+}
+
+/**
+ * @param {Boolean} agree - 是否贊同
+ * @param {Number} id - 評論 id
+ * @param {Array} list - 贊同的會員 id 列表
+ */
+function agree(agree, id, list) {
+  if (!store.userInfo.status) {
+    store.toggleLoginModal();
+  } else {
+    if (list.includes(store.userInfo.id)) {
+      // 移除 user id
+      list.splice(list.indexOf(store.userInfo.id), 1);
+    } else {
+      // 加入user id
+      list.push(store.userInfo.id);
+    }
+
+    let newList = {};
+    agree ? (newList.agree = list) : (newList.disagree = list);
+
+    api
+      .patch(`/comment/${id}`, newList)
+      .catch(() => console.error('API 好像掛了，真是抱歉!!'));
+  }
 }
 
 function reply(index) {
