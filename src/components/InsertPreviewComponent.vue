@@ -291,13 +291,13 @@
         </div>
       </section>
     </div>
-    <Loading v-else></Loading>
+    <LoadingNormal v-else></LoadingNormal>
   </div>
 </template>
 <script setup>
 import { VueperSlides, VueperSlide } from 'vueperslides';
 import 'vueperslides/dist/vueperslides.css';
-import Loading from '@/components/LoadingComponent';
+import LoadingNormal from '@/components/LoadingNormalComponent';
 import { ref, reactive, toRefs, onActivated } from 'vue';
 
 const props = defineProps({

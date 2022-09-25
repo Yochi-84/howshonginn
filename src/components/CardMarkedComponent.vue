@@ -86,7 +86,7 @@ const name = computed(() =>
 );
 
 const mark = computed(() => {
-  if (cardInfo.value.favorite > 500) {
+  if (cardInfo.value.favorite > 700) {
     return { color: 'danger-dark', title: '熱門' };
   } else if (cardInfo.value.tags.length > 6) {
     return { color: 'sky-600', title: '超多特色' };

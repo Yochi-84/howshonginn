@@ -26,11 +26,11 @@
       </ul>
     </div>
   </section>
-  <Loading v-else></Loading>
+  <LoadingNormal v-else></LoadingNormal>
 </template>
 <script setup>
 import axios from 'axios';
-import Loading from '@/components/LoadingComponent';
+import LoadingNormal from '@/components/LoadingNormalComponent';
 import { ref, onDeactivated, onMounted } from 'vue';
 
 const emits = defineEmits(['campTags']);

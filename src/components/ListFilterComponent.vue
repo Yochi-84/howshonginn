@@ -178,6 +178,7 @@
 <script setup>
 import { onMounted, ref, watch, computed, inject } from 'vue';
 import { useStore } from '@/stores/index';
+import router from "@/router";
 import axios from 'axios';
 
 const emits = defineEmits(['filterParameter']);
@@ -221,6 +222,7 @@ defineExpose({
 
 function filterSubmit() {
   store.toggleFilterMode('filter');
+  router.replace({query: null});
   let filterParameter = {};
   if (filterItem.value.countySelect !== '') {
     // 下拉選單
@@ -233,10 +235,10 @@ function filterSubmit() {
   } else {
     // 區域選擇
     const area = {
-      北部: ['台北', '新北', '基隆', '桃園', '新竹', '宜蘭'],
-      中部: ['苗栗', '台中', '彰化', '南投', '雲林'],
-      南部: ['嘉義', '台南', '高雄', '屏東'],
-      東部: ['花蓮', '台東'],
+      北部: ['臺北', '新北', '基隆', '桃園', '新竹', '宜蘭'],
+      中部: ['苗栗', '臺中', '彰化', '南投', '雲林'],
+      南部: ['嘉義', '臺南', '高雄', '屏東'],
+      東部: ['花蓮', '臺東'],
       離島: ['連江', '金門', '澎湖'],
     };
 

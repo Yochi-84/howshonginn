@@ -16,14 +16,14 @@
           ></CardMarked>
         </li>
       </ul>
-      <Loading v-if="loadingStatus"></Loading>
+      <LoadingNormal v-if="loadingStatus"></LoadingNormal>
     </div>
   </div>
 </template>
 <script setup>
 import BreadCrumb from '@/components/BreadCrumbComponent';
 import CardMarked from '@/components/CardMarkedComponent';
-import Loading from '@/components/LoadingComponent';
+import LoadingNormal from '@/components/LoadingNormalComponent';
 import { ref, onMounted } from 'vue';
 import { useStore } from '@/stores/index';
 import axios from 'axios';

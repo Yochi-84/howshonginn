@@ -20,7 +20,7 @@
         </div>
         <div
           :class="[
-            'absolute right-0 bottom-6 left-0 flex flex-col items-center px-4 text-center text-white duration-700',
+            'absolute right-0 bottom-8 left-0 flex flex-col items-center px-6 text-center text-white duration-700 md:px-4',
             currentSlide === index ? 'opacity-100' : 'opacity-0',
           ]"
         >
@@ -32,8 +32,8 @@
           </h4>
           <ul
             :class="[
-              'flex max-h-0 flex-wrap gap-y-2 gap-x-2 overflow-hidden text-sm text-white duration-700',
-              { 'group-hover:max-h-screen': currentSlide === index },
+              'flex flex-wrap gap-y-2 gap-x-2 text-sm text-white duration-700 lg:max-h-0 lg:overflow-hidden',
+              { 'lg:group-hover:max-h-screen': currentSlide === index },
             ]"
           >
             <li
@@ -104,30 +104,25 @@ const settings = {
   transform: scale(1);
 }
 
-:deep(.carousel__prev) {
-  width: auto;
-  height: auto;
-  background-color: transparent;
-  transform: translate(50%, -50%);
-
-  .carousel__icon {
-    width: 48px;
-    height: 48px;
-    fill: #1d976c;
-  }
-}
-
+:deep(.carousel__prev),
 :deep(.carousel__next) {
   width: auto;
   height: auto;
   background-color: transparent;
-  transform: translate(-50%, -50%);
 
   .carousel__icon {
     width: 48px;
     height: 48px;
-    fill: #1d976c;
+    fill: $primary-dark;
   }
+}
+
+:deep(.carousel__prev) {
+  transform: translate(50%, -50%);
+}
+
+:deep(.carousel__next) {
+  transform: translate(-50%, -50%);
 }
 
 .carousel__slide--next > .carousel__item {
@@ -143,6 +138,12 @@ const settings = {
 }
 
 .carousel__slide--active > .carousel__item {
-  transform: scale(1.1);
+  transform: scaleY(1);
+}
+
+@media screen and (min-width: 576px) {
+  .carousel__slide--active > .carousel__item {
+    transform: scale(1.2);
+  }
 }
 </style>

@@ -37,16 +37,19 @@
       </div>
       <div class="-mx-3 flex flex-wrap justify-center">
         <aside class="w-full px-3 lg:w-1/3 xl:w-1/4">
-          <Filter @filterParameter="filterResult" ref="filter"></Filter>
+          <ListFilter @filterParameter="filterResult" ref="filter"></ListFilter>
         </aside>
-        <Loading class="px-3 lg:w-2/3 xl:w-3/4" v-if="loadingShow"></Loading>
+        <LoadingNormal
+          class="px-3 lg:w-2/3 xl:w-3/4"
+          v-if="loadingShow"
+        ></LoadingNormal>
         <section
           class="px-3 lg:w-2/3 xl:w-3/4"
           v-else-if="!loadingShow && hasResult"
         >
           <ul class="-mx-2 mb-8 flex flex-wrap gap-y-4">
             <li
-              class="px-2 w-1/2 xl:w-1/3"
+              class="w-1/2 px-2 xl:w-1/3"
               v-for="(item, index) of showList.slice(0, 12 * currentPage)"
               :key="item.name"
             >
@@ -81,10 +84,11 @@
 <script setup>
 import BreadCrumb from '@/components/BreadCrumbComponent';
 import SearchBox from '@/components/SearchBoxComponent';
-import Filter from '@/components/FilterComponent';
+import ListFilter from '@/components/ListFilterComponent';
 import CardMarked from '@/components/CardMarkedComponent';
-import Loading from '@/components/LoadingComponent';
+import LoadingNormal from '@/components/LoadingNormalComponent';
 import { ref, onMounted, watch, computed, inject } from 'vue';
+import router from '@/router';
 import { useRoute } from 'vue-router';
 import { useStore } from '@/stores/index';
 import axios from 'axios';
@@ -103,69 +107,92 @@ const filter = ref(null);
 
 const showList = computed(() => {
   let list = [...place.value];
-  if (store.filterMode === 'keyword') {
-    if (Object.entries(filterParameter.value).length > 0) {
-      // 清空 filterParameter 並清除篩選區已選擇的項目
-      filterResult({});
-      filter.value.clearFilter();
-    }
-    // 關鍵字搜尋
-    if (route.query.q) {
-      list = place.value.filter((item) =>
-        item.name.toLowerCase().includes(route.query.q.toLowerCase())
-      );
-    } else {
-      list = [...place.value];
-    }
-  } else if (
-    store.filterMode === 'filter' &&
-    Object.entries(filterParameter.value).length > 0
-  ) {
-    // 清空 searchbox
-    searchbox.value.clearInput();
-    // 條件篩選。2 種都沒選就不管，所以不用 else
-    if (typeof filterParameter.value.filterArea === 'string') {
-      // 下拉選單縣市鄉鎮篩選
-      list = place.value.filter((item) =>
-        item.county.includes(filterParameter.value.filterArea)
-      );
-    } else if (filterParameter.value.filterArea.length) {
-      // 區域篩選
-      list = place.value.filter((item) =>
-        filterParameter.value.filterArea.some((ele) =>
-          item.county.includes(ele)
-        )
-      );
-    }
-
-    if (filterParameter.value.filterTag.length > 0) {
-      if (!filterParameter.value.tagFilterMode) {
-        // 一般模式
-        list = list.filter((item) =>
-          filterParameter.value.filterTag.some(
-            (ele) => item.tags.indexOf(ele) > -1
-          )
+  if (!route.query.mode) {
+    if (store.filterMode === 'keyword') {
+      if (Object.entries(filterParameter.value).length > 0) {
+        // 清空 filterParameter 並清除篩選區已選擇的項目
+        filterResult({});
+        filter.value.clearFilter();
+      }
+      // 關鍵字搜尋
+      if (route.query.q) {
+        list = place.value.filter((item) =>
+          item.name.toLowerCase().includes(route.query.q.toLowerCase())
         );
       } else {
-        //嚴格模式
-        list = list.filter((item) =>
-          filterParameter.value.filterTag.every(
-            (ele) => item.tags.indexOf(ele) > -1
+        list = [...place.value];
+      }
+    } else if (
+      store.filterMode === 'filter' &&
+      Object.entries(filterParameter.value).length > 0
+    ) {
+      // 清空 searchbox
+      searchbox.value.clearInput();
+      // 條件篩選。2 種都沒選就不管，所以不用 else
+      if (typeof filterParameter.value.filterArea === 'string') {
+        // 下拉選單縣市鄉鎮篩選
+        list = place.value.filter((item) =>
+          item.county.includes(filterParameter.value.filterArea)
+        );
+      } else if (filterParameter.value.filterArea.length) {
+        // 區域篩選
+        list = place.value.filter((item) =>
+          filterParameter.value.filterArea.some((ele) =>
+            item.county.includes(ele)
           )
         );
       }
-    }
-  }
 
-  switch (sortMethod.value) {
-    case 'favorite':
-      return list.sort((prev, next) => next.favorite - prev.favorite);
-    case 'new':
-      return list.sort((prev, next) => next.id - prev.id);
-    case 'random':
-      return list.sort(() => 0.5 - Math.random());
-    default:
+      if (filterParameter.value.filterTag.length > 0) {
+        if (!filterParameter.value.tagFilterMode) {
+          // 一般模式
+          list = list.filter((item) =>
+            filterParameter.value.filterTag.some(
+              (ele) => item.tags.indexOf(ele) > -1
+            )
+          );
+        } else {
+          //嚴格模式
+          list = list.filter((item) =>
+            filterParameter.value.filterTag.every(
+              (ele) => item.tags.indexOf(ele) > -1
+            )
+          );
+        }
+      }
+    }
+
+    switch (sortMethod.value) {
+      case 'favorite':
+        return list.sort((prev, next) => next.favorite - prev.favorite);
+      case 'new':
+        return list.sort((prev, next) => next.id - prev.id);
+      case 'random':
+        return list.sort(() => 0.5 - Math.random());
+      default:
+        return list;
+    }
+  } else {
+    // footer 連結跳轉處理
+    if (route.query.mode === 'area') {
+      const area = {
+        北部: ['臺北', '新北', '基隆', '桃園', '新竹', '宜蘭'],
+        中部: ['苗栗', '臺中', '彰化', '南投', '雲林'],
+        南部: ['嘉義', '臺南', '高雄', '屏東'],
+        東部: ['花蓮', '臺東'],
+        離島: ['連江', '金門', '澎湖'],
+      };
+      return list.filter((item) =>
+        area[route.query.area].some((ele) =>
+          item.county.includes(ele)
+        )
+      );
+    } else if (route.query.mode === 'tag') {
+      return list.filter(item => item.tags.includes(route.query.tag));
+    } else {
+      router.replace({ query: null });
       return list;
+    }
   }
 });
 

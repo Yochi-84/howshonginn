@@ -15,11 +15,10 @@
           <ul
             class="flex flex-wrap gap-x-6 gap-y-3 md:block md:space-y-6 md:text-center"
           >
-            <li><router-link to="/" class="link">北部</router-link></li>
-            <li><router-link to="/" class="link">中部</router-link></li>
-            <li><router-link to="/" class="link">南部</router-link></li>
-            <li><router-link to="/" class="link">東部</router-link></li>
-            <li><router-link to="/" class="link">離島</router-link></li>
+            <li><router-link to="/list?mode=area&area=北部" class="link">北部</router-link></li>
+            <li><router-link to="/list?mode=area&area=中部" class="link">中部</router-link></li>
+            <li><router-link to="/list?mode=area&area=南部" class="link">南部</router-link></li>
+            <li><router-link to="/list?mode=area&area=東部" class="link">東部</router-link></li>
           </ul>
         </div>
         <div class="mb-6 flex items-center md:mb-0 md:block md:items-start">
@@ -31,10 +30,10 @@
           <ul
             class="flex flex-wrap gap-x-6 gap-y-3 md:block md:space-y-6 md:text-center"
           >
-            <li><router-link to="/" class="link">有雨棚</router-link></li>
-            <li><router-link to="/" class="link">賞雲海</router-link></li>
-            <li><router-link to="/" class="link">賞櫻花</router-link></li>
-            <li><router-link to="/" class="link">近市區</router-link></li>
+            <li><router-link to="/list?mode=tag&tag=有雨棚" class="link">有雨棚</router-link></li>
+            <li><router-link to="/list?mode=tag&tag=有雲海" class="link">有雲海</router-link></li>
+            <li><router-link to="/list?mode=tag&tag=有夜景" class="link">有夜景</router-link></li>
+            <li><router-link to="/list?mode=tag&tag=近海邊" class="link">近海邊</router-link></li>
           </ul>
         </div>
         <div class="mb-6 flex items-center md:mb-0 md:block md:items-start">
@@ -46,10 +45,9 @@
           <ul
             class="flex flex-wrap gap-x-6 gap-y-3 md:block md:space-y-6 md:text-center"
           >
-            <li><router-link to="/" class="link">大草皮</router-link></li>
-            <li><router-link to="/" class="link">少帳包區</router-link></li>
-            <li><router-link to="/" class="link">親子</router-link></li>
-            <li><router-link to="/" class="link">寵物友善</router-link></li>
+            <li><router-link to="/list?mode=tag&tag=團露大草皮" class="link">團露大草皮</router-link></li>
+            <li><router-link to="/list?mode=tag&tag=小包區" class="link">小包區</router-link></li>
+            <li><router-link to="/list?mode=tag&tag=可攜帶寵物" class="link">可攜帶寵物</router-link></li>
           </ul>
         </div>
       </div>
