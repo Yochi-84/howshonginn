@@ -127,8 +127,8 @@ const loadingStatus = ref(false);
 const famous = ref([]);
 const share = ref([]);
 
-const famousIndexList = [27, 63, 192, 273];
-const shareIndexList = [60, 97, 128, 146, 242, 272];
+const famousIndexList = [27, 63, 192, 268];
+const shareIndexList = [52, 99, 132, 147, 231, 288];
 
 const api = axios.create({
   baseURL: `${process.env.VUE_APP_API_PATH}/campingPlace`,

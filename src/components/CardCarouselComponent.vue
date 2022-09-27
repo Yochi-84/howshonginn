@@ -20,7 +20,7 @@
         </div>
         <div
           :class="[
-            'absolute right-0 bottom-8 left-0 flex flex-col items-center px-6 text-center text-white duration-700 md:px-4',
+            'absolute right-0 bottom-6 left-0 flex flex-col items-center px-6 text-center text-white duration-700 md:px-4',
             currentSlide === index ? 'opacity-100' : 'opacity-0',
           ]"
         >
@@ -89,7 +89,7 @@ const settings = {
 </script>
 <style lang="scss" scoped>
 .carousel__slide {
-  padding: 20px 0;
+  padding: 40px 0;
 }
 
 .carousel__slide--active {

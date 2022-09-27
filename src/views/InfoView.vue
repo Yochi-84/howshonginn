@@ -1,7 +1,14 @@
 <template>
   <div class="py-20 md:py-34">
-    <div class="container mb-10">
+    <div class="container mb-10 flex items-center justify-between">
       <BreadCrumb v-if="routeChange"></BreadCrumb>
+      <button
+        type="button"
+        @click="router.push({ name: 'edit', params: { id: route.query.id } })"
+        class="btn btn-primary"
+      >
+        <font-awesome-icon icon="fa-solid fa-pen-to-square" class="mr-2" />編輯營地
+      </button>
     </div>
     <!-- 輪播 & 基本資訊 -->
     <section class="container">
@@ -377,6 +384,7 @@ import { VueperSlides, VueperSlide } from 'vueperslides';
 import 'vueperslides/dist/vueperslides.css';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import router from '@/router';
 import { useStore } from '@/stores/index';
 
 const loadingStatus = ref(false);
@@ -416,7 +424,7 @@ onMounted(() => {
 
       infoOperated.value = true;
     })
-    .then(() => window.setTimeout(() => loadingStatus.value = false,500))
+    .then(() => window.setTimeout(() => (loadingStatus.value = false), 500))
     .catch((err) => console.error(err));
 });
 </script>

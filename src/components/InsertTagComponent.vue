@@ -33,6 +33,11 @@ import axios from 'axios';
 import LoadingNormal from '@/components/LoadingNormalComponent';
 import { ref, onDeactivated, onMounted } from 'vue';
 
+const props = defineProps({
+  existedTags: {
+    type: Array,
+  },
+});
 const emits = defineEmits(['campTags']);
 const tags = ref({});
 const loadingStatus = ref(true);
@@ -52,6 +57,15 @@ onMounted(() => {
       });
       tags.value = temp;
       loadingStatus.value = false;
+
+      // 編輯時將已存在的資料寫入
+      if (props.existedTags?.length) {
+        for (let kind in tags.value) {
+          tags.value[kind].forEach((item) => {
+            if (props.existedTags.includes(item.tag)) item.checked = true;
+          });
+        }
+      }
     })
     .catch((err) => console.error(err));
 });
@@ -59,9 +73,9 @@ onMounted(() => {
 // 離開元件時將資料傳給父層
 onDeactivated(() => {
   let checkedList = Object.values(tags.value)
-      .reduce((acc, cur) => [...acc, ...cur], [])
-      .filter((item) => item.checked)
-      .map((ele) => ele.tag);
-    emits('campTags', checkedList);
-})
+    .reduce((acc, cur) => [...acc, ...cur], [])
+    .filter((item) => item.checked)
+    .map((ele) => ele.tag);
+  emits('campTags', checkedList);
+});
 </script>

@@ -312,9 +312,17 @@
 </template>
 <script setup>
 import axios from 'axios';
-import { ref, computed, onMounted, onDeactivated } from 'vue';
+import { ref,toRefs, computed, onMounted, onDeactivated } from 'vue';
+
+const props = defineProps({
+  existedInfo: {
+    type: Object,
+    default: () => ({})
+  },
+});
 
 const emits = defineEmits(['campInfo']);
+const {existedInfo} = toRefs(props);
 const countyCity = ref([]);
 const townList = computed(
   () => Array.from(countyCity.value)[countySelect.value]?.AreaList
@@ -377,14 +385,41 @@ function addRow() {
 function removeRow() {
   areaPrice.value.pop();
 }
+
 // 抓取鄉鎮資料
 onMounted(() => {
   axios
     .get(
       'https://raw.githubusercontent.com/donma/TaiwanAddressCityAreaRoadChineseEnglishJSON/master/CityCountyData.json'
     )
-    .then((res) => (countyCity.value = res.data))
+    .then((res) => {
+      countyCity.value = res.data;
+      getExistedInfo();
+    })
     .catch((err) => console.error(err));
+
+  // 編輯時將已存在的資料寫入
+  function getExistedInfo() {
+    if (Object.keys(existedInfo.value)?.length) {
+      name.value = existedInfo.value.name.slice(
+        existedInfo.value.name.indexOf(' ') + 1
+      );
+      campingInfo.value.phone = existedInfo.value.phone;
+      campingInfo.value.address = existedInfo.value.address;
+      campingInfo.value.website = existedInfo.value.website;
+      campingInfo.value.height = existedInfo.value.height;
+      campingInfo.value.intro = existedInfo.value.intro;
+      areaPrice.value = Object.values(existedInfo.value.price);
+      let county = existedInfo.value.county.match(/.{2}[縣市]/g)[0];
+      for (let item in countyCity.value) {
+        if (countyCity.value[item].CityName === county) {
+          countySelect.value = item;
+          break;
+        }
+      }
+      townSelect.value = existedInfo.value.county.replace(county, '');
+    }
+  }
 });
 
 // 離開元件時將資料傳給父層

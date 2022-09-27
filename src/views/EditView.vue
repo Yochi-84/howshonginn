@@ -42,7 +42,7 @@
         </Transition>
         <div class="mb-6 border-b-8 border-double border-b-primary-dark"></div>
         <Transition :name="transitionDirection" mode="out-in">
-          <KeepAlive>
+          <KeepAlive v-if="originalGet">
             <Component
               :is="stepView[currentStep]"
               class="mb-10"
@@ -51,8 +51,11 @@
               @campPictureOrigin="getOriginPicture"
               @campTags="getTags"
               :previewInfo="tempAll"
+              :existedInfo="originalInfo"
+              :existedImage="originalImage"
+              :existedTags="originalTags"
             >
-          </Component>
+            </Component>
           </KeepAlive>
         </Transition>
         <div class="flex items-center justify-center gap-x-6 px-3">
@@ -103,18 +106,23 @@
   </LoadingFull>
 </template>
 <script setup>
-import BreadCrumb from '@/components/BreadCrumbComponent';
 import InsertStep from '@/components/InsertStepComponent';
 import InsertInfo from '@/components/InsertInfoComponent';
 import InsertPicture from '@/components/InsertPictureComponent';
 import InsertTag from '@/components/InsertTagComponent';
 import InsertPreview from '@/components/InsertPreviewComponent';
-import LoadingFull from '@/components/LoadingFullComponent';
 import { createToast } from 'mosha-vue-toastify';
 import 'mosha-vue-toastify/dist/style.css';
 import axios from 'axios';
-import { ref, computed } from 'vue';
 import router from '@/router';
+import { useRoute } from 'vue-router';
+import { ref, computed, onMounted } from 'vue';
+
+const route = useRoute();
+const originalInfo = ref({});
+const originalImage = ref([]);
+const originalTags = ref([]);
+const originalGet = ref(false);
 
 const loadingStatus = ref(false);
 const loadingTitle = ref('');
@@ -167,7 +175,7 @@ function doStep(forward) {
   steps.value[currentStep.value].active = false;
   forward ? (currentStep.value += 1) : (currentStep.value -= 1);
   steps.value[currentStep.value].active = true;
-  maxStep.value = forward ?  currentStep.value : maxStep.value;
+  maxStep.value = forward ? currentStep.value : maxStep.value;
   window.scrollTo(0, 80);
 }
 
@@ -175,7 +183,7 @@ function finishStep() {
   let toastInfo = {
     info: '',
     type: 'warning',
-    bgColor: '#D28226',
+    bgColor: '#408560',
   };
   if (tempAll.value.name === '') {
     toastInfo.info = '營地名稱不可空白';
@@ -208,8 +216,101 @@ function finishStep() {
     );
   } else {
     loadingStatus.value = true;
-    upload();
+    update();
   }
+}
+
+async function update() {
+  let imageUploadStatus = true; // 記錄圖片上傳狀態
+  let infoUploadStatus = true; // 記錄資料上傳狀態/
+  const finalInfo = { ...tempAll.value };
+  let pictureLink = [...finalInfo.image.filter(item => !item.startsWith("blob"))]; // 先把沒被改到的塞進去
+
+  // 如果有修改圖片就上傳
+  if (finalInfo.image.filter(item => item.startsWith("blob")).length) {
+    const config = {
+      method: 'POST',
+      url: 'https://api.imgur.com/3/image',
+      headers: {
+        Authorization: `Bearer ${process.env.VUE_APP_IMGUR_TOKEN}`,
+      },
+    };
+
+    const apiCallList = [];
+    const newUploadPicture = finalInfo.originPicture.filter(item => typeof item === Object);
+    for (let i = 0; i < newUploadPicture.length; i++) {
+      let form = new FormData();
+      form.append('image', newUploadPicture[i]);
+      form.append('type', 'file');
+      form.append('title', finalInfo.name);
+      form.append('album', process.env.VUE_APP_IMGUR_ALBUM);
+
+      let tempConfig = { ...config };
+      tempConfig.data = form;
+
+      apiCallList.push(tempConfig);
+    }
+
+    loadingTitle.value = '圖片上傳中...';
+    for (let i of apiCallList) {
+      await axios(i)
+        .then((res) => {
+          pictureLink.push(res.data.data.link);
+        })
+        .catch(() => (imageUploadStatus = false));
+    }
+
+    if (pictureLink.length) {
+      // 把圖片網址換成回傳回來的
+      finalInfo.image = pictureLink;
+    }
+  }
+
+  // 原位址上傳完用不到了，刪掉
+  delete finalInfo.originPicture;
+
+  loadingTitle.value = '資料上傳中...';
+  await axios
+    .patch(`${process.env.VUE_APP_API_PATH}/campingPlace/${route.params.id}`, finalInfo)
+    .then((res) => res)
+    .catch(() => {
+      infoUploadStatus = false;
+    })
+    .finally(() => {
+      let toastInfo = {
+        info: '',
+        type: 'warning',
+        bgColor: '#408560',
+      };
+      if (!infoUploadStatus) {
+        toastInfo.info = '編輯失敗!!可能哪裡出了問題';
+        toastInfo.type = 'danger';
+        toastInfo.bgColor = '#A31C3D';
+      } else if (infoUploadStatus && !imageUploadStatus) {
+        toastInfo.info = '編輯成功，但是圖片上傳有可能失敗了 QAQ';
+        toastInfo.type = 'warning';
+        toastInfo.bgColor = '#D28226';
+      } else {
+        toastInfo.info = '編輯成功';
+        toastInfo.type = 'success';
+        toastInfo.bgColor = '#408560';
+      }
+      router.push({ name: 'home' });
+      createToast(
+        {
+          title: '溫馨提醒',
+          description: toastInfo.info,
+        },
+        {
+          type: toastInfo.type,
+          position: 'top-center',
+          timeout: 3000,
+          toastBackgroundColor: toastInfo.bgColor,
+          showIcon: 'true',
+          transition: 'zoom',
+        }
+      );
+    });
 }
 
 const tempInfo = ref({});
@@ -245,106 +346,18 @@ const tempAll = computed(() => {
   };
 });
 
-async function upload() {
-  let imageUploadStatus = true; // 記錄圖片上傳狀態
-  let infoUploadStatus = true; // 記錄資料上傳狀態/
-  const finalInfo = { ...tempAll.value };
-  let pictureLink = [];
-
-  // 如果有圖片就上傳
-  if (finalInfo.originPicture.length > 0) {
-    const config = {
-      method: 'POST',
-      url: 'https://api.imgur.com/3/image',
-      headers: {
-        Authorization: `Bearer ${process.env.VUE_APP_IMGUR_TOKEN}`,
-      },
-    };
-
-    const apiCallList = [];
-    for (let i = 0; i < finalInfo.originPicture.length; i++) {
-      let form = new FormData();
-      form.append('image', finalInfo.originPicture[i]);
-      form.append('type', 'file');
-      form.append('title', finalInfo.name);
-      form.append('album', process.env.VUE_APP_IMGUR_ALBUM);
-
-      let tempConfig = { ...config };
-      tempConfig.data = form;
-
-      apiCallList.push(tempConfig);
-    }
-
-    loadingTitle.value = '圖片上傳中...';
-    for (let i of apiCallList) {
-      await axios(i)
-        .then((res) => {
-          pictureLink.push(res.data.data.link);
-        })
-        .catch(() => imageUploadStatus = false);
-    }
-
-    if (pictureLink.length) {
-      // 把圖片網址換成回傳回來的
-      finalInfo.image = pictureLink;
-    } else {
-      // 沒有值大概就是上傳失敗，回傳預設圖片
-      finalInfo.image = ["init_pic.jpg"];
-    }
-  }
-
-  // 原位址上傳完用不到了，刪掉
-  delete finalInfo.originPicture;
-
-  // 加入新增時間
-  const now = new Date();
-  finalInfo.createTime = `${now.getFullYear()}/${
-    now.getMonth() + 1
-  }/${now.getDate()} ${now.getHours()}:${now.getMinutes()}`;
-
-  loadingTitle.value = '資料上傳中...';
-  await axios
-    .post(`${process.env.VUE_APP_API_PATH}/campingPlace`, finalInfo)
-    .then((res) => res)
-    .catch(() => {
-      infoUploadStatus = false;
+onMounted(() => {
+  axios
+    .get(`${process.env.VUE_APP_API_PATH}/campingPlace/${route.params.id}`)
+    .then((res) => {
+      const { image, tags, ...info } = res.data;
+      originalInfo.value = info;
+      originalImage.value = image;
+      originalTags.value = tags;
+      originalGet.value = true;
     })
-    .finally(() => {
-      let toastInfo = {
-        info: '',
-        type: 'warning',
-        bgColor: '#408560',
-      };
-      if (!infoUploadStatus) {
-        toastInfo.info = "新增失敗!!可能哪裡出了問題";
-        toastInfo.type = 'danger';
-        toastInfo.bgColor = "#A31C3D";
-      } else if (infoUploadStatus && !imageUploadStatus) {
-        toastInfo.info = "新增營地成功，但是圖片上傳有可能失敗了 QAQ";
-        toastInfo.type = 'warning';
-        toastInfo.bgColor = "#D28226";
-      } else {
-        toastInfo.info = "新增營地成功";
-        toastInfo.type = 'success';
-        toastInfo.bgColor = "#408560";
-      }
-      router.push({ name: 'home' });
-      createToast(
-        {
-          title: '溫馨提醒',
-          description: toastInfo.info,
-        },
-        {
-          type: toastInfo.type,
-          position: 'top-center',
-          timeout: 3000,
-          toastBackgroundColor: toastInfo.bgColor,
-          showIcon: 'true',
-          transition: 'zoom',
-        }
-      );
-    });
-}
+    .catch((err) => console.error(err));
+});
 </script>
 <style scoped>
 .left-enter-active,

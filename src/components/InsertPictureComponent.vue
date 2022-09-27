@@ -12,8 +12,8 @@
           >
             <img
               :src="
-                image === 'init_pic.jpg'
-                  ? require('../assets/image/init_pic.jpg')
+                !image.startsWith('blob') && !image.includes('imgur.com')
+                  ? require('../assets/image/' + image)
                   : image
               "
               :alt="'image' + index"
@@ -79,8 +79,8 @@
           v-for="(image, index) of uploadImage"
           :key="index"
           :image="
-            image === 'init_pic.jpg'
-              ? require('../assets/image/init_pic.jpg')
+            !image.startsWith('blob') && !image.includes('imgur.com')
+              ? require('../assets/image/' + image)
               : image
           "
           class="overflow-hidden rounded-lg"
@@ -93,8 +93,13 @@
 <script setup>
 import { VueperSlides, VueperSlide } from 'vueperslides';
 import 'vueperslides/dist/vueperslides.css';
-import { ref, onDeactivated } from 'vue';
+import { ref, onMounted, onDeactivated } from 'vue';
 
+const props = defineProps({
+  existedImage: {
+    type: Array,
+  },
+});
 const emits = defineEmits(['campPicture', 'campPictureOrigin']);
 const currentSlide = ref(0);
 const uploadImage = ref(['init_pic.jpg']);
@@ -105,13 +110,23 @@ function upload(e) {
   let tempOriginList = []; // 原位址，上傳用
   let tempList = []; // 預覽用
   let fileLength = Math.min(4, e.target.files.length);
-  for (let i = 0; i < fileLength; i++) {
-    tempOriginList.push(e.target.files[i]);
-    const src = URL.createObjectURL(e.target.files[i]);
-    tempList.push(src);
+  if (fileLength && uploadImage.value[0] === 'init_pic.jpg') {
+    uploadImage.value.pop();
   }
-  uploadOriginImage.value = tempOriginList;
-  uploadImage.value = tempList;
+
+  for (let i = 0; i < fileLength; i++) {
+    // 重複的不管
+    if(!uploadOriginImage.value.filter(item => item.name === e.target.files[i].name).length) {
+      tempOriginList.push(e.target.files[i]);
+      const src = URL.createObjectURL(e.target.files[i]);
+      tempList.push(src);
+    }
+  }
+  uploadOriginImage.value = [
+    ...uploadOriginImage.value,
+    ...tempOriginList,
+  ].slice(0, 4);
+  uploadImage.value = [...uploadImage.value, ...tempList].slice(0, 4);
 }
 
 function removeImage(index) {
@@ -127,6 +142,18 @@ function clearUpload() {
   uploadImage.value.length = 0;
   uploadImage.value.push('init_pic.jpg');
 }
+
+onMounted(() => {
+  // 編輯時將已存在的資料寫入
+  if (props.existedImage?.length) {
+    let tempList = []; // 預覽用
+    for (let i of props.existedImage) {
+      tempList.push(i);
+    }
+    uploadImage.value = tempList;
+    uploadOriginImage.value = props.existedImage;
+  }
+});
 
 // 離開元件時將資料傳給父層
 onDeactivated(() => {

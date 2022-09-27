@@ -15,8 +15,8 @@
                   v-for="image of info.image"
                   :key="image"
                   :image="
-                    image === 'init_pic.jpg'
-                      ? require('../assets/image/init_pic.jpg')
+                    !image.startsWith('blob') && !image.includes('imgur.com')
+                      ? require('../assets/image/' + image)
                       : image
                   "
                   class="overflow-hidden rounded-lg"
@@ -336,8 +336,16 @@ onActivated(() => {
   info.name = temp.name.slice(temp.name.indexOf(' ') + 1);
   info.intro = temp.intro.split('\n');
 
-  let copyList = ["county","phone","address","height","website","image","tags"];
-  for(let i of copyList) {
+  let copyList = [
+    'county',
+    'phone',
+    'address',
+    'height',
+    'website',
+    'image',
+    'tags',
+  ];
+  for (let i of copyList) {
     info[i] = Array.isArray(temp[i]) ? [...temp[i]] : temp[i];
   }
 

@@ -48,6 +48,23 @@ const routes = [
     },
   },
   {
+    path: "/edit/:id",
+    name: "edit",
+    component: () => import("../views/EditView.vue"),
+    meta: {
+      breadcrumb: [
+        {
+          name: "首頁",
+          link: "/",
+        },
+        {
+          name: "更新營地",
+        },
+      ],
+      requiresAuth: true
+    },
+  },
+  {
     path: "/info",
     name: "info",
     component: () => import("../views/InfoView.vue"),
