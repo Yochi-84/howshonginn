@@ -133,11 +133,11 @@
         目前還沒有任何評論喔~~~
       </h3>
       <p class="mb-4 md:mb-6 md:text-lg">要不要來發表一下呢？</p>
-      <a href="#" @click.prevent="showModal" class="btn btn-large btn-primary"
+      <button type="button" @click="showModal" class="btn btn-large btn-primary"
         ><font-awesome-icon
           icon="fa-regular fa-comment-dots"
           class="mr-2"
-        />發表評論</a
+        />發表評論</button
       >
     </div>
   </div>
@@ -169,8 +169,12 @@ const commentModalStatus = ref(false);
 const api = axios.create({ baseURL: process.env.VUE_APP_API_PATH });
 
 function showModal() {
-  commentModalStatus.value = true;
-  store.toggleMask(true, true, false);
+  if (!store.userInfo.status) {
+    store.toggleLoginModal();
+  } else {
+    commentModalStatus.value = true;
+    store.toggleMask(true, true, false);
+  }
 }
 function closeModal() {
   commentModalStatus.value = false;

@@ -48,22 +48,6 @@ const routes = [
     },
   },
   {
-    path: "/contact",
-    name: "contact",
-    component: () => import("../views/ContactView.vue"),
-    meta: {
-      breadcrumb: [
-        {
-          name: "首頁",
-          link: "/",
-        },
-        {
-          name: "聯絡我們",
-        },
-      ],
-    },
-  },
-  {
     path: "/info",
     name: "info",
     component: () => import("../views/InfoView.vue"),
@@ -81,23 +65,6 @@ const routes = [
           name: "營地資訊",
         },
       ],
-    },
-  },
-  {
-    path: "/news",
-    name: "news",
-    component: () => import("../views/NewsView.vue"),
-    meta: {
-      breadcrumb: [
-        {
-          name: "首頁",
-          link: "/",
-        },
-        {
-          name: "系統消息"
-        }
-      ],
-      requiresAuth: true
     },
   },
   {
@@ -133,7 +100,8 @@ const routes = [
       ],
       requiresAuth: true
     },
-  }
+  },
+  { path: '/:pathMatch(.*)*', name: 'NotFound', redirect: '/' },
 ];
 
 const router = createRouter({

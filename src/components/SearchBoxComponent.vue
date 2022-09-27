@@ -1,17 +1,17 @@
 <template>
-  <div class="flex items-center justify-between rounded bg-white">
+  <div class="relative rounded bg-white">
     <input
       type="text"
       placeholder="請輸入關鍵字搜尋"
       :class="[
-        'flex-grow basis-3/4 bg-transparent py-3 pl-2 text-base  focus:outline-none md:pl-4 lg:placeholder:text-content-light',
+        'bg-transparent py-3 pl-2 pr-8  md:pr-12 text-base focus:outline-none md:pl-4 lg:placeholder:text-content-light w-full',
       ]"
       v-model="keyword"
       @keydown.enter.exact="search"
     />
     <a
       href="#"
-      class="block h-full flex-shrink-0 cursor-pointer px-2 py-3 text-content-light duration-300 hover:text-primary-dark md:px-4"
+      class="absolute block cursor-pointer text-content-light duration-300 hover:text-primary-dark px-2 md:px-4 py-3 right-0 top-0"
       @click.prevent="search"
       ><font-awesome-icon icon="fa-solid fa-search"
     /></a>

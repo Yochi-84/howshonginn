@@ -35,9 +35,6 @@
         <li>
           <router-link to="/share" class="block py-3">分享營地</router-link>
         </li>
-        <li>
-          <router-link to="/contact" class="block py-3">聯絡我們</router-link>
-        </li>
         <li v-if="!store.userInfo.status">
           <a href="#" class="block py-3" @click.prevent="showLoginModal"
             ><font-awesome-icon
@@ -74,14 +71,6 @@
               <font-awesome-icon icon="fa-solid fa-heart" class="mr-2" />
               我的收藏
             </router-link>
-          </li>
-          <li v-show="store.userInfo.status">
-            <router-link to="/news" class="block py-3"
-              ><font-awesome-icon
-                icon="fa-solid fa-bullhorn"
-                class="mr-2"
-              />系統消息</router-link
-            >
           </li>
           <li v-show="store.userInfo.status">
             <router-link to="/setting" class="block py-3"
@@ -129,13 +118,6 @@
             to="/share"
             class="block duration-300 md:hover:-translate-y-1"
             >分享營地</router-link
-          >
-        </li>
-        <li>
-          <router-link
-            to="/contact"
-            class="block duration-300 md:hover:-translate-y-1"
-            >聯絡我們</router-link
           >
         </li>
         <li class="ml-auto">
@@ -188,16 +170,6 @@
                   ]"
                   v-show="userMenuStatus"
                 >
-                  <li
-                    class="whitespace-nowrap text-white duration-300 hover:text-secondary"
-                  >
-                    <router-link to="/news" class="block py-2 px-4"
-                      ><font-awesome-icon
-                        icon="fa-solid fa-bullhorn"
-                        class="mr-2"
-                      />系統消息</router-link
-                    >
-                  </li>
                   <li
                     class="whitespace-nowrap text-white duration-300 hover:text-secondary"
                   >
