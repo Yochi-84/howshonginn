@@ -111,6 +111,7 @@ import InsertInfo from '@/components/InsertInfoComponent';
 import InsertPicture from '@/components/InsertPictureComponent';
 import InsertTag from '@/components/InsertTagComponent';
 import InsertPreview from '@/components/InsertPreviewComponent';
+import LoadingFull from '@/components/LoadingFullComponent';
 import { createToast } from 'mosha-vue-toastify';
 import 'mosha-vue-toastify/dist/style.css';
 import axios from 'axios';
