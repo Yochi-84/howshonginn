@@ -237,7 +237,7 @@ async function update() {
     };
 
     const apiCallList = [];
-    const newUploadPicture = finalInfo.originPicture.filter(item => typeof item === Object);
+    const newUploadPicture = finalInfo.originPicture.filter(item => typeof item === 'object');
     for (let i = 0; i < newUploadPicture.length; i++) {
       let form = new FormData();
       form.append('image', newUploadPicture[i]);
