@@ -6,7 +6,7 @@
 
 @layer base {
   body {
-    @apply text-gray-700 leading-normal;
+    @apply leading-normal text-gray-700;
   }
 
   ::-webkit-scrollbar {
@@ -38,6 +38,16 @@
   /* Firefox */
   input[type='number'] {
     -moz-appearance: textfield;
+  }
+
+  input,
+  textarea,
+  button,
+  select,
+  a,
+  li,
+  label {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   }
 }
 
