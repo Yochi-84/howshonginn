@@ -64,22 +64,24 @@
           <!-- 回覆 -->
           <div
             class="mb-0.5 cursor-pointer text-sm text-content-light md:pl-10 md:text-base"
+            @click="comment.collapse = !comment.collapse"
           >
             共
             {{ replyList.filter((item) => item.replyID == comment.id).length }}
             則回覆<font-awesome-icon
               icon="fa-solid fa-caret-up"
               :class="[
-                'ml-1 md:ml-2',
+                'ml-1 md:ml-2 duration-300',
                 {
                   hidden:
                     replyList.filter((item) => item.replyID == comment.id)
                       .length === 0,
+                  'rotate-180' : comment.collapse
                 },
               ]"
             />
           </div>
-          <ul class="md:pl-10">
+          <ul :class="['md:pl-10 overflow-hidden transition-[max-height] duration-500 ',comment.collapse ? 'max-h-0 ease-out' : ' max-h-screen ease-in']">
             <li
               class="border-l-4 py-4 pl-4 odd:border-l-primary-dark odd:bg-primary-light even:border-l-secondary-dark even:bg-secondary-light md:flex md:items-center md:gap-x-4"
               v-for="reply of replyList.filter(
@@ -253,6 +255,7 @@ onMounted(() => {
         acct.data.forEach((item) => {
           if (!item.replyID) {
             item.currentReply = '';
+            item.collapse = true;
             commentList.value.push(item);
           } else {
             replyList.value.push(item);
