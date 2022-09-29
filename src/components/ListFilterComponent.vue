@@ -255,10 +255,7 @@ function filterSubmit() {
     );
   }
 
-  let filterTag = [];
-  filterItem.value.tagList.forEach((item) => {
-    if (item.selected) filterTag.push(item.tag);
-  });
+  let filterTag = filterItem.value.tagList.filter(item => item.selected).map(ele => ele.tag) ;
   filterParameter.filterTag = filterTag;
   filterParameter.tagFilterMode = filterItem.value.tagFilterMode;
   emits('filterParameter', filterParameter);

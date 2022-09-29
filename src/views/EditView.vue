@@ -228,7 +228,7 @@ async function update() {
   let pictureLink = [...finalInfo.image.filter(item => !item.startsWith("blob"))]; // 先把沒被改到的塞進去
 
   // 如果有修改圖片就上傳
-  if (finalInfo.image.filter(item => item.startsWith("blob")).length) {
+  if (finalInfo.image.some(item => item.startsWith("blob"))) {
     const config = {
       method: 'POST',
       url: 'https://api.imgur.com/3/image',

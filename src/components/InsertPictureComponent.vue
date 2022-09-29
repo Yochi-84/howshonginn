@@ -116,7 +116,7 @@ function upload(e) {
 
   for (let i = 0; i < fileLength; i++) {
     // 重複的不管
-    if(!uploadOriginImage.value.filter(item => item.name === e.target.files[i].name).length) {
+    if(!uploadOriginImage.value.some(item => item.name === e.target.files[i].name)) {
       tempOriginList.push(e.target.files[i]);
       const src = URL.createObjectURL(e.target.files[i]);
       tempList.push(src);

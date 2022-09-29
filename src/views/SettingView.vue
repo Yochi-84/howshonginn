@@ -87,7 +87,7 @@
               type="button"
               class="btn enabled:btn-primary btn-large mt-6 disabled:bg-gray-300 disabled:text-gray-600"
               @click="modificationSubmit"
-              :disabled="hasAnyModification"
+              :disabled="nothingModified"
             >
               確認變更
             </button>
@@ -227,8 +227,8 @@ const currentPic = computed(() => {
 });
 
 // 有沒有更改資料，有改才能按送出
-const hasAnyModification = computed(
-  () => Object.values(modifiedInfo).filter((item) => item.modified).length === 0
+const nothingModified = computed(() =>
+  Object.values(modifiedInfo).every((item) => !item.modified)
 );
 
 function changeNickname() {
