@@ -112,7 +112,15 @@
       </div>
     </section>
   </div>
-  <LoadingFull bgOpacity="1" v-if="loadingStatus"></LoadingFull>
+  <LoadingFull bgOpacity="1" v-if="loadingStatus">
+    <template #title>
+      <h2
+        class="z-5 text-xl font-bold text-primary-dark md:text-3xl"
+      >
+        歡迎來到 How享營，資料載入中...
+      </h2>
+    </template>
+  </LoadingFull>
 </template>
 
 <script setup>
